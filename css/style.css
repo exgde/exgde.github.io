@@ -1,0 +1,149 @@
+/* ============================================================
+   portfolio — preto e branco, recortes em halftone, HUD em mono.
+   As cores saem de --bg / --fg; "inverter" só troca as duas.
+   ============================================================ */
+
+:root{
+  --bg:#000;
+  --fg:#fff;
+  --mute:#8a8a8a;
+  --f:"Helvetica Neue",Helvetica,Arial,sans-serif;
+  --mono:"VT323",ui-monospace,Menlo,Consolas,monospace;
+  --ease:cubic-bezier(.16,1,.3,1);
+  --gutter:clamp(1rem,3.5vw,3rem);
+  --mx:0; --my:0;                 /* posição do ponteiro, -1..1 (main.js) */
+}
+body.is-invert{ --bg:#fff; --fg:#000; --mute:#6f6f6f }
+
+*,*::before,*::after{ box-sizing:border-box }
+html{ scroll-behavior:smooth; -webkit-text-size-adjust:100% }
+body{
+  margin:0; background:var(--bg); color:var(--fg);
+  font-family:var(--f); line-height:1.5;
+  overflow-x:hidden; -webkit-font-smoothing:antialiased;
+  transition:background-color .35s, color .35s;
+}
+body.is-booting{ overflow:hidden }
+a{ color:inherit }
+button{ font:inherit; color:inherit; background:none; border:0; padding:0; cursor:pointer }
+::selection{ background:var(--fg); color:var(--bg) }
+:focus-visible{ outline:2px solid currentColor; outline-offset:4px }
+
+/* ---- camadas: recortes (1) < tracking (2) < texto e PSP (3) ---- */
+.sec{
+  position:relative; height:100svh; min-height:520px; overflow:hidden;
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  padding:var(--gutter);
+}
+.el{
+  position:absolute; z-index:1; pointer-events:none;
+  left:calc(var(--x)*1%); top:calc(var(--y)*1%);
+  width:calc(var(--w)*1vmin); height:calc(var(--w)*1vmin);
+  transform:translate(-50%,-50%)
+            translate(calc(var(--mx)*var(--d,1)*14px),calc(var(--my)*var(--d,1)*14px));
+  will-change:transform;
+}
+.trk{ position:fixed; inset:0; width:100%; height:100%; z-index:2; pointer-events:none }
+.lay{ position:relative; z-index:3 }
+
+/* os recortes são pontos brancos sobre transparente: invertido, viram pretos */
+body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
+
+/* entrada de cada seção */
+.sec .lay{ opacity:0; transform:translateY(18px); transition:opacity .9s var(--ease), transform .9s var(--ease) }
+.sec.is-in .lay{ opacity:1; transform:none }
+
+/* ---- boot ---- */
+.boot{
+  position:fixed; inset:0; z-index:100; background:var(--bg);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1.1rem;
+  transition:opacity .6s var(--ease), visibility .6s;
+}
+.boot.is-done{ opacity:0; visibility:hidden }
+.boot__tag{
+  margin:0; font-weight:700; font-size:clamp(3rem,13vw,7rem); line-height:1;
+  letter-spacing:-.06em; transform:scaleY(1.45);
+}
+.boot__bar{ width:min(60vw,15rem); height:1px; background:var(--mute); margin-top:1.4rem }
+.boot__bar span{ display:block; height:100%; width:0; background:var(--fg) }
+.boot__pct{ font-family:var(--mono); font-size:1.1rem; letter-spacing:.18em; color:var(--mute) }
+
+/* ---- controles fixos ---- */
+.ctl{ position:fixed; right:var(--gutter); bottom:var(--gutter); z-index:10; mix-blend-mode:difference; color:#fff }
+.ctl__b{ font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em; padding:.5rem 0 .2rem; min-height:44px }
+.ctl__b[aria-pressed="true"]{ text-decoration:underline; text-underline-offset:.3em }
+
+/* ---- linha de título com recorte no meio (capa e contato) ---- */
+.line{
+  margin:0; display:flex; align-items:center; justify-content:center; gap:.08em;
+  font-style:italic; font-weight:400; font-size:clamp(1.9rem,6.4vw,5.2rem);
+  line-height:1; letter-spacing:-.02em; white-space:nowrap;
+}
+.cut{
+  flex:none; width:clamp(7rem,27vmin,17rem); height:clamp(7rem,27vmin,17rem);
+  transform:translate(calc(var(--mx)*-10px),calc(var(--my)*-10px));
+}
+.role{ margin:1.6rem 0 0; font-family:var(--mono); font-size:1.15rem; letter-spacing:.1em; color:var(--mute); text-align:center }
+
+.cue{ position:absolute; z-index:3; left:50%; bottom:var(--gutter); width:44px; height:56px; margin-left:-22px; display:grid; place-items:center }
+.cue i{ display:block; width:1px; height:40px; background:currentColor; transform-origin:top; animation:cue 2.2s var(--ease) infinite }
+@keyframes cue{ 0%{ transform:scaleY(0) } 55%{ transform:scaleY(1) } 100%{ transform:scaleY(1); opacity:0 } }
+
+/* ---- a máquina ---- */
+.machine__stage{ position:absolute; inset:0; z-index:3; touch-action:pan-y }
+#pspCanvas{ display:block; width:100%; height:100%; filter:grayscale(1) contrast(1.08) }  /* tire o filter para tela colorida */
+.machine__loading{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--mono); color:var(--mute); text-align:center; padding:var(--gutter); pointer-events:none }
+.machine__loading.is-off{ display:none }
+.machine__flat{ position:absolute; left:50%; top:50%; width:min(86vw,720px); transform:translate(-50%,-50%); border:1px solid var(--mute); filter:grayscale(1) }
+.spin{ width:26px; height:26px; border:1px solid var(--mute); border-top-color:var(--fg); border-radius:50%; animation:spin .9s linear infinite }
+@keyframes spin{ to{ transform:rotate(360deg) } }
+
+.rail{ position:absolute; z-index:4; left:var(--gutter); bottom:var(--gutter); display:flex; align-items:flex-end; gap:1rem; max-width:calc(100% - 2*var(--gutter) - 10rem) }
+.rail__count{ font-family:var(--mono); line-height:.8; white-space:nowrap }
+.rail__count b{ font-weight:400; font-size:3.2rem }
+.rail__count i{ font-style:normal; font-size:1.1rem; color:var(--mute); margin-left:.2rem }
+.rail__txt{ display:flex; flex-direction:column; min-width:0 }
+.rail__txt strong{ font-weight:400; font-style:italic; font-size:1.15rem; line-height:1.2 }
+.rail__txt span{ font-family:var(--mono); font-size:1rem; color:var(--mute); letter-spacing:.04em }
+
+.keys{ position:absolute; z-index:4; right:var(--gutter); bottom:calc(var(--gutter) + 3.4rem); display:flex; gap:.5rem }
+.keys button, .keys a{
+  width:44px; height:44px; display:grid; place-items:center;
+  border:1px solid currentColor; font-family:var(--mono); font-size:1.3rem; text-decoration:none;
+  transition:background-color .2s, color .2s;
+}
+.keys button:hover, .keys a:hover{ background:var(--fg); color:var(--bg) }
+.keys a[hidden]{ display:none }
+
+/* ---- sobre ---- */
+.about{ align-items:flex-end }
+.about__body{ width:min(100%,36rem); margin-right:clamp(0rem,6vw,6rem) }
+.about__body h2{ margin:0 0 1.2rem; font-family:var(--mono); font-weight:400; font-size:clamp(2.2rem,5vw,3rem); letter-spacing:.1em; line-height:1 }
+.about__body p{ margin:0 0 .8rem; font-size:clamp(1rem,1.5vw,1.15rem); line-height:1.55 }
+.stack{ list-style:none; margin:1.6rem 0 0; padding:0; display:flex; flex-wrap:wrap; gap:.3rem .9rem; font-family:var(--mono); font-size:1.1rem; color:var(--mute); letter-spacing:.05em }
+.stack li + li::before{ content:"/"; margin-right:.9rem }
+
+/* ---- contato ---- */
+.links{ margin-top:2rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem 2rem; font-family:var(--mono); font-size:1.4rem; letter-spacing:.05em }
+.links a{ text-underline-offset:.3em; min-height:44px; display:inline-flex; align-items:center }
+.links a::after{ content:" ↗"; white-space:pre }
+.links a:hover{ text-decoration:none }
+.credit{ position:absolute; left:var(--gutter); bottom:var(--gutter); margin:0; max-width:calc(100% - 2*var(--gutter) - 6rem); font-family:var(--mono); font-size:.95rem; color:var(--mute); line-height:1.3 }
+
+/* ---- retrato: o título empilha em volta do recorte ---- */
+@media (max-aspect-ratio:4/5){
+  .line{ flex-direction:column; font-size:clamp(2.6rem,15vw,5rem); gap:0 }
+  .cut{ width:44vmin; height:44vmin; margin:-.5rem 0 }
+  .about{ align-items:center; justify-content:flex-end; padding-bottom:calc(var(--gutter) + 4rem) }
+  .about__body{ margin-right:0 }
+  .rail{ bottom:calc(var(--gutter) + 7.2rem); max-width:calc(100% - 2*var(--gutter)) }
+  .contact .el{ left:80%; top:16% }      /* o cursor sobe para não cobrir os links */
+}
+
+@media (prefers-reduced-motion:reduce){
+  html{ scroll-behavior:auto }
+  .sec .lay{ transform:none; transition:opacity .3s }
+  .cue i, .spin{ animation:none }
+  .el, .cut{ transform:translate(-50%,-50%) }
+  .cut{ transform:none }
+}
