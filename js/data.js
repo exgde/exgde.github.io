@@ -42,6 +42,15 @@ window.PF = {
 
   projects: [
     {
+      title: 'Casa Acessível',
+      sub: 'Casa e banheiro para cadeira de rodas, em realidade virtual',
+      stack: 'Unreal Engine 5.8 · Blender · Python',
+      year: '2026',
+      link: '',                     // repositório privado: sem link
+      img: 'assets/projects/casa-acessivel.jpg',
+      vid: 'assets/projects/casa-acessivel.mp4'
+    },
+    {
       title: 'WW1-Thriller',
       sub: 'Terror em terceira pessoa, em desenvolvimento',
       stack: 'Unreal Engine 5.8 · Blueprint',
