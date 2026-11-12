@@ -24,6 +24,7 @@ const BUS = window.PF_BUS;
 const stage = document.getElementById('machine');
 const canvas = document.getElementById('pspCanvas');
 const loading = document.getElementById('pspLoading');
+const keys = document.getElementById('keys');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const pad = (n) => String(n).padStart(2, '0');
 
@@ -80,6 +81,7 @@ function placeholder(p, i, now) {
 }
 
 function hud(p, i, n, hasMedia) {
+  const room = (keysX0 ? keysX0 - 28 : SW - 40) - 40;   // o texto de baixo para antes dos botões
   if (hasMedia) {                 // faixa escura para o texto ler por cima da captura
     const fade = g.createLinearGradient(0, SH - 170, 0, SH);
     fade.addColorStop(0, 'rgba(0,0,0,0)'); fade.addColorStop(1, 'rgba(0,0,0,.82)');
@@ -93,11 +95,66 @@ function hud(p, i, n, hasMedia) {
   g.textAlign = 'left';
   if (hasMedia) {
     g.font = 'italic 44px "Helvetica Neue", Helvetica, Arial, sans-serif';
-    g.fillText(p.title || '', 40, SH - 78, SW - 80);
+    g.fillText(p.title || '', 40, SH - 78, room);
   }
   g.font = '30px VT323, monospace'; g.fillStyle = 'rgba(255,255,255,.75)';
-  g.fillText([p.stack, p.year].filter(Boolean).join(' · ').toUpperCase(), 40, SH - 36, SW - 80);
+  g.fillText([p.stack, p.year].filter(Boolean).join(' · ').toUpperCase(), 40, SH - 36, room);
 }
+
+/* ------------------------------------------------------------
+   Botões na tela: ←, → e abrir ficam no canto de baixo à direita.
+   São os <button>/<a> de verdade (teclado, leitor de tela, link),
+   esticados por cima da tela com matrix3d para seguir o PSP em 3D.
+   Em tela pequena (celular) não cabem: ficam no rodapé da página.
+   ------------------------------------------------------------ */
+const KEYS_PAD_X = 40, KEYS_PAD_Y = 30;   // margem até a borda da tela, em pixels da textura
+const KEYS_PX = 84;                       // altura que os botões querem ter na textura...
+const KEYS_MIN = 34, KEYS_MAX = 46;       // ...desde que fiquem entre isto na página (px CSS)
+const KEYS_TEX_MAX = 120;                 // mais alto que isto na textura cobre a tela: vão para fora
+let keysX0 = 0;                           // onde os botões começam na textura (0 = fora da tela)
+let keysTexH = 0;                         // altura deles na textura, decidida no resize
+
+function sizeKeys(screenPx) {             // screenPx = largura da tela do PSP na página, parado
+  const per = screenPx / SW;              // px da página por px da textura
+  const want = Math.min(KEYS_MAX, Math.max(KEYS_MIN, KEYS_PX * per));
+  keysTexH = per > 0 && want / per <= KEYS_TEX_MAX ? want / per : 0;
+  if (!keysTexH) placeKeys(null);
+}
+
+// matrix3d que leva o retângulo w×h do elemento para os 4 cantos q (sup. esq., sup. dir., inf. dir., inf. esq.)
+function quadMatrix(w, h, q) {
+  const [p0, p1, p2, p3] = q;
+  const dx1 = p1.x - p2.x, dx2 = p3.x - p2.x, dx3 = p0.x - p1.x + p2.x - p3.x;
+  const dy1 = p1.y - p2.y, dy2 = p3.y - p2.y, dy3 = p0.y - p1.y + p2.y - p3.y;
+  const den = dx1 * dy2 - dx2 * dy1;
+  const gx = (dx3 * dy2 - dx2 * dy3) / den, gy = (dx1 * dy3 - dx3 * dy1) / den;
+  const a = p1.x - p0.x + gx * p1.x, b = p3.x - p0.x + gy * p3.x;
+  const d = p1.y - p0.y + gx * p1.y, e = p3.y - p0.y + gy * p3.y;
+  const m = [a / w, d / w, 0, gx / w, b / h, e / h, 0, gy / h, 0, 0, 1, 0, p0.x, p0.y, 0, 1];
+  return 'matrix3d(' + m.map((v) => +v.toFixed(6)).join(',') + ')';
+}
+
+const corners = [{}, {}, {}, {}];
+// toPage(x, y, out): ponto da textura (px) → ponto na seção (px CSS). null = botões fora da tela
+function placeKeys(toPage) {
+  const w = keys.offsetWidth, h = keys.offsetHeight;
+  if (!toPage || !keysTexH || !w || !h) {
+    if (keys.classList.contains('is-in-screen')) { keys.classList.remove('is-in-screen'); keys.style.transform = ''; }
+    keysX0 = 0;
+    return;
+  }
+  const x1 = SW - KEYS_PAD_X, y1 = SH - KEYS_PAD_Y, y0 = y1 - keysTexH, x0 = x1 - keysTexH * w / h;
+  toPage(x0, y0, corners[0]); toPage(x1, y0, corners[1]);
+  toPage(x1, y1, corners[2]); toPage(x0, y1, corners[3]);
+  keys.style.transform = quadMatrix(w, h, corners);
+  keys.classList.add('is-in-screen');
+  keysX0 = x0;
+}
+
+// com o ponteiro nos botões o PSP para de seguir o cursor, senão eles fogem do clique
+let hold = false;
+keys.addEventListener('pointerenter', () => { hold = true; });
+keys.addEventListener('pointerleave', () => { hold = false; });
 
 function crt(now) {
   const dt = now - switchedAt;    // chuvisco rápido na troca de projeto
@@ -185,7 +242,16 @@ function flat(reason) {
   loading.classList.add('is-off');
   scr.className = 'machine__flat';
   stage.appendChild(scr);
-  frameFn = drawScreen;
+  // tela plana: a textura vira a própria página, então a conta é só uma escala
+  let box = null;
+  const toPage = (x, y, out) => { out.x = box.left + x / SW * box.width; out.y = box.top + y / SH * box.height; };
+  frameFn = (now) => {
+    drawScreen(now);
+    const r = scr.getBoundingClientRect(), s = stage.getBoundingClientRect();
+    if (!box || r.width !== box.width) sizeKeys(r.width);
+    box = { left: r.left - s.left, top: r.top - s.top, width: r.width, height: r.height };
+    placeKeys(toPage);
+  };
   BUS.modelReady();
   start();
 }
@@ -228,16 +294,32 @@ function boot3d() {
 
   const WIDTH = 4;                 // largura do PSP em unidades da cena
   let height = 1.8;
+  let vw = 1, vh = 1;              // tamanho do palco em px CSS
+
+  // a tela como plano: ponto(u, v) = O + u·A + v·B, no espaço da malha (achado no load)
+  let screenMesh = null, screenW = 0;
+  const uvO = new THREE.Vector3(), uvA = new THREE.Vector3(), uvB = new THREE.Vector3(), tmp = new THREE.Vector3();
+  function screenPoint(u, v, out) {
+    return out.copy(uvO).addScaledVector(uvA, u).addScaledVector(uvB, v).applyMatrix4(screenMesh.matrixWorld);
+  }
+  // pixel da textura → px na página (a CanvasTexture sobe com flipY: o topo do canvas é v = 1)
+  function toPage(x, y, out) {
+    screenPoint(x / SW, 1 - y / SH, tmp).project(camera);
+    out.x = (tmp.x + 1) / 2 * vw;
+    out.y = (1 - tmp.y) / 2 * vh;
+  }
 
   function resize() {
     const w = stage.clientWidth, h = stage.clientHeight;
     if (!w || !h) return;
+    vw = w; vh = h;
     renderer.setSize(w, h, false);
     camera.aspect = w / h;
     // enquadra pelo lado que apertar primeiro: largura (celular) ou altura (desktop)
     const need = Math.max(WIDTH / .84 / camera.aspect, height / .58);
     camera.position.set(0, 0, need / (2 * Math.tan(THREE.MathUtils.degToRad(FOV) / 2)));
     camera.updateProjectionMatrix();
+    if (screenW) sizeKeys(screenW * h / need);   // largura da tela do PSP em px, com ele parado
   }
   new ResizeObserver(resize).observe(stage);
 
@@ -270,6 +352,25 @@ function boot3d() {
       for (let i = 0; i < uv.count; i++) uv.setXY(i, (uv.getX(i) - u0) / (u1 - u0), (uv.getY(i) - v0) / (v1 - v0));
       uv.needsUpdate = true;
       screen.material = new THREE.MeshBasicMaterial({ map: tex, toneMapped: false });
+
+      // mínimos quadrados de posição = O + u·A + v·B sobre os vértices: serve para pôr os botões na tela
+      const pos = screen.geometry.attributes.position, p = new THREE.Vector3();
+      const S = [0, 0, 0, 0, 0, 0], R = [new THREE.Vector3(), new THREE.Vector3(), new THREE.Vector3()];
+      for (let i = 0; i < pos.count; i++) {
+        const u = uv.getX(i), v = uv.getY(i);
+        p.fromBufferAttribute(pos, i);
+        S[0]++; S[1] += u; S[2] += v; S[3] += u * u; S[4] += u * v; S[5] += v * v;
+        R[0].add(p); R[1].addScaledVector(p, u); R[2].addScaledVector(p, v);
+      }
+      const inv = new THREE.Matrix3().set(S[0], S[1], S[2], S[1], S[3], S[4], S[2], S[4], S[5]);
+      if (inv.determinant() > 1e-9) {
+        const e = inv.invert().elements;      // simétrica: linha = coluna
+        [uvO, uvA, uvB].forEach((out, k) => {
+          out.set(0, 0, 0);
+          for (let j = 0; j < 3; j++) out.addScaledVector(R[j], e[j * 3 + k]);
+        });
+        screenMesh = screen;
+      }
     } else {
       console.warn('[psp] não achei a malha da tela no modelo; os projetos não vão aparecer nele.');
     }
@@ -284,10 +385,15 @@ function boot3d() {
     holder.add(model);
     pivot.add(holder);
     height = size.y * k;
+    if (screenMesh) {
+      pivot.updateMatrixWorld(true);   // o pivô ainda está parado aqui: mede a largura da tela em repouso
+      screenW = screenPoint(0, .5, new THREE.Vector3()).distanceTo(screenPoint(1, .5, tmp));
+    }
     resize();
 
     loading.classList.add('is-off');
     let riseFrom = null;           // o PSP sobe na primeira vez que aparece
+    let aimY = 0, aimX = 0, rollZ = 0, bob = 0;
 
     frameFn = (now) => {
       const t = now / 1000;
@@ -299,14 +405,20 @@ function boot3d() {
       const rise = 1 - Math.pow(1 - q, 4);
       kick *= .9;
       const calm = reduce ? 0 : 1;
-      // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY)
-      const ry = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick;
-      const rx = (py * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
-      pivot.rotation.y += (ry - pivot.rotation.y) * .09;
-      pivot.rotation.x += (rx - pivot.rotation.x) * .09;
-      pivot.rotation.z = Math.sin(t * .5) * .012 * calm;
-      pivot.position.y = (rise - 1) * 2.4 + Math.sin(t * .8) * .035 * calm;
+      // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY).
+      // Com o ponteiro nos botões (hold) a pose congela; só o empurrãozinho da troca continua.
+      if (!hold) {
+        aimY = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm;
+        aimX = (py * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
+        rollZ = Math.sin(t * .5) * .012 * calm;
+        bob = Math.sin(t * .8) * .035 * calm;
+      }
+      pivot.rotation.y += (aimY + kick - pivot.rotation.y) * .09;
+      pivot.rotation.x += (aimX - pivot.rotation.x) * .09;
+      pivot.rotation.z = rollZ;
+      pivot.position.y = (rise - 1) * 2.4 + bob;
       renderer.render(scene, camera);
+      if (screenMesh) placeKeys(toPage);   // depois do render: as matrizes já estão no quadro atual
     };
     BUS.modelReady();
     start();

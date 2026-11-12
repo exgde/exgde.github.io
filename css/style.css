@@ -114,6 +114,13 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 .keys button:hover, .keys a:hover{ background:var(--fg); color:var(--bg) }
 .keys a[hidden]{ display:none }
+.keys .ico{ width:20px; height:20px; fill:none; stroke:currentColor; stroke-width:9; stroke-linecap:round; stroke-linejoin:round }
+
+/* dentro da tela do PSP: psp.js posiciona com matrix3d a cada quadro, então
+   aqui só a opacidade anima, e a cor é sempre a do HUD (branco), mesmo invertido */
+.keys.is-in-screen{ left:0; top:0; right:auto; bottom:auto; transform-origin:0 0; transition:opacity .9s var(--ease); color:#fff; will-change:transform }
+.keys.is-in-screen button, .keys.is-in-screen a{ background:rgba(0,0,0,.45); border-color:rgba(255,255,255,.9) }
+.keys.is-in-screen button:hover, .keys.is-in-screen a:hover{ background:#fff; color:#000 }
 
 /* ---- sobre ---- */
 .about{ align-items:flex-end }

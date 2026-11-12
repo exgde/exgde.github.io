@@ -9,7 +9,7 @@
      sub    uma linha dizendo o que é
      stack  tecnologias, separadas por " · "
      year   ano
-     link   para onde o botão ↗ leva (GitHub, demo...). Deixe '' para esconder
+     link   para onde o botão de abrir (na tela do PSP) leva (GitHub, demo...). Deixe '' para esconder
             (repositório privado não deve ter link: quem visita cai num 404).
      img    captura de tela, ex.: 'assets/projects/meu-app.jpg' (ideal 960×544)
      vid    gravação curta em loop, ex.: 'assets/projects/meu-app.mp4'

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611121343" />
+<link rel="stylesheet" href="css/style.css?v=2611121710" />
 </head>
 <body class="is-booting">
 
@@ -53,10 +53,13 @@
     <div class="rail__count"><b id="railIdx">01</b><i id="railTot">/00</i></div>
     <div class="rail__txt"><strong id="railTitle"></strong><span id="railMeta"></span></div>
   </div>
-  <div class="keys lay">
+  <!-- com o PSP carregado, js/psp.js cola estes botões no canto da tela dele -->
+  <div class="keys lay" id="keys">
     <button id="prevBtn" aria-label="Projeto anterior">←</button>
     <button id="nextBtn" aria-label="Próximo projeto">→</button>
-    <a id="railOpen" href="#" target="_blank" rel="noopener" aria-label="Abrir este projeto">↗</a>
+    <a id="railOpen" href="#" target="_blank" rel="noopener" aria-label="Abrir este projeto">
+      <svg class="ico" viewBox="16 16 116 116" aria-hidden="true"><path d="M74 36.5H39a12 12 0 0 0-12 12v59a12 12 0 0 0 12 12h59a12 12 0 0 0 12-12V73M72 75l47-47M93 27h27v27"/></svg>
+    </a>
   </div>
 </section>
 
@@ -96,10 +99,10 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611121343"></script>
-<script src="js/art.js?v=2611121343"></script>
-<script src="js/main.js?v=2611121343"></script>
-<script src="js/track.js?v=2611121343"></script>
-<script type="module" src="js/psp.js?v=2611121343"></script>
+<script src="js/data.js?v=2611121710"></script>
+<script src="js/art.js?v=2611121710"></script>
+<script src="js/main.js?v=2611121710"></script>
+<script src="js/track.js?v=2611121710"></script>
+<script type="module" src="js/psp.js?v=2611121710"></script>
 </body>
 </html>
