@@ -45,6 +45,8 @@ function mediaFor(i) {
     m.vid = document.createElement('video');
     m.vid.muted = true; m.vid.loop = true; m.vid.playsInline = true; m.vid.preload = 'auto';
     m.vid.src = p.vid;
+    // o projeto que abre a página não passa pelo BUS.on: sem este play() o vídeo ficava parado no 1º quadro
+    if (i === BUS.index) m.vid.play().catch(() => {});
   } else if (p.img) {
     m.img = new Image();
     m.img.src = p.img;
@@ -165,8 +167,14 @@ function loop(now) {
   frameFn(now);
   requestAnimationFrame(loop);
 }
-new IntersectionObserver((es) => { onScreen = es[0].isIntersecting; start(); }, { threshold: .02 }).observe(stage);
-document.addEventListener('visibilitychange', start);
+// o vídeo do projeto atual toca só com o PSP na tela (e volta a tocar quando a pessoa rola de volta até ele)
+function syncVideo() {
+  const m = media.get(BUS.index);
+  if (!m || !m.vid) return;
+  if (onScreen && !document.hidden) m.vid.play().catch(() => {}); else m.vid.pause();
+}
+new IntersectionObserver((es) => { onScreen = es[0].isIntersecting; start(); syncVideo(); }, { threshold: .02 }).observe(stage);
+document.addEventListener('visibilitychange', () => { start(); syncVideo(); });
 
 /* ------------------------------------------------------------
    Reserva: sem WebGL ou sem modelo, a tela vai plana na página
