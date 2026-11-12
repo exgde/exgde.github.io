@@ -18,7 +18,7 @@
    ============================================================ */
 window.PF = {
   name: 'JoaoByss',                 // título da aba do navegador
-  bootTag: '#BYSS',                 // palavra grande na tela de carregamento
+  bootTag: '#JOAOBYSS',                // palavra grande na tela de carregamento
   hero: ['joao', 'byss.'],          // as duas palavras em volta do disquete
   role: 'jogos · mods · código',
 
