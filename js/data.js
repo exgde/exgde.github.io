@@ -1,8 +1,15 @@
 /* ============================================================
    CONTEÚDO — o único arquivo que você precisa editar.
 
-   Tudo que aparece escrito no site sai daqui: nome, bio, lista de
-   projetos e links de contato.
+   Tudo que aparece escrito no site sai daqui: nome, a seção de IA,
+   bio, lista de projetos e links de contato.
+
+   IA (seção logo depois da capa):
+     kicker   linha pequena acima do título
+     heading  título da seção
+     lede     parágrafo de abertura
+     items    o que você faz: { title, text }, numerados na ordem da lista
+     tools    ferramentas, separadas por "/"
 
    Projetos:
      title  nome do projeto (aparece na tela do PSP e no rodapé)
@@ -17,27 +24,41 @@
    Sem img nem vid, o PSP mostra uma tela gerada com o título.
    ============================================================ */
 window.PF = {
-  name: 'JoaoByss',                 // título da aba do navegador
+  name: 'JoaoByss · AI engineering', // título da aba do navegador
   bootTag: '#JOAOBYSS',                // palavra grande na tela de carregamento
   hero: ['joao', 'byss.'],          // as duas palavras em volta do disquete
-  role: 'jogos · mods · código',
+  role: 'ai engineering · automação · integração',
+
+  ai: {
+    kicker: '// ia local desde 2023',
+    heading: 'AI engineering',
+    lede: 'Rodo modelos de linguagem na minha própria máquina desde 2023. Hoje meu foco é automação e integração inteligente: ligar modelos a ferramentas e sistemas para que o trabalho repetitivo se resolva sozinho.',
+    items: [
+      { title: 'IA local',              text: 'Ollama, LM Studio e llama.cpp, com modelos GGUF do Hugging Face rodando no meu hardware.' },
+      { title: 'Nuvem',                 text: 'Servidores no Google Cloud quando o modelo não cabe na máquina de casa.' },
+      { title: 'MCP',                   text: 'Model Context Protocol para ligar modelos a ferramentas, arquivos e APIs.' },
+      { title: 'Contexto e parâmetros', text: 'Monto o contexto que o modelo recebe e ajusto temperatura, top-p e janela de contexto para cada tarefa.' },
+      { title: 'Automação',             text: 'Fluxos em que a IA faz o trabalho repetitivo e conversa com outros sistemas.' }
+    ],
+    tools: ['Ollama', 'LM Studio', 'llama.cpp', 'GGUF', 'Hugging Face', 'Google Cloud', 'MCP', 'Python']
+  },
 
   about: {
     heading: 'sobre',
     bio: [
-      // RASCUNHO escrito a partir dos seus repositórios — reescreva com as suas palavras.
-      'Faço jogos e mods. No momento estou desenvolvendo o WW1-Thriller, um jogo de terror em terceira pessoa na Unreal Engine 5.8, todo em Blueprint.',
-      'Também faço mods e pequenos projetos em Python, Swift e SQL.'
+      'Sou o João, estudante de Ciência da Computação na UFJ e técnico em informática pelo IFG.',
+      'Comecei a rodar IA local em 2023 e não parei mais. Hoje trabalho com AI engineering, com foco em automação e integração inteligente.',
+      'Antes da IA vieram os jogos, que faço desde 2019: sigo com projetos em Unreal Engine 5, mods e apps em Python, Swift e SQL.'
     ],
-    stack: ['Unreal Engine 5', 'Blueprint', 'Python', 'C#', 'Swift', 'SQL']
+    stack: ['Python', 'TypeScript', 'SQL', 'C#', 'Swift', 'Unreal Engine 5']
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
   links: [
-    { label: 'github', href: 'https://github.com/exgde' }
+    { label: 'github',   href: 'https://github.com/exgde' },
+    { label: 'linkedin', href: 'https://www.linkedin.com/in/joao-bernardes-478749415/' }
     // para mostrar mais contatos, adicione linhas como:
-    // { label: 'email',    href: 'mailto:voce@exemplo.com' },
-    // { label: 'linkedin', href: 'https://www.linkedin.com/in/seu-usuario' }
+    // { label: 'email',    href: 'mailto:voce@exemplo.com' }
   ],
 
   projects: [

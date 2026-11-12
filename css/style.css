@@ -115,10 +115,21 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .keys button:hover, .keys a:hover{ background:var(--fg); color:var(--bg) }
 .keys a[hidden]{ display:none }
 
+/* ---- ia: cresce além da tela se a lista precisar ---- */
+.ai{ align-items:flex-start; height:auto; min-height:100svh }
+.ai__body{ --inset:clamp(0rem,6vw,6rem); width:min(calc(100% - var(--inset)),40rem); margin-left:var(--inset) }
+.ai__kicker{ margin:0 0 .6rem; font-family:var(--mono); font-size:1.15rem; letter-spacing:.1em; color:var(--mute) }
+.ai__lede{ margin:0 0 1.6rem; font-size:clamp(1rem,1.5vw,1.15rem); line-height:1.55 }
+.ai__list{ list-style:none; margin:0; padding:0; border-bottom:1px solid var(--mute) }
+.ai__list li{ display:grid; grid-template-columns:2.4rem 1fr; gap:.15rem .6rem; padding:.7rem 0; border-top:1px solid var(--mute) }
+.ai__list b{ grid-row:span 2; font-family:var(--mono); font-weight:400; font-size:1.1rem; line-height:1.2; color:var(--mute) }
+.ai__list strong{ font-weight:400; font-style:italic; font-size:1.15rem; line-height:1.2 }
+.ai__list span{ grid-column:2; font-family:var(--mono); font-size:1.1rem; letter-spacing:.05em; color:var(--mute) }   /* mesmo texto de .stack */
+
 /* ---- sobre ---- */
 .about{ align-items:flex-end }
 .about__body{ width:min(100%,36rem); margin-right:clamp(0rem,6vw,6rem) }
-.about__body h2{ margin:0 0 1.2rem; font-family:var(--mono); font-weight:400; font-size:clamp(2.2rem,5vw,3rem); letter-spacing:.1em; line-height:1 }
+.about__body h2, .ai__body h2{ margin:0 0 1.2rem; font-family:var(--mono); font-weight:400; font-size:clamp(2.2rem,5vw,3rem); letter-spacing:.1em; line-height:1 }
 .about__body p{ margin:0 0 .8rem; font-size:clamp(1rem,1.5vw,1.15rem); line-height:1.55 }
 .stack{ list-style:none; margin:1.6rem 0 0; padding:0; display:flex; flex-wrap:wrap; gap:.3rem .9rem; font-family:var(--mono); font-size:1.1rem; color:var(--mute); letter-spacing:.05em }
 .stack li + li::before{ content:"/"; margin-right:.9rem }
@@ -138,6 +149,13 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
   .about__body{ margin-right:0 }
   .rail{ bottom:calc(var(--gutter) + 7.2rem); max-width:calc(100% - 2*var(--gutter)) }
   .contact .el{ left:80%; top:16% }      /* o cursor sobe para não cobrir os links */
+}
+
+/* ---- ia em tela estreita, quase quadrada ou deitada baixa: o chip vai para cima do texto ---- */
+@media (max-aspect-ratio:6/5), (max-width:900px), (max-height:500px){
+  .ai{ padding-top:calc(var(--gutter) + 40vmin) }
+  .ai__body{ --inset:0rem }
+  .ai .el{ left:70%; top:calc(var(--gutter) + 18vmin); width:44vmin; height:44vmin }
 }
 
 @media (prefers-reduced-motion:reduce){

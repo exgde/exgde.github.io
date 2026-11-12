@@ -2,7 +2,7 @@
 
 Portfolio de uma página em HTML, CSS e JavaScript puros, sem build. No ar em https://exgde.github.io/
 
-- Todo o conteúdo (nome, bio, projetos, links) fica em `js/data.js`.
+- Todo o conteúdo (nome, seção de IA, bio, projetos, links) fica em `js/data.js`.
 - Para rodar localmente: `python3 -m http.server 8765` e abrir `http://localhost:8765`.
 - Capturas e gravações dos projetos vão em `assets/projects/`.
 

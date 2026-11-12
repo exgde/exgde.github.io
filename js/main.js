@@ -1,5 +1,6 @@
 /* ============================================================
-   BASE — preenche o texto a partir de data.js, cuida do boot, do
+   BASE — preenche o texto a partir de data.js (capa, IA, sobre,
+   contato), cuida do boot, do
    botão inverter, do ponteiro e da navegação entre projetos.
 
    js/psp.js (módulo) conversa com este arquivo por window.PF_BUS.
@@ -41,6 +42,22 @@
   text('heroRole', PF.role);
   text('contactA', (PF.contact || [])[0]);
   text('contactB', (PF.contact || [])[1]);
+
+  var ai = PF.ai || {};
+  text('aiKicker', ai.kicker);
+  text('aiH', ai.heading);
+  text('aiLede', ai.lede);
+  (ai.items || []).forEach(function (it, i) {
+    var li = document.createElement('li');
+    var n = document.createElement('b'); n.textContent = pad(i + 1);
+    var t = document.createElement('strong'); t.textContent = it.title || '';
+    var d = document.createElement('span'); d.textContent = it.text || '';
+    li.appendChild(n); li.appendChild(t); li.appendChild(d);
+    $('aiList').appendChild(li);
+  });
+  (ai.tools || []).forEach(function (item) {
+    var li = document.createElement('li'); li.textContent = item; $('aiTools').appendChild(li);
+  });
 
   var about = PF.about || {};
   text('aboutH', about.heading);
