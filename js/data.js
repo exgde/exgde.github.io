@@ -27,7 +27,7 @@ window.PF = {
     bio: [
       // RASCUNHO escrito a partir dos seus repositórios — reescreva com as suas palavras.
       'Faço jogos e mods. No momento estou desenvolvendo o WW1-Thriller, um jogo de terror em terceira pessoa na Unreal Engine 5.8, todo em Blueprint.',
-      'Também publico mods de OOT para o Switch 2 e pequenos projetos em Python, Swift e SQL.'
+      'Também faço mods e pequenos projetos em Python, Swift e SQL.'
     ],
     stack: ['Unreal Engine 5', 'Blueprint', 'Python', 'C#', 'Swift', 'SQL']
   },

@@ -15,6 +15,11 @@ import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 
 const MODEL = 'assets/models/psp.glb';
+
+/* Quanto o PSP gira, em radianos (1 rad ≈ 57°). Aumente para soltar mais. */
+const TILT_Y = .75;   // esquerda/direita seguindo o cursor (era .38)
+const TILT_X = .36;   // cima/baixo seguindo o cursor (era .2)
+const SWAY = .12;     // balanço próprio, mesmo com o cursor parado
 const BUS = window.PF_BUS;
 const stage = document.getElementById('machine');
 const canvas = document.getElementById('pspCanvas');
@@ -286,9 +291,11 @@ function boot3d() {
       const rise = 1 - Math.pow(1 - q, 4);
       kick *= .9;
       const calm = reduce ? 0 : 1;
-      const ry = px * .38 * calm + kick, rx = py * .2 * calm - .04;
-      pivot.rotation.y += (ry - pivot.rotation.y) * .07;
-      pivot.rotation.x += (rx - pivot.rotation.x) * .07;
+      // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY)
+      const ry = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick;
+      const rx = (py * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
+      pivot.rotation.y += (ry - pivot.rotation.y) * .09;
+      pivot.rotation.x += (rx - pivot.rotation.x) * .09;
       pivot.rotation.z = Math.sin(t * .5) * .012 * calm;
       pivot.position.y = (rise - 1) * 2.4 + Math.sin(t * .8) * .035 * calm;
       renderer.render(scene, camera);
