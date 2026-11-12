@@ -91,10 +91,10 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 
 /* ---- a máquina ---- */
 .machine__stage{ position:absolute; inset:0; z-index:3; touch-action:pan-y }
-#pspCanvas{ display:block; width:100%; height:100%; filter:grayscale(1) contrast(1.08) }  /* tire o filter para tela colorida */
+#pspCanvas{ display:block; width:100%; height:100%; filter:contrast(1.08) }  /* tela colorida (era grayscale(1) contrast(1.08)) */
 .machine__loading{ position:absolute; inset:0; display:grid; place-items:center; font-family:var(--mono); color:var(--mute); text-align:center; padding:var(--gutter); pointer-events:none }
 .machine__loading.is-off{ display:none }
-.machine__flat{ position:absolute; left:50%; top:50%; width:min(86vw,720px); transform:translate(-50%,-50%); border:1px solid var(--mute); filter:grayscale(1) }
+.machine__flat{ position:absolute; left:50%; top:50%; width:min(86vw,720px); transform:translate(-50%,-50%); border:1px solid var(--mute) }
 .spin{ width:26px; height:26px; border:1px solid var(--mute); border-top-color:var(--fg); border-radius:50%; animation:spin .9s linear infinite }
 @keyframes spin{ to{ transform:rotate(360deg) } }
 
