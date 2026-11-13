@@ -51,8 +51,7 @@ window.PF = {
     // uma linha cada, embaixo da bio
     built: [
       'CUTSCENE-LOADER — animação 3D de um vídeo comum, sem mocap',
-      'Painel com servidor MCP próprio e segundo parecer de um Qwen local',
-      'Fábrica de vídeos com IA, com aprovação humana antes de publicar'
+      'Ferramentas variadas dedicadas ao desenvolvimento de jogos indie'
     ],
     now: 'Procuro vaga júnior em AI engineering ou automação · topo freela · inglês fluente',
     links: [
@@ -221,8 +220,7 @@ window.PF_EN = {
     ],
     built: [
       'CUTSCENE-LOADER — 3D animation from an ordinary video, no mocap',
-      'Dashboard with its own MCP server and a second opinion from a local Qwen',
-      'AI video factory, with human approval before anything is published'
+      'A range of tools made for indie game development'
     ],
     now: 'Looking for a junior role in AI engineering or automation · open to freelance · fluent in English'
   },
