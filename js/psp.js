@@ -189,10 +189,24 @@ BUS.on((i, dir) => {
    Ponteiro e arrasto
    ------------------------------------------------------------ */
 let px = 0, py = 0;
+/* Perto dos botões (anterior/próximo/abrir) o PSP congela: para de seguir o cursor e
+   de balançar, para os botões não fugirem do dedo. NEAR_KEYS = folga em volta deles, em px. */
+const NEAR_KEYS = 56;
+let nearKeys = false, holdUntil = 0;
 window.addEventListener('pointermove', (e) => {
   px = (e.clientX / innerWidth) * 2 - 1;
   py = (e.clientY / innerHeight) * 2 - 1;
+  const k = document.querySelector('.keys.is-placed');
+  if (k && e.pointerType === 'mouse') {
+    const r = k.getBoundingClientRect();
+    nearKeys = e.clientX > r.left - NEAR_KEYS && e.clientX < r.right + NEAR_KEYS &&
+               e.clientY > r.top - NEAR_KEYS && e.clientY < r.bottom + NEAR_KEYS;
+  }
 }, { passive: true });
+document.documentElement.addEventListener('pointerleave', () => { nearKeys = false; });   // mouse saiu da janela
+// toque: encostar num botão segura o PSP parado por um instante
+const keysEl = document.querySelector('.keys');
+if (keysEl) keysEl.addEventListener('pointerdown', () => { holdUntil = performance.now() + 1600; });
 
 /* Tocar em qualquer parte do PSP (carcaça, botões ou tela) leva ao próximo
    projeto. Arrastar para o lado continua trocando nos dois sentidos.
@@ -461,8 +475,15 @@ function boot3d() {
     }
 
     const base = { x: 0, y: 0 };  // inclinação do cursor/balanço, sem a mola do dedo
+    let mt = 0, lastNow = 0, holdK = 0, lpx = 0, lpy = 0;   // relógio do balanço e cursor "travado"
     frameFn = (now) => {
-      const t = now / 1000;
+      const dt = lastNow ? Math.min(.1, (now - lastNow) / 1000) : 0;
+      lastNow = now;
+      const frozen = nearKeys || now < holdUntil;
+      holdK += ((frozen ? 1 : 0) - holdK) * .18;   // congela e descongela suave, sem tranco
+      mt += dt * (1 - holdK);                        // o balanço para de andar enquanto congelado
+      if (!frozen) { lpx = px; lpy = py; }           // e a inclinação para de seguir o cursor
+      const t = mt;
       drawScreen(now);
       tex.needsUpdate = true;
 
@@ -471,9 +492,10 @@ function boot3d() {
       const rise = 1 - Math.pow(1 - q, 4);
       kick *= .9;
       const calm = reduce ? 0 : 1;
-      // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY)
-      const ry = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick - (1 - rise) * .9;
-      const rx = (py * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
+      // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY).
+      // Congelado, o empurrão da troca de projeto também some (clicar → → → não mexe o PSP).
+      const ry = (lpx * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick * (1 - holdK) - (1 - rise) * .9;
+      const rx = (lpy * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
       step();
       base.y += (ry - base.y) * .09;
       base.x += (rx - base.x) * .09;

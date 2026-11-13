@@ -83,7 +83,14 @@
     $('infoWhy').parentNode.hidden = !p.why;
     text('railMeta', [p.stack, p.year].filter(Boolean).join(' · '));
     var open = $('railOpen');
-    if (p.link) { open.href = p.link; open.hidden = false; } else { open.hidden = true; }
+    // sem link o botão fica no lugar, apagado e desativado: se sumisse, ← e → mudariam de posição
+    if (p.link) {
+      open.href = p.link;
+      open.removeAttribute('aria-disabled'); open.removeAttribute('title');
+    } else {
+      open.removeAttribute('href');               // sem href o link não recebe foco nem clique
+      open.setAttribute('aria-disabled', 'true'); open.title = 'Sem link público';
+    }
   }
   function paintInfo(i) {
     if (!introDone || reduce) { fillInfo(i); return; }
