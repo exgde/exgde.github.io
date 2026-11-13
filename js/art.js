@@ -10,6 +10,10 @@
 
    Para criar um recorte novo: adicione uma entrada em ART e use o nome
    em data-art no index.html.
+
+   Borda suave: quando um recorte passa da borda da seção (que corta com
+   overflow:hidden), os pontos vão encolhendo até sumir antes do corte,
+   em vez de terminarem numa linha reta. Recalcula ao redimensionar.
    ============================================================ */
 (function () {
   'use strict';
@@ -124,10 +128,60 @@
     return pts.length > 4 ? pts : null;
   }
 
+  /* ---- borda suave ----
+     Mede quanto o recorte passa de cada lado da seção e guarda, em unidades
+     do próprio canvas (0..1): onde o ponto deve chegar a zero (at) e em
+     quanto espaço ele encolhe até lá (len). */
+  var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var SIDES = ['t', 'r', 'b', 'l'];
+
+  function measureFade(canvas) {
+    var sec = canvas.closest('.sec');
+    if (!sec || !canvas.classList.contains('el')) return null;
+    var w = canvas.offsetWidth, h = canvas.offsetHeight;
+    if (!w || !h) return null;
+    var cs = getComputedStyle(canvas);
+    if (cs.display === 'none') return null;
+    // .el fica em left/top e é centrado por translate(-50%,-50%); offset* ignora o transform
+    var x0 = canvas.offsetLeft - w / 2, y0 = canvas.offsetTop - h / 2;
+    var pad = reduce ? 0 : 14 * (parseFloat(cs.getPropertyValue('--d')) || 1) + 4;   // folga do deslize do ponteiro
+    var over = { t: -y0, l: -x0, b: y0 + h - sec.clientHeight, r: x0 + w - sec.clientWidth };
+    var len = Math.min(Math.max(w * 0.18, 40), 120);
+    var fade = null;
+    SIDES.forEach(function (k) {
+      var size = (k === 't' || k === 'b') ? h : w;
+      var at = over[k] + pad;                        // a partir da borda do canvas, onde a seção corta
+      if (at <= -len * 0.25) return;                 // longe da borda: nada a fazer
+      (fade = fade || {})[k] = { at: Math.max(at, 0) / size, len: len / size };
+    });
+    return fade;
+  }
+
+  function sameFade(a, b) {
+    if (!a || !b) return a === b;
+    return SIDES.every(function (k) {
+      var p = a[k], q = b[k];
+      if (!p || !q) return p === q;
+      return Math.abs(p.at - q.at) < 0.004 && Math.abs(p.len - q.len) < 0.004;
+    });
+  }
+
+  function smooth(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
+
+  function fadeAt(f, u, v) {          // u, v: centro do ponto, 0..1
+    if (!f) return 1;
+    var k = 1;
+    if (f.t) k *= smooth((v - f.t.at) / f.t.len);
+    if (f.b) k *= smooth((1 - v - f.b.at) / f.b.len);
+    if (f.l) k *= smooth((u - f.l.at) / f.l.len);
+    if (f.r) k *= smooth((1 - u - f.r.at) / f.r.len);
+    return k;
+  }
+
   function render(canvas) {
     var def = ART[canvas.getAttribute('data-art')];
     if (!def) return;
-    var n = def.cells;
+    var n = def.cells, fade = canvas._fade;
 
     var src = document.createElement('canvas');
     src.width = src.height = n;
@@ -145,7 +199,9 @@
       for (var i = 0; i < n; i++) {
         var v = lum(d, n, i, j);
         if (v < 0.06) continue;
-        var x = (i + 0.5) * step, y = (j + 0.5) * step, s = Math.sqrt(v);
+        var s = Math.sqrt(v) * fadeAt(fade, (i + 0.5) / n, (j + 0.5) / n);
+        if (s < 0.1) continue;
+        var x = (i + 0.5) * step, y = (j + 0.5) * step;
         if (def.dot === 'square') {
           var w = step * s * 0.94;
           c.fillRect(x - w / 2, y - w / 2, w, w);
@@ -158,8 +214,24 @@
   }
 
   function renderAll() {
-    [].forEach.call(document.querySelectorAll('canvas[data-art]'), render);
+    [].forEach.call(document.querySelectorAll('canvas[data-art]'), function (c) {
+      c._fade = measureFade(c);
+      render(c);
+    });
   }
+
+  /* ao mudar o tamanho da tela, redesenha só os recortes cuja borda mudou */
+  function refade() {
+    [].forEach.call(document.querySelectorAll('canvas.el[data-art]'), function (c) {
+      var f = measureFade(c);
+      if (sameFade(f, c._fade)) return;
+      c._fade = f;
+      render(c);
+    });
+  }
+  var t;
+  window.addEventListener('resize', function () { clearTimeout(t); t = setTimeout(refade, 120); });
+  window.addEventListener('load', refade);
 
   window.PF_ART = { render: render, renderAll: renderAll, shapes: ART };
   renderAll();
