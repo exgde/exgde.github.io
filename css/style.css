@@ -199,13 +199,56 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .stage .cue{ opacity:0; transition:opacity 1s var(--ease) .6s }
 .stage.is-info .cue{ opacity:1 }
 
-/* ---- sobre ---- */
-.about{ align-items:flex-end }
-.about__body{ width:min(100%,36rem); margin-right:clamp(0rem,6vw,6rem) }
-.about__body h2{ margin:0 0 1.2rem; font-family:var(--mono); font-weight:400; font-size:clamp(2.2rem,5vw,3rem); letter-spacing:.1em; line-height:1 }
-.about__body p{ margin:0 0 .8rem; font-size:clamp(1rem,1.5vw,1.15rem); line-height:1.55 }
-.stack{ list-style:none; margin:1.6rem 0 0; padding:0; display:flex; flex-wrap:wrap; gap:.3rem .9rem; font-family:var(--mono); font-size:1.1rem; color:var(--mute); letter-spacing:.05em }
+/* ---- sobre ----
+   Grade de 12 colunas: rótulos na coluna estreita (1–3), conteúdo à direita (4–12).
+   A seção cresce com o texto em vez de cortar (height:auto). */
+.about{ height:auto; min-height:100svh; padding-block:clamp(4.5rem,12vh,8rem); justify-content:center }
+.about__wrap{
+  width:min(100%,72rem); margin:0 auto;
+  display:grid; grid-template-columns:repeat(12,minmax(0,1fr)); gap:2.6rem 2rem; align-items:start;
+}
+.about__h{ grid-column:1 / 4; margin:0; font-family:var(--mono); font-weight:400; font-size:clamp(2.6rem,5.4vw,3.8rem); letter-spacing:.1em; line-height:.8 }
+.about__lead{ grid-column:4 / 13; margin:0; font-size:clamp(1.25rem,2.1vw,1.7rem); line-height:1.35; letter-spacing:-.01em; max-width:46rem }
+
+.about__k{ margin:0 0 .6rem; font-family:var(--mono); font-weight:400; font-size:1.05rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute); line-height:1 }
+.about__side{ grid-column:1 / 4; margin:0; padding-top:.75rem; border-top:1px solid color-mix(in srgb, var(--fg) 22%, transparent) }
+.about__txt{ grid-column:4 / 13; display:grid; grid-template-columns:1fr 1fr; gap:2rem }
+.about__txt p, .about__now p{ margin:0; font-size:clamp(1.03rem,1.35vw,1.15rem); line-height:1.55 }
+
+/* três recortes do lado artístico, com rótulo em mono */
+.crafts{ grid-column:1 / 4; list-style:none; margin:0; padding:0; display:grid; grid-template-columns:repeat(3,1fr); gap:.6rem }
+.crafts li{ display:flex; flex-direction:column; align-items:center; gap:.35rem; min-width:0 }
+.crafts canvas{ width:100%; aspect-ratio:1; max-width:6.5rem; transition:transform .5s var(--ease) }
+.crafts li:hover canvas{ transform:translateY(-4px) rotate(-4deg) }
+.crafts span{ font-family:var(--mono); font-size:.95rem; letter-spacing:.06em; color:var(--mute); white-space:nowrap }
+body.is-invert .crafts canvas{ filter:invert(1) }
+
+/* o que já construí: 2×2, número + nome + uma linha */
+.built{
+  grid-column:4 / 13; list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:1fr 1fr; gap:1.6rem 2rem;
+}
+.built li{ display:grid; grid-template-columns:auto 1fr; gap:.15rem .8rem; padding-top:.75rem; border-top:1px solid color-mix(in srgb, var(--fg) 22%, transparent) }
+.built__n{ grid-row:span 2; font-family:var(--mono); font-size:1.6rem; line-height:.9; color:var(--mute) }
+.built b{ font-weight:400; font-style:italic; font-size:1.15rem; line-height:1.2 }
+.built p{ margin:0; font-size:.98rem; line-height:1.5; color:color-mix(in srgb, var(--fg) 82%, transparent) }
+
+.about__now{ grid-column:4 / 13; padding-top:.75rem; border-top:1px solid color-mix(in srgb, var(--fg) 22%, transparent) }
+.about__now p{ max-width:46rem }
+.stack{ list-style:none; margin:1.2rem 0 0; padding:0; display:flex; flex-wrap:wrap; gap:.3rem .9rem; font-family:var(--mono); font-size:1.1rem; color:var(--mute); letter-spacing:.05em }
 .stack li + li::before{ content:"/"; margin-right:.9rem }
+
+/* telas médias: rótulos em cima, conteúdo embaixo */
+@media (max-width:860px){
+  .about__wrap{ grid-template-columns:minmax(0,1fr); gap:1.6rem }
+  .about__wrap > *{ grid-column:1 / -1 !important }
+  .about__side{ margin-top:.8rem; border-top:0; padding-top:0 }
+  .crafts{ max-width:24rem }
+  .about__now{ border-top:0; padding-top:0 }
+}
+@media (max-width:560px){
+  .about__txt, .built{ grid-template-columns:minmax(0,1fr) }
+}
 
 /* ---- contato ---- */
 .links{ margin-top:2rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem 2rem; font-family:var(--mono); font-size:1.4rem; letter-spacing:.05em }
@@ -218,8 +261,8 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 @media (max-aspect-ratio:4/5){
   .line{ flex-direction:column; font-size:clamp(2.6rem,15vw,5rem); gap:0 }
   .cut{ width:44vmin; height:44vmin; margin:-.5rem 0 }
-  .about{ align-items:center; justify-content:flex-end; padding-bottom:calc(var(--gutter) + 4rem) }
-  .about__body{ margin-right:0 }
+  .about{ padding-bottom:calc(var(--gutter) + 4rem) }     /* espaço para o "inverter" */
+  .about .el[data-art="chip"]{ left:90%; top:2.2%; width:20vmin; height:20vmin }   /* no canto, acima do texto */
   /* capa em retrato: nome no topo, PSP no meio, descrição embaixo */
   .brand .line{ flex-direction:row; font-size:clamp(1.6rem,9vw,3.4rem); gap:.04em }
   .brand .cut{ width:30vmin; height:30vmin; margin:0 }

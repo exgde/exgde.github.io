@@ -46,8 +46,22 @@
 
   var about = PF.about || {};
   text('aboutH', about.heading);
-  (about.bio || []).forEach(function (line) {
-    var p = document.createElement('p'); p.textContent = line; $('aboutBio').appendChild(p);
+  text('aboutLead', about.lead);
+  text('aboutAi', about.ai);
+  text('aboutArt', about.art);
+  text('aboutNow', about.now);
+  (about.crafts || []).forEach(function (c) {      // recorte + rótulo; o desenho sai de art.js
+    var li = document.createElement('li'), cv = document.createElement('canvas'), b = document.createElement('span');
+    cv.setAttribute('data-art', c.art); cv.setAttribute('aria-hidden', 'true');
+    b.textContent = c.label;
+    li.appendChild(cv); li.appendChild(b); $('aboutCrafts').appendChild(li);
+    if (window.PF_ART) window.PF_ART.render(cv);
+  });
+  (about.built || []).forEach(function (it, i) {
+    var li = document.createElement('li'), n = document.createElement('span'), h = document.createElement('b'), p = document.createElement('p');
+    n.className = 'built__n'; n.textContent = pad(i + 1);
+    h.textContent = it.title; p.textContent = it.text;
+    li.appendChild(n); li.appendChild(h); li.appendChild(p); $('aboutBuilt').appendChild(li);
   });
   (about.stack || []).forEach(function (item) {
     var li = document.createElement('li'); li.textContent = item; $('aboutStack').appendChild(li);

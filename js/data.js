@@ -27,19 +27,32 @@ window.PF = {
 
   about: {
     heading: 'sobre',
-    bio: [
-      // RASCUNHO escrito a partir dos seus repositórios — reescreva com as suas palavras.
-      'Faço jogos e mods. No momento estou desenvolvendo o WW1-Thriller, um jogo de terror em terceira pessoa na Unreal Engine 5.8, todo em Blueprint.',
-      'Também faço mods e pequenos projetos em Python, Swift e SQL.'
+    // abre a seção, em letra maior
+    lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Rodo modelos de linguagem na minha própria máquina desde 2023, e hoje meu foco é AI engineering: ligar modelos a ferramentas, dados e rotinas reais.',
+    ai: 'Já lidei com o que costuma quebrar na prática: janela de contexto, parâmetros de inferência, custo de GPU e a ligação entre modelo e ferramentas via MCP. Uso o Claude Code conectado à Unity, à Unreal e ao Blender. Também sei quando não usar IA, e consigo explicar cada decisão do código que publico.',
+    art: 'Antes de programar, eu já desenhava. Faço ilustração, pixel art e modelagem 3D, e sou autor e ilustrador de um livro infantil. Faço jogos desde 2019, em Unity e Unreal.',
+    // os três recortes ao lado do texto de arte (o nome em "art" é o desenho de js/art.js)
+    crafts: [
+      { label: 'ilustração',    art: 'pencil' },
+      { label: 'pixel art',     art: 'sprite' },
+      { label: 'modelagem 3d',  art: 'cube' }
     ],
-    stack: ['Unreal Engine 5', 'Blueprint', 'Python', 'C#', 'Swift', 'SQL']
+    built: [
+      { title: 'CUTSCENE-LOADER', text: 'Tira a animação 3D das pessoas de um vídeo comum, sem roupa de mocap, e exporta um BVH por pessoa para o Blender. Pre-alpha.' },
+      { title: 'Painel com MCP próprio', text: 'O Claude lê o estado real dos meus projetos antes de opinar, e um Qwen local dá um segundo parecer.' },
+      { title: 'Fábrica de vídeos', text: 'O Claude escreve o roteiro, a narração roda na minha GPU, a animação 3D sai de código e eu aprovo antes de publicar.' },
+      { title: 'Pipeline de prospecção', text: 'Busca negócios locais e monta a fila de mensagens, com limite de custo e aprovação humana antes de qualquer envio.' }
+    ],
+    now: 'Estudo SQL e Next.js e cuido da comunicação do projeto de extensão Tibira (UFJ). Procuro vaga júnior em AI engineering ou automação, e topo freela e colaboração. Falo inglês fluentemente.',
+    stack: ['Python', 'Claude Code', 'MCP', 'LLMs locais', 'Unreal Engine', 'Unity', 'Blender', 'SQL']
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
   links: [
-    { label: 'github', href: 'https://github.com/exgde' }
+    { label: 'github', href: 'https://github.com/exgde' },
+    { label: 'itch.io', href: 'https://joaobyss.itch.io' },
+    { label: 'email',  href: 'mailto:jbmidiasxboy@gmail.com' }
     // para mostrar mais contatos, adicione linhas como:
-    // { label: 'email',    href: 'mailto:voce@exemplo.com' },
     // { label: 'linkedin', href: 'https://www.linkedin.com/in/seu-usuario' }
   ],
 

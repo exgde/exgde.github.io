@@ -62,6 +62,11 @@
       if (r.width < 12 || r.bottom < 0 || r.top > H || r.right < 0 || r.left > W) return;
       if (frameNo % 24 === 0) T.conf = (0.9 + Math.random() * 0.099).toFixed(3);
 
+      // recorta pela seção do elemento: a moldura não invade a seção vizinha
+      var sec = T.el.closest('.sec'), sr = sec ? sec.getBoundingClientRect() : null;
+      c.save();
+      if (sr) { c.beginPath(); c.rect(sr.left, sr.top, sr.width, sr.height); c.clip(); }
+
       var poly = T.el._contour, x0 = r.left, y0 = r.top, x1 = r.right, y1 = r.bottom, pts = null;
       if (poly) {
         x0 = y0 = Infinity; x1 = y1 = -Infinity;
@@ -90,6 +95,7 @@
         c.globalAlpha = 0.9;
         pts.forEach(function (p, i) { if (i % 3 === 0) c.strokeRect(Math.round(p[0]) - 2.5, Math.round(p[1]) - 2.5, 5, 5); });
       }
+      c.restore();
     });
 
     /* nós soltos, ligados dois a dois */
