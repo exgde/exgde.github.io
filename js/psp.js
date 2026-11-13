@@ -45,6 +45,42 @@ function makeVid(src, loop) {
   return v;
 }
 
+/* ------------------------------------------------------------
+   Som dos clipes
+   Toca só com o cursor em cima do PSP, baixo, e entra/sai em fade.
+   O navegador só deixa tirar o mudo depois de um gesto da pessoa na página
+   (clique ou tecla); antes disso o clipe segue mudo.
+   ------------------------------------------------------------ */
+const SND_VOL = .22, SND_FADE = 450;        // volume máximo e duração do fade, em ms
+let vol = 0, sndAt0 = 0, hot = false, overUi = false, gest = false;
+let sndMuted = false;
+try { sndMuted = localStorage.getItem('psp-muted') === '1'; } catch (e) {}
+const sndBtn = document.getElementById('sndBtn');
+function paintSnd() { if (sndBtn) sndBtn.setAttribute('aria-pressed', sndMuted ? 'true' : 'false'); }
+paintSnd();
+if (sndBtn) sndBtn.addEventListener('click', () => {
+  sndMuted = !sndMuted;
+  try { localStorage.setItem('psp-muted', sndMuted ? '1' : '0'); } catch (e) {}
+  paintSnd();
+});
+['pointerdown', 'keydown'].forEach((t) => window.addEventListener(t, () => { gest = true; }, { capture: true, passive: true }));
+function canSound() { return gest || !!(navigator.userActivation && navigator.userActivation.hasBeenActive); }
+function audioTick(now) {
+  const dt = Math.min(100, now - sndAt0); sndAt0 = now;
+  const m = media.get(BUS.index), v = m && m.vid;
+  let want = ((hot || overUi) && !sndMuted && v && !v.paused && canSound()) ? SND_VOL : 0;
+  if (v && v.duration && v.duration - v.currentTime < SND_FADE / 1000 + .08) want = 0;   // fade-out antes do clipe acabar
+  const step = SND_VOL * dt / SND_FADE;
+  vol = want > vol ? Math.min(want, vol + step) : Math.max(want, vol - step);
+  media.forEach((mm) => {
+    [mm.vid, mm.next].forEach((x) => {
+      if (!x) return;
+      if (x === v && vol > .002) { x.volume = vol; if (x.muted) x.muted = false; }
+      else if (!x.muted) x.muted = true;
+    });
+  });
+}
+
 function mediaFor(i) {
   if (media.has(i)) return media.get(i);
   const p = BUS.projects[i] || {}, m = {};
@@ -66,6 +102,7 @@ function mediaFor(i) {
         m.k = (m.k + 1) % clips.length;
         m.vid = m.next;
         m.vid.currentTime = 0;
+        vol = 0;                    // o som do clipe novo entra em fade-in
         m.vid.play().catch(() => {});
         old.pause();
         old.src = clips[(m.k + 1) % clips.length];
@@ -203,6 +240,8 @@ let kick = 0;                     // empurrãozinho no PSP a cada troca
 BUS.on((i, dir) => {
   switchedAt = performance.now();
   kick = dir * .22;
+  vol = 0;
+  media.forEach((m) => { [m.vid, m.next].forEach((v) => { if (v) v.muted = true; }); });
   media.forEach((m, k) => { if (m.vid) { if (k === i) m.vid.play().catch(() => {}); else m.vid.pause(); } });
   const m = mediaFor(i);
   if (m.vid) m.vid.play().catch(() => {});
@@ -220,7 +259,7 @@ window.addEventListener('pointermove', (e) => {
   py = (e.clientY / innerHeight) * 2 - 1;
 }, { passive: true });
 const keysEl = document.querySelector('.keys');
-if (keysEl) keysEl.querySelectorAll('button, a').forEach((el) => {
+document.querySelectorAll('.keys button, .keys a').forEach((el) => {
   el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') overKey = true; });
   el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') overKey = false; });
 });
@@ -281,7 +320,13 @@ stage.addEventListener('pointercancel', () => { release(); down = null; });
    (placeKeys, a cada quadro) e só aparecem com o cursor em cima do modelo.
    Em cima dos próprios botões eles continuam acesos (CSS :hover). */
 const keys = document.querySelector('.keys');
-function overPsp(on) { if (keys) keys.classList.toggle('is-on', on); }
+const snd = document.querySelector('.keys--snd');
+function overPsp(on) { hot = on; if (keys) keys.classList.toggle('is-on', on); if (snd) snd.classList.toggle('is-on', on); }
+[keys, snd].forEach((el) => {
+  if (!el) return;
+  el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') overUi = true; });
+  el.addEventListener('pointerleave', () => { overUi = false; });
+});
 stage.addEventListener('pointerleave', () => { stage.style.cursor = ''; overPsp(false); });
 
 // a mãozinha (e os botões) só aparecem em cima do PSP, não no espaço vazio em volta
@@ -307,6 +352,14 @@ function keysAt(x, y) {
   keys.classList.add('is-placed');
 }
 
+// o botão de som fica com o canto de cima-direita dele no ponto (x, y) da página
+function sndAt(x, y) {
+  if (!snd) return;
+  const h = snd.offsetParent ? snd.offsetParent.getBoundingClientRect() : { left: 0, top: 0 };
+  snd.style.transform = `translate3d(${(x - h.left).toFixed(1)}px,${(y - h.top).toFixed(1)}px,0) translate(-100%,0)`;
+  snd.classList.add('is-placed');
+}
+
 /* ------------------------------------------------------------
    Visibilidade: só desenha com a seção na tela
    ------------------------------------------------------------ */
@@ -314,6 +367,7 @@ let onScreen = false, running = false, frameFn = null;
 function start() { if (!running && onScreen && !document.hidden && frameFn) { running = true; requestAnimationFrame(loop); } }
 function loop(now) {
   if (!onScreen || document.hidden) { running = false; return; }
+  audioTick(now);
   frameFn(now);
   requestAnimationFrame(loop);
 }
@@ -346,6 +400,7 @@ function flat(reason) {
     drawScreen(now);
     const r = scr.getBoundingClientRect();
     keysAt(r.right, r.bottom);
+    sndAt(r.right, r.top);
   };
   BUS.modelReady();
   start();
@@ -561,12 +616,15 @@ function boot3d() {
     function placeKeys() {
       const r = canvas.getBoundingClientRect();
       let bx = 0, by = 0, best = -Infinity;
+      let lx = 0, ly = 0, bestL = -Infinity;       // canto de cima-direita, para o botão de som
       for (const c of corners) {
         pv.copy(c).applyMatrix4(screen.matrixWorld).project(camera);
         const x = (pv.x + 1) / 2 * r.width, y = (1 - pv.y) / 2 * r.height;
         if (x + y > best) { best = x + y; bx = x; by = y; }
+        if (x - y > bestL) { bestL = x - y; lx = x; ly = y; }
       }
       keysAt(r.left + bx, r.top + by);
+      sndAt(r.left + lx, r.top + ly);
     }
     BUS.modelReady();
     start();

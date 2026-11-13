@@ -234,6 +234,13 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .keys svg{ width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
 .keys a[aria-disabled="true"]{ opacity:.3; cursor:default }               /* sem link: fica no lugar, sem ação */
 .keys a[aria-disabled="true"]:hover{ background:none; color:#fff }
+/* som: mesmo bloco, sozinho, no canto superior direito da tela do PSP */
+.keys--snd{ translate:-12px 12px }
+@media (max-width:640px){ .keys--snd{ translate:-7px 7px } }
+.keys--snd .snd__off{ display:none }
+.keys--snd button[aria-pressed="true"] .snd__on{ display:none }
+.keys--snd button[aria-pressed="true"] .snd__off{ display:block }
+.keys--snd button[aria-pressed="true"]{ opacity:.6 }
 
 /* o "dedo" no PSP: anel que abre onde a pessoa tocou (psp.js) */
 /* anel de toque em halftone (desenhado por psp.js, quadro a quadro) */
