@@ -126,18 +126,6 @@ window.PF = {
       vids: [1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { return 'assets/projects/goldspotting-' + n + '.mp4'; })
     },
     {
-      title: 'Casa Acessível',
-      sub: 'Casa e banheiro para cadeira de rodas, em realidade virtual',
-      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
-      how: 'Modelei a casa e o banheiro no Blender, montei a cena e a interação em VR na Unreal Engine 5.8 e usei Python para automatizar etapas do processo.',
-      why: 'Para experimentar, em escala real e de dentro, como uma casa precisa ser para quem usa cadeira de rodas: passagens, alturas e espaço de giro.',
-      stack: 'Unreal Engine 5.8 · Blender · Python',
-      year: '2026',
-      link: '',                     // repositório privado: sem link
-      img: 'assets/projects/casa-acessivel.jpg',
-      vid: 'assets/projects/casa-acessivel.mp4'
-    },
-    {
       title: 'WW1-Thriller',
       sub: 'Terror em terceira pessoa, em desenvolvimento',
       // RASCUNHO — reescreva "how" e "why" com as suas palavras.
@@ -149,6 +137,18 @@ window.PF = {
       img: 'assets/projects/ww1-thriller.jpg',
       // 1: demonstração de movimentação e tiro · 2: sistema de luz com isqueiro
       vids: ['assets/projects/ww1-thriller-1.mp4', 'assets/projects/ww1-thriller-2.mp4']
+    },
+    {
+      title: 'Casa Acessível',
+      sub: 'Casa e banheiro para cadeira de rodas, em realidade virtual',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Modelei a casa e o banheiro no Blender, montei a cena e a interação em VR na Unreal Engine 5.8 e usei Python para automatizar etapas do processo.',
+      why: 'Para experimentar, em escala real e de dentro, como uma casa precisa ser para quem usa cadeira de rodas: passagens, alturas e espaço de giro.',
+      stack: 'Unreal Engine 5.8 · Blender · Python',
+      year: '2026',
+      link: '',                     // repositório privado: sem link
+      img: 'assets/projects/casa-acessivel.jpg',
+      vid: 'assets/projects/casa-acessivel.mp4'
     },
     {
       title: 'oot-switch2-button-prompts',
@@ -274,14 +274,14 @@ window.PF_EN = {
       stack: '3D game · GBJAM 14'
     },
     {
-      sub: 'A wheelchair-accessible house and bathroom, in virtual reality',
-      how: 'I modeled the house and bathroom in Blender, built the scene and the VR interaction in Unreal Engine 5.8, and used Python to automate steps of the process.',
-      why: 'To experience, at real scale and from the inside, what a house needs to be like for a wheelchair user: doorways, heights and turning space.'
-    },
-    {
       sub: 'Third-person horror, in development',
       how: 'Made in Unreal Engine 5.8, with all the logic in Blueprint: the character, the third-person camera and the game\'s tension systems.',
       why: 'A horror game set in World War I, and my main project right now.'
+    },
+    {
+      sub: 'A wheelchair-accessible house and bathroom, in virtual reality',
+      how: 'I modeled the house and bathroom in Blender, built the scene and the VR interaction in Unreal Engine 5.8, and used Python to automate steps of the process.',
+      why: 'To experience, at real scale and from the inside, what a house needs to be like for a wheelchair user: doorways, heights and turning space.'
     },
     {
       sub: 'PlayStation, Xbox and Steam Deck button icons for OOT (Switch 2)',
