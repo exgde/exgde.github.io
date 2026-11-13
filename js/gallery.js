@@ -50,7 +50,12 @@
       else b.setAttribute('aria-label', 'Ver em tela cheia: ' + (it.alt || 'desenho'));
       var img = document.createElement('img');
       img.src = it.img; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async'; img.draggable = false;
-      b.appendChild(img);
+      // o botão é só a área de hover/clique e nunca se mexe; quem "salta" no destaque é a
+      // camada de dentro (sem pointer-events). Assim o salto não tira o quadro de baixo do cursor.
+      var art = document.createElement('span');
+      art.className = 'gallery__art';
+      art.appendChild(img);
+      b.appendChild(art);
       frag.appendChild(b);
     });
     if (front && front.parentNode === R.el) front = null;
@@ -141,17 +146,35 @@
     return f > SEEN_FROM && f < SEEN_TO;
   }
 
+  /* o quadro no ponto (x, y), ou null num vão. Usa elementsFromPoint e não elementFromPoint:
+     com um quadro saltado em 3D, o Chrome às vezes devolve a fileira no lugar do quadro que
+     está ali, e o destaque ficava ligando e desligando sozinho. */
+  function tileAt(x, y) {
+    var list = document.elementsFromPoint(x, y);
+    for (var i = 0; i < list.length; i++) {
+      var el = list[i];
+      if (el.classList && el.classList.contains('gallery__tile')) return gallery.contains(el) ? el : null;
+      if (el === gallery || !gallery.contains(el)) return null;    // chegou no fundo da galeria: vão
+    }
+    return null;
+  }
+
   function hoverAt(x, y) {          // o quadro debaixo do mouse agora (as fileiras andam sozinhas)
     if (dragging || lb.open) return;
-    var el = document.elementFromPoint(x, y);
-    var tile = el && el.closest ? el.closest('.gallery__tile') : null;   // vão entre quadros não conta
-    if (tile && (!gallery.contains(tile) || !seen(tile, x))) tile = null;
+    var tile = tileAt(x, y);
+    if (tile && !seen(tile, x)) tile = null;
     if (tile) {
       var R = rowOf(tile.parentNode);
       if (R.mode === 'coast' && Math.abs(R.v) > HOVER_MAX_V) return;
     }
-    setFront(tile);
+    if (tile) { clearTimeout(unfrontT); unfrontT = 0; setFront(tile); }
+    else if (front && !unfrontT) {
+      // vão entre quadros: espera um instante antes de apagar o destaque, para não piscar
+      // ao passar de um quadro para o vizinho
+      unfrontT = setTimeout(function () { unfrontT = 0; setFront(null); }, UNFRONT_MS);
+    }
   }
+  var unfrontT = 0, UNFRONT_MS = 160;
 
   gallery.addEventListener('pointermove', function (e) {
     if (e.pointerType !== 'mouse') return;
@@ -161,6 +184,7 @@
   gallery.addEventListener('pointerleave', function (e) {
     if (e.pointerType !== 'mouse') return;
     mouse.in = false;
+    clearTimeout(unfrontT); unfrontT = 0;
     if (!dragging) setFront(null);
   });
 
@@ -168,10 +192,11 @@
   rows.forEach(function (R) {
     R.el.addEventListener('pointerdown', function (e) {
       if (e.pointerType === 'mouse' && e.button !== 0) return;
+      clearTimeout(unfrontT); unfrontT = 0;
       setFront(null);
       dragging = R;
       R.mode = 'drag';
-      var hit = e.target.closest('.gallery__tile');
+      var hit = tileAt(e.clientX, e.clientY) || e.target.closest('.gallery__tile');   // e.target erra com quadro em 3D
       R.drag = {
         id: e.pointerId, x0: e.clientX, last: e.clientX, moved: false,
         tile: hit && seen(hit, e.clientX) ? hit : null,      // quadro esmaecido na ponta não abre

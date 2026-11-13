@@ -254,24 +254,30 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 .gallery__row.is-drag, .gallery__row.is-drag .gallery__tile{ cursor:grabbing }
 
+/* .gallery__tile é a área de hover/clique: fica sempre no lugar do quadro e nunca se mexe.
+   .gallery__art (dentro dele, sem pointer-events) é o que aparece e o que salta no destaque. */
 .gallery__tile{
   position:relative; flex:none; height:100%; aspect-ratio:1; display:block;
-  padding:0; border:0; margin:0; font:inherit; color:inherit; cursor:zoom-in;
+  padding:0; border:0; margin:0; font:inherit; color:inherit; background:none; cursor:zoom-in;
+  transform-style:preserve-3d;    /* deixa o salto da camada de dentro acontecer no espaço 3D da galeria */
+  outline:none; -webkit-tap-highlight-color:transparent;
+}
+.gallery__art{
+  display:block; width:100%; height:100%; pointer-events:none;
   overflow:hidden; border-radius:10px; background:color-mix(in srgb, var(--fg) 8%, transparent);
-  outline-offset:3px; -webkit-tap-highlight-color:transparent;
   transition:transform .45s var(--ease), box-shadow .45s var(--ease);
 }
-.gallery__tile img{
+.gallery__tile:focus-visible .gallery__art{ outline:2px solid var(--fg); outline-offset:3px }
+.gallery__art img{
   display:block; width:100%; height:100%; object-fit:cover; object-position:50% 30%;
   filter:grayscale(1) contrast(1.05); pointer-events:none;
   transition:filter .45s var(--ease);
 }
-/* o quadro debaixo do mouse vem para a frente (continua dentro do plano inclinado,
-   então mantém a perspectiva); os vizinhos da mesma fileira apagam um pouco */
 /* o quadro debaixo do mouse sai do plano em direção a quem olha (translateZ dentro da
-   perspectiva, com um pequeno "quique"), e por estar mais perto fica por cima das outras fileiras */
-.gallery__tile.is-front{
-  z-index:3; transform:translateZ(90px) scale(1.2);
+   perspectiva, com um pequeno "quique"); por estar mais perto, fica por cima das outras fileiras.
+   Os vizinhos da mesma fileira apagam um pouco. */
+.gallery__tile.is-front .gallery__art{
+  transform:translateZ(90px) scale(1.2);
   transition:transform .55s cubic-bezier(.34,1.56,.64,1), box-shadow .45s var(--ease);
   box-shadow:0 26px 60px rgba(0,0,0,.75), 0 0 0 1.5px color-mix(in srgb, var(--fg) 70%, transparent);
 }
@@ -386,7 +392,7 @@ html.is-lb{ overflow:hidden }
 
 @media (prefers-reduced-motion:reduce){
   .lb[open], .lb__stage img{ animation:none !important }
-  .gallery__tile, .gallery__tile img{ transition:none }
+  .gallery__art, .gallery__art img{ transition:none }
 }
 
 /* ---- contato ---- */
