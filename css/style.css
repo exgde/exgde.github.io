@@ -111,9 +111,11 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 .role{ margin:1.6rem 0 0; font-family:var(--mono); font-size:1.15rem; letter-spacing:.1em; color:var(--mute); text-align:center }
 
-.cue{ position:absolute; z-index:3; left:50%; bottom:var(--gutter); width:44px; height:56px; margin-left:-22px; display:grid; place-items:center }
-.cue i{ display:block; width:1px; height:40px; background:currentColor; transform-origin:top; animation:cue 2.2s var(--ease) infinite }
-@keyframes cue{ 0%{ transform:scaleY(0) } 55%{ transform:scaleY(1) } 100%{ transform:scaleY(1); opacity:0 } }
+/* seta "tem mais pra baixo": pontos desenhados por js/cue.js, que define tamanho e posição */
+.cue{ position:absolute; z-index:3; left:50%; bottom:var(--gutter); display:block; color:var(--fg); -webkit-tap-highlight-color:transparent }
+.cue canvas{ display:block }
+.cue:focus-visible{ outline-offset:-14px; border-radius:12px }
+.cue.is-gone{ visibility:hidden; pointer-events:none }
 
 /* ---- capa + máquina: uma tela só ----
    Estados (main.js, em #hero): is-name → is-dock → is-psp → is-info.
@@ -533,9 +535,14 @@ html.is-lb{ overflow:hidden }
 
 /* ---- contato ---- */
 .contact{ justify-content:center }
-/* última seção: pode passar da altura da tela (telas baixas, mais links) em vez de cortar,
-   e guarda espaço embaixo para os créditos (.foot) */
-.contact{ height:auto; min-height:100svh; padding-bottom:calc(var(--gutter) + 3.6rem) }
+/* última seção: altura do conteúdo (não da tela), para não abrir um vão depois do "sobre";
+   guarda espaço embaixo para os créditos (.foot) */
+.contact{ height:auto; min-height:0; padding-top:clamp(2.5rem,7vh,4.5rem); padding-bottom:calc(var(--gutter) + 3.6rem) }
+/* recortes extras dos lados: os el--side somem em telas estreitas (ficariam atrás dos cartões),
+   os el--wide só entram quando sobra margem dos lados (telas largas) */
+.contact .el--wide{ display:none }
+@media (min-width:1500px){ .contact .el--wide{ display:block } }
+@media (max-width:900px){ .contact .el--side{ display:none } }
 .contact__wrap{
   position:relative; z-index:3; width:min(100%,72rem);
   display:flex; flex-direction:column; align-items:center; gap:clamp(1.6rem,4.5vh,3.2rem);
@@ -651,7 +658,7 @@ html.is-lb{ overflow:hidden }
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto }
   .sec .lay{ transform:none; transition:opacity .3s }
-  .cue i, .spin{ animation:none }
+  .spin{ animation:none }
   .poke{ display:none }
   .brand, .brand__w, .brand__cut, .brand .role, .machine__stage, .el--late,
   .info__in, .info__in > *, .info__dl > div{ transition:opacity .4s !important; filter:none !important }
