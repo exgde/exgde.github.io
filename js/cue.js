@@ -3,7 +3,7 @@
 
    Feita de pontos redondos, como os recortes (js/art.js): o tamanho de
    cada ponto segue o brilho da forma. Parada, uma onda desce pela seta.
-   Ao rolar a página ela se desfaz: cada ponto se solta, se espalha e
+   Ao rolar a página ela se desfaz no lugar (fica fixa embaixo da tela): cada ponto se solta, se espalha e
    encolhe até sumir, em momentos um pouco diferentes. O efeito segue a
    posição da rolagem, então voltar para o topo remonta a seta.
    ============================================================ */

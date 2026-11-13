@@ -111,8 +111,9 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 .role{ margin:1.6rem 0 0; font-family:var(--mono); font-size:1.15rem; letter-spacing:.1em; color:var(--mute); text-align:center }
 
-/* seta "tem mais pra baixo": pontos desenhados por js/cue.js, que define tamanho e posição */
-.cue{ position:absolute; z-index:3; left:50%; bottom:var(--gutter); display:block; color:var(--fg); -webkit-tap-highlight-color:transparent }
+/* seta "tem mais pra baixo": pontos desenhados por js/cue.js, que define tamanho e posição.
+   fixa na tela: ao rolar ela se desfaz no lugar, em vez de subir junto com a capa */
+.cue{ position:fixed; z-index:3; left:50%; bottom:var(--gutter); display:block; color:var(--fg); -webkit-tap-highlight-color:transparent }
 .cue canvas{ display:block }
 .cue:focus-visible{ outline-offset:-14px; border-radius:12px }
 .cue.is-gone{ visibility:hidden; pointer-events:none }
