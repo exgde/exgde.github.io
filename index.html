@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611131800" />
+<link rel="stylesheet" href="css/style.css?v=2611132100" />
 </head>
 <body class="is-booting">
 
@@ -75,29 +75,23 @@
 </section>
 
 <!-- 02 · SOBRE
-     Coluna estreita à esquerda com os rótulos, conteúdo à direita. -->
+     Esquerda: três fileiras de desenhos num plano em perspectiva, cada uma
+     deslizando para um lado (main.js monta, CSS anima).
+     Direita: o cartão com o "sobre mim". -->
 <section class="sec about" id="about">
-  <canvas class="el" data-art="chip" data-trk style="--x:93;--y:9;--w:30;--d:1.2" aria-hidden="true"></canvas>
-  <canvas class="el" data-art="cursor" style="--x:4;--y:94;--w:16;--d:.7" aria-hidden="true"></canvas>
-
   <div class="about__wrap lay">
-    <h2 class="about__h" id="aboutH"></h2>
-    <p class="about__lead" id="aboutLead"></p>
-
-    <ul class="crafts" id="aboutCrafts" aria-label="Lado artístico"></ul>
-    <div class="about__txt">
-      <div><h3 class="about__k">ia</h3><p id="aboutAi"></p></div>
-      <div><h3 class="about__k">arte</h3><p id="aboutArt"></p></div>
+    <div class="gallery" id="gallery" aria-label="Desenhos">
+      <div class="gallery__plane" id="galleryPlane"></div>
     </div>
 
-    <h3 class="about__k about__side">o que já construí</h3>
-    <ol class="built" id="aboutBuilt"></ol>
-
-    <h3 class="about__k about__side">agora</h3>
-    <div class="about__now">
-      <p id="aboutNow"></p>
-      <ul class="stack" id="aboutStack"></ul>
-    </div>
+    <article class="card">
+      <h2 class="card__h" id="aboutH"></h2>
+      <p class="card__lead" id="aboutLead"></p>
+      <div class="card__bio" id="aboutBio"></div>
+      <ul class="card__built" id="aboutBuilt"></ul>
+      <p class="card__now" id="aboutNow"></p>
+      <nav class="card__links" id="aboutLinks" aria-label="Onde ver mais"></nav>
+    </article>
   </div>
 </section>
 
@@ -127,10 +121,10 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611131800"></script>
-<script src="js/art.js?v=2611131800"></script>
-<script src="js/main.js?v=2611131800"></script>
-<script src="js/track.js?v=2611131800"></script>
-<script type="module" src="js/psp.js?v=2611131800"></script>
+<script src="js/data.js?v=2611132100"></script>
+<script src="js/art.js?v=2611132100"></script>
+<script src="js/main.js?v=2611132100"></script>
+<script src="js/track.js?v=2611132100"></script>
+<script type="module" src="js/psp.js?v=2611132100"></script>
 </body>
 </html>

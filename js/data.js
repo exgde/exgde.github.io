@@ -26,30 +26,57 @@ window.PF = {
   role: 'jogos · mods · código',
 
   about: {
-    heading: 'sobre',
-    // abre a seção, em letra maior
-    lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Rodo modelos de linguagem na minha própria máquina desde 2023, e hoje meu foco é AI engineering: ligar modelos a ferramentas, dados e rotinas reais.',
-    ai: 'Já lidei com o que costuma quebrar na prática: janela de contexto, parâmetros de inferência, custo de GPU e a ligação entre modelo e ferramentas via MCP. Uso o Claude Code conectado à Unity, à Unreal e ao Blender. Também sei quando não usar IA, e consigo explicar cada decisão do código que publico.',
-    art: 'Antes de programar, eu já desenhava. Faço ilustração, pixel art e modelagem 3D, e sou autor e ilustrador de um livro infantil. Faço jogos desde 2019, em Unity e Unreal.',
-    // os três recortes ao lado do texto de arte (o nome em "art" é o desenho de js/art.js)
-    crafts: [
-      { label: 'ilustração',    art: 'pencil' },
-      { label: 'pixel art',     art: 'sprite' },
-      { label: 'modelagem 3d',  art: 'cube' }
+    heading: 'sobre mim',
+    lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Meu foco é AI engineering: ligar modelos de linguagem a ferramentas, dados e rotinas reais.',
+    bio: [
+      'Rodo LLMs na minha própria máquina desde 2023 e uso o Claude Code ligado via MCP à Unity, à Unreal e ao Blender. Sei quando não usar IA, e consigo explicar cada decisão do código que publico.',
+      'Antes de programar, eu já desenhava: faço ilustração, pixel art e modelagem 3D, e faço jogos desde 2019.'
     ],
+    // uma linha cada, embaixo da bio
     built: [
-      { title: 'CUTSCENE-LOADER', text: 'Tira a animação 3D das pessoas de um vídeo comum, sem roupa de mocap, e exporta um BVH por pessoa para o Blender. Pre-alpha.' },
-      { title: 'Painel com MCP próprio', text: 'O Claude lê o estado real dos meus projetos antes de opinar, e um Qwen local dá um segundo parecer.' },
-      { title: 'Fábrica de vídeos', text: 'O Claude escreve o roteiro, a narração roda na minha GPU, a animação 3D sai de código e eu aprovo antes de publicar.' },
-      { title: 'Pipeline de prospecção', text: 'Busca negócios locais e monta a fila de mensagens, com limite de custo e aprovação humana antes de qualquer envio.' }
+      'CUTSCENE-LOADER — animação 3D de um vídeo comum, sem mocap',
+      'Painel com servidor MCP próprio e segundo parecer de um Qwen local',
+      'Fábrica de vídeos com IA, com aprovação humana antes de publicar'
     ],
-    now: 'Estudo SQL e Next.js e cuido da comunicação do projeto de extensão Tibira (UFJ). Procuro vaga júnior em AI engineering ou automação, e topo freela e colaboração. Falo inglês fluentemente.',
-    stack: ['Python', 'Claude Code', 'MCP', 'LLMs locais', 'Unreal Engine', 'Unity', 'Blender', 'SQL']
+    now: 'Procuro vaga júnior em AI engineering ou automação · topo freela · inglês fluente',
+    links: [
+      { label: 'artstation', href: 'https://www.artstation.com/joaobyss' },
+      { label: 'itch.io',    href: 'https://joaobyss.itch.io' },
+      { label: 'github',     href: 'https://github.com/exgde' }
+    ]
+  },
+
+  /* Desenhos da galeria em perspectiva, ao lado do "sobre mim".
+     rows: as três fileiras, de cima para baixo (cada uma repete os seus
+     desenhos até encher a largura). alt descreve o desenho para leitor de tela.
+     Clicar num desenho abre o "link" (o ArtStation). */
+  art: {
+    link: 'https://www.artstation.com/joaobyss',
+    rows: [
+      [
+        { img: 'assets/art/art-01.webp', alt: 'Soldado com máscara de gás e coração azul brilhando no peito' },
+        { img: 'assets/art/art-03.webp', alt: 'Garota de cabelo curto se abraçando' },
+        { img: 'assets/art/art-06.webp', alt: 'Gigante com tentáculos saindo do mar, perto de um navio' },
+        { img: 'assets/art/art-10.webp', alt: 'Cena em pixel art do jogo Goldspotting com a personagem Sofia' }
+      ],
+      [
+        { img: 'assets/art/art-05.webp', alt: 'Perfil de garota de franja, de olhos fechados' },
+        { img: 'assets/art/art-09.webp', alt: 'Garota sentada à mesa de um café' },
+        { img: 'assets/art/art-02.webp', alt: 'Homem com o rosto enfaixado apontando uma arma' },
+        { img: 'assets/art/art-11.webp', alt: 'Capa do jogo Goldspotting' }
+      ],
+      [
+        { img: 'assets/art/art-04.webp', alt: 'Esboço de rosto de garota de cabelo claro' },
+        { img: 'assets/art/art-07.webp', alt: 'Garota correndo numa praia com coqueiros' },
+        { img: 'assets/art/art-08.webp', alt: 'Folha de estudos de personagem' }
+      ]
+    ]
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
   links: [
     { label: 'github', href: 'https://github.com/exgde' },
+    { label: 'artstation', href: 'https://www.artstation.com/joaobyss' },
     { label: 'itch.io', href: 'https://joaobyss.itch.io' },
     { label: 'email',  href: 'mailto:jbmidiasxboy@gmail.com' }
     // para mostrar mais contatos, adicione linhas como:

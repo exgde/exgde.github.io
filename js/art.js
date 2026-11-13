@@ -101,57 +101,6 @@
       g.fillStyle = lin(g, 0.22, 0.08, 0.7, 0.9, '#ffffff', '#707070'); g.fill();
     } },
 
-    /* lado artístico (seção "sobre"): lápis, sprite e cubo */
-    pencil: { cells: 40, dot: 'round', draw: function (g) {
-      about(g, 0.72, 1);
-      g.fillStyle = lin(g, 0.4, 0, 0.6, 0, '#ffffff', '#6a6a6a'); g.fillRect(0.4, 0.06, 0.2, 0.56);   // corpo
-      g.fillStyle = '#3a3a3a'; g.fillRect(0.4, 0.06, 0.2, 0.05);                                     // borracha
-      g.fillStyle = '#d8d8d8'; g.fillRect(0.4, 0.11, 0.2, 0.07);                                     // anel de metal
-      g.fillStyle = '#1c1c1c'; g.fillRect(0.4, 0.18, 0.2, 0.012);
-      g.beginPath(); g.moveTo(0.4, 0.62); g.lineTo(0.6, 0.62); g.lineTo(0.5, 0.86); g.closePath();   // ponta de madeira
-      g.fillStyle = lin(g, 0.4, 0.62, 0.6, 0.86, '#bdbdbd', '#7a7a7a'); g.fill();
-      g.beginPath(); g.moveTo(0.465, 0.78); g.lineTo(0.535, 0.78); g.lineTo(0.5, 0.86); g.closePath(); // grafite
-      g.fillStyle = '#ffffff'; g.fill();
-    } },
-
-    sprite: { cells: 26, dot: 'square', draw: function (g, n) {   // bichinho em pixel art, desenhado aqui mesmo
-      var rows = [
-        '....####....',
-        '..##++++##..',
-        '.#++++++++#.',
-        '.#+..++..+#.',
-        '#++..++..++#',
-        '#++++++++++#',
-        '#+++----+++#',
-        '#++++++++++#',
-        '.#++++++++#.',
-        '.#+#++++#+#.',
-        '..#.#..#.#..'
-      ], tone = { '#': '#ffffff', '+': '#8c8c8c', '-': '#3a3a3a' };
-      g.setTransform(1, 0, 0, 1, 0, 0);
-      var px = 2, ox = 1, oy = 2;                  // 12×11 pixels, 2 células cada, centrado em 26
-      rows.forEach(function (r, y) {
-        for (var x = 0; x < r.length; x++) {
-          if (!tone[r[x]]) continue;
-          g.fillStyle = tone[r[x]];
-          g.fillRect(ox + x * px, oy + y * px, px, px);
-        }
-      });
-    } },
-
-    cube: { cells: 44, dot: 'round', draw: function (g) {
-      var c = [0.5, 0.47], s = 0.43, h = s * 0.58;
-      var top = [[0.5, c[1] - s], [0.5 + s * 0.87, c[1] - h + 0.02], [0.5, c[1] - 0.02 + 0.0], [0.5 - s * 0.87, c[1] - h + 0.02]];
-      function face(pts, fill) {
-        g.beginPath(); pts.forEach(function (p, i) { g[i ? 'lineTo' : 'moveTo'](p[0], p[1]); }); g.closePath();
-        g.fillStyle = fill; g.fill();
-      }
-      var L = 0.5 - s * 0.87, R = 0.5 + s * 0.87, mid = c[1] - 0.02, top0 = c[1] - h + 0.02, bot = c[1] + s;
-      face(top, lin(g, L, c[1] - s, R, mid, '#ffffff', '#cfcfcf'));
-      face([[L, top0], [0.5, mid], [0.5, bot], [L, bot - (mid - top0)]], lin(g, L, top0, 0.5, bot, '#9a9a9a', '#5c5c5c'));
-      face([[R, top0], [0.5, mid], [0.5, bot], [R, bot - (mid - top0)]], lin(g, R, top0, 0.5, bot, '#5a5a5a', '#2e2e2e'));
-    } },
-
     at:     { cells: 44, dot: 'round', draw: function (g, n) { glyph(g, n, '@', 0.92, 0.02); } },
     braces: { cells: 44, dot: 'round', draw: function (g, n) { glyph(g, n, '{}', 0.8, 0); } }
   };
