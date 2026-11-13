@@ -1,0 +1,9 @@
+{
+  "upperarm_l": [4, -12, 0],
+  "upperarm_r": [-5, 13, 0],
+  "lowerarm_l": [-20, 5, 0],
+  "lowerarm_r": [-24, -5, 0],
+  "thigh_l": [0, -6, 0],
+  "thigh_r": [0, 6, 0],
+  "head": [0, 0, 5]
+}

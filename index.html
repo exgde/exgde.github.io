@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611131250" />
+<link rel="stylesheet" href="css/style.css?v=2611131454" />
 </head>
 <body class="is-booting">
 
@@ -112,6 +112,34 @@
   </div>
 </section>
 
+<!-- 03 · MODELAGEM 3D
+     Mais curta que as outras. Esquerda: o texto. Direita: o soldado do
+     WW1-Thriller girando (36 quadros do Blender) e, mais apagados em volta,
+     os outros modelos. Os pontos são desenhados por js/m3d.js. -->
+<section class="sec m3d" id="m3d">
+  <div class="m3d__wrap lay">
+    <header class="m3d__h">
+      <p class="kick"><span id="m3dK"></span><i aria-hidden="true"></i></p>
+      <h2 class="m3d__t" id="m3dT"></h2>
+      <p class="m3d__lead" id="m3dLead"></p>
+      <ul class="m3d__list" id="m3dList"></ul>
+      <p class="m3d__meta" id="m3dMeta"></p>
+    </header>
+
+    <div class="m3d__stage">
+      <figure class="m3d__it m3d__it--crew"><canvas data-dots="assets/m3d/crew.webp" style="aspect-ratio:648/345" aria-hidden="true"></canvas><figcaption data-lab="crew"></figcaption></figure>
+      <figure class="m3d__it m3d__it--fn"><canvas data-dots="assets/m3d/fn1910.webp" style="aspect-ratio:290/210" aria-hidden="true"></canvas><figcaption data-lab="fn1910"></figcaption></figure>
+      <figure class="m3d__it m3d__it--head"><canvas data-dots="assets/m3d/head.webp" style="aspect-ratio:301/300" aria-hidden="true"></canvas><figcaption data-lab="head"></figcaption></figure>
+      <figure class="m3d__it m3d__it--w1897"><canvas data-dots="assets/m3d/w1897.webp" style="aspect-ratio:547/150" aria-hidden="true"></canvas><figcaption data-lab="w1897"></figcaption></figure>
+      <figure class="m3d__it m3d__it--lighter"><canvas data-dots="assets/m3d/lighter.webp" style="aspect-ratio:85/250" aria-hidden="true"></canvas><figcaption data-lab="lighter"></figcaption></figure>
+      <figure class="m3d__hero">
+        <canvas id="m3dHero" data-sheet="assets/m3d/soldier-turn.webp" tabindex="0" role="img"></canvas>
+        <figcaption><span data-lab="hero"></span><span class="m3d__hint" id="m3dHint"></span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
 <!-- 04 · CONTATO -->
 <section class="sec contact" id="contact">
   <canvas class="el" data-art="cursor" data-trk style="--x:90;--y:16;--w:30;--d:1.4" aria-hidden="true"></canvas>
@@ -173,14 +201,15 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611131250"></script>
-<script src="js/i18n.js?v=2611131250"></script>
-<script src="js/icons.js?v=2611131250"></script>
-<script src="js/art.js?v=2611131250"></script>
-<script src="js/main.js?v=2611131250"></script>
-<script src="js/cue.js?v=2611131250"></script>
-<script src="js/gallery.js?v=2611131250"></script>
-<script src="js/track.js?v=2611131250"></script>
-<script type="module" src="js/psp.js?v=2611131250"></script>
+<script src="js/data.js?v=2611131454"></script>
+<script src="js/i18n.js?v=2611131454"></script>
+<script src="js/icons.js?v=2611131454"></script>
+<script src="js/art.js?v=2611131454"></script>
+<script src="js/main.js?v=2611131454"></script>
+<script src="js/cue.js?v=2611131454"></script>
+<script src="js/gallery.js?v=2611131454"></script>
+<script src="js/m3d.js?v=2611131454"></script>
+<script src="js/track.js?v=2611131454"></script>
+<script type="module" src="js/psp.js?v=2611131454"></script>
 </body>
 </html>

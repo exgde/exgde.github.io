@@ -672,3 +672,62 @@ html.is-lb{ overflow:hidden }
   .el, .cut{ transform:translate(-50%,-50%) }
   .cut{ transform:none }
 }
+
+/* ============================================================
+   03 · MODELAGEM 3D — mais curta: altura do conteúdo, não da tela
+   ============================================================ */
+.m3d{ height:auto; min-height:0; padding-block:clamp(2.5rem,8vh,5.5rem) }
+.m3d__wrap{
+  width:min(100%,82rem); display:grid; grid-template-columns:minmax(0,.82fr) minmax(0,1.18fr);
+  gap:clamp(1.5rem,4vw,4.5rem); align-items:center;
+}
+.m3d__t{ margin:0; font-weight:400; font-style:italic; font-size:clamp(1.8rem,3.4vw,3.2rem); line-height:1; letter-spacing:-.02em }
+.m3d__t span:last-child{ color:color-mix(in srgb, var(--fg) 62%, transparent) }
+.m3d__lead{ margin:1rem 0 0; max-width:30rem; font-size:clamp(1rem,1.25vw,1.15rem); line-height:1.45 }
+.m3d__list{ list-style:none; margin:1.1rem 0 0; padding:0; max-width:31rem; display:grid; gap:.5rem }
+.m3d__list li{
+  position:relative; padding-left:1.1rem; font-size:clamp(.92rem,1.05vw,1rem); line-height:1.4;
+  color:color-mix(in srgb, var(--fg) 80%, transparent);
+}
+.m3d__list li::before{ content:""; position:absolute; left:0; top:.55em; width:.42rem; height:.42rem; border-radius:50%; background:currentColor }
+.m3d__meta{
+  position:relative; margin:1.2rem 0 0; padding-top:.6rem; max-width:max-content;
+  font-family:var(--mono); font-size:1.05rem; letter-spacing:.06em; color:var(--mute);
+}
+.m3d__meta::before{ content:""; position:absolute; left:0; top:0; width:100%; height:1px; background:color-mix(in srgb, var(--fg) 35%, transparent) }
+
+.m3d__stage{ position:relative; height:clamp(21rem,58vh,34rem) }
+.m3d__stage figure{ margin:0 }
+.m3d__stage canvas{ display:block; width:100%; height:100%; opacity:0; transition:opacity 1.1s var(--ease) }
+.m3d__stage canvas.is-on{ opacity:1 }
+.m3d__stage figcaption{
+  font-family:var(--mono); font-size:.92rem; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--mute); white-space:nowrap; line-height:1.1;
+}
+/* o soldado, na frente e no meio */
+.m3d__hero{ position:absolute; z-index:3; left:50%; bottom:1.4rem; height:calc(100% - 1.4rem); aspect-ratio:300/545; transform:translateX(-50%) }
+.m3d__hero canvas{ cursor:grab; touch-action:pan-y; outline:none }
+.m3d__hero canvas.is-held{ cursor:grabbing }
+.m3d__hero canvas:focus-visible{ outline:1px dashed color-mix(in srgb, var(--fg) 55%, transparent); outline-offset:4px }
+.m3d__hero figcaption{ position:absolute; left:50%; top:100%; transform:translateX(-50%); padding-top:.35rem; display:flex; gap:.7rem; color:var(--fg) }
+.m3d__hint{ color:var(--mute) }
+/* os outros, atrás e mais apagados */
+.m3d__it{ position:absolute; z-index:1 }
+.m3d__it figcaption{ padding-top:.3rem }
+.m3d__it--crew{ left:-1%; bottom:1.4rem; width:54%; opacity:.5 }
+.m3d__it--fn{ left:7%; top:3%; width:17%; opacity:.62; rotate:-9deg }
+.m3d__it--head{ right:3%; top:0; width:25%; opacity:.82; z-index:2 }
+.m3d__it--w1897{ right:-1%; top:50%; width:39%; opacity:.66; rotate:-7deg }
+.m3d__it--lighter{ right:24%; bottom:1.4rem; width:6%; opacity:.6 }
+.m3d__it--fn figcaption, .m3d__it--w1897 figcaption{ rotate:0deg }
+
+@media (max-width:900px){
+  .m3d__wrap{ grid-template-columns:1fr; gap:1.6rem }
+  .m3d__stage{ height:clamp(20rem,62vh,28rem) }
+  .m3d__it--crew{ width:70%; left:-4% }
+  .m3d__it--head{ width:31%; right:0 }
+  .m3d__it--w1897{ width:46%; right:-3% }
+  .m3d__it--fn{ width:22%; left:2% }
+  .m3d__it--lighter{ right:16%; width:8% }
+  .m3d__stage figcaption{ font-size:.82rem }
+}

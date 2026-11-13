@@ -90,6 +90,22 @@ window.PF = {
     ]
   },
 
+  /* 03 · modelagem 3D (js/m3d.js). As imagens saem do Blender; ver tools/m3d/. */
+  m3d: {
+    kicker: '3D · personagens e armas',
+    title: ['modelos', 'para jogos'],
+    lead: 'Personagens, inimigos e armas dos meus jogos, preparados para rodar no motor.',
+    list: [
+      'Soldado do WW1-Thriller: 15,6 mil triângulos, rig no esqueleto da Unreal e shape keys de respiração',
+      'Armas com ossos para ferrolho, gatilho e carregador',
+      'Low poly do Goldspotting: piratas com cerca de 1,2 mil triângulos cada'
+    ],
+    meta: 'Blender · Unreal Engine 5 · Unity',
+    hint: 'arraste para girar',
+    heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, girando. Arraste para girar.',
+    labels: { hero: 'WW1-Thriller', head: 'soldado tático', crew: 'Goldspotting', w1897: 'W1897', fn1910: 'FN1910', lighter: 'isqueiro' }
+  },
+
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
   contactKicker: 'contato · links',
   contactNote: 'Vaga júnior, freela ou collab em jogos e IA: é só chamar.',
@@ -245,6 +261,21 @@ window.PF_EN = {
         { alt: 'Character study sheet' }
       ]
     ]
+  },
+
+  m3d: {
+    kicker: '3D · characters and weapons',
+    title: ['models', 'for games'],
+    lead: 'Characters, enemies and weapons from my games, set up to run in the engine.',
+    list: [
+      'WW1-Thriller soldier: 15.6k triangles, rigged to the Unreal skeleton, with breathing shape keys',
+      'Weapons with bones for the slide, trigger and magazine',
+      'Goldspotting low poly: pirates at about 1.2k triangles each'
+    ],
+    meta: 'Blender · Unreal Engine 5 · Unity',
+    hint: 'drag to rotate',
+    heroAlt: 'WW1-Thriller soldier in a gas mask, rotating. Drag to rotate.',
+    labels: { hero: 'WW1-Thriller', head: 'tactical soldier', crew: 'Goldspotting', w1897: 'W1897', fn1910: 'FN1910', lighter: 'lighter' }
   },
 
   contact: ['get in', 'touch.'],
