@@ -147,8 +147,9 @@ window.PF = {
       stack: 'Unreal Engine 5.8 · Blueprint',
       year: '2026',
       link: '',                     // repositório privado: sem link
-      img: '',
-      vid: ''                       // quando a gravação chegar: 'assets/projects/ww1-thriller.mp4'
+      img: 'assets/projects/ww1-thriller.jpg',
+      // 1: demonstração de movimentação e tiro · 2: sistema de luz com isqueiro
+      vids: ['assets/projects/ww1-thriller-1.mp4', 'assets/projects/ww1-thriller-2.mp4']
     },
     {
       title: 'oot-switch2-button-prompts',
