@@ -58,7 +58,7 @@ window.PF = {
     links: [
       { label: 'artstation', href: 'https://joaobyss.artstation.com' },
       { label: 'itch.io',    href: 'https://joaobyss.itch.io' },
-      { label: 'github',     href: 'https://github.com/exgde' },
+      { label: 'github',     href: 'https://github.com/joaobyss' },
       { label: 'ko-fi',      href: 'https://ko-fi.com/joaobyss' }
     ]
   },
@@ -100,7 +100,7 @@ window.PF = {
   linkGroups: [
     { title: 'carreira & código', links: [
       { icon: 'linkedin', label: 'LinkedIn', handle: 'joao-bernardes', note: 'currículo e experiência', href: 'https://www.linkedin.com/in/joao-bernardes-478749415/' },
-      { icon: 'github',   label: 'GitHub',   handle: '@exgde',         note: 'código e projetos',      href: 'https://github.com/exgde' }
+      { icon: 'github',   label: 'GitHub',   handle: '@joaobyss',         note: 'código e projetos',      href: 'https://github.com/joaobyss' }
     ] },
     { title: 'arte & vídeo', links: [
       { icon: 'artstation', label: 'ArtStation', handle: 'joaobyss',          note: 'ilustração e 3D',    href: 'https://joaobyss.artstation.com/' },
@@ -158,7 +158,7 @@ window.PF = {
       why: 'Para quem joga com controle de PlayStation, Xbox ou Steam Deck ver na tela os botões que tem na mão.',
       stack: 'Mod · 43 estrelas',
       year: '2026',
-      link: 'https://github.com/exgde/oot-switch2-button-prompts',
+      link: 'https://github.com/joaobyss/oot-switch2-button-prompts',
       img: '', vid: ''
     },
     {
@@ -169,7 +169,7 @@ window.PF = {
       why: 'Para jogar OOT (Switch 2) no Lichii com teclado e mouse, sem precisar de controle.',
       stack: 'Python · Mod',
       year: '2026',
-      link: 'https://github.com/exgde/oot-lichii-keyboard-mouse',
+      link: 'https://github.com/joaobyss/oot-lichii-keyboard-mouse',
       img: '', vid: ''
     },
     {
@@ -180,7 +180,7 @@ window.PF = {
       why: 'Um projeto pessoal, feito para o meu próprio uso.',
       stack: 'Swift',
       year: '2026',
-      link: 'https://github.com/exgde/adega',
+      link: 'https://github.com/joaobyss/adega',
       img: '', vid: ''
     },
     {
@@ -191,7 +191,7 @@ window.PF = {
       why: 'Para praticar modelagem de banco de dados num caso real: livros, leitores e empréstimos.',
       stack: 'MySQL',
       year: '2026',
-      link: 'https://github.com/exgde/biblioteca-sql',
+      link: 'https://github.com/joaobyss/biblioteca-sql',
       img: '', vid: ''
     }
   ]
