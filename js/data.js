@@ -17,6 +17,9 @@
      img    captura de tela, ex.: 'assets/projects/meu-app.jpg' (ideal 960×544)
      vid    gravação curta em loop, ex.: 'assets/projects/meu-app.mp4'
             (se tiver vid, ele é usado no lugar de img)
+     vids   vários clipes, ex.: ['assets/projects/a-1.mp4', 'assets/projects/a-2.mp4']:
+            o PSP toca um depois do outro, em ciclo, com um chuvisco na troca
+            (se tiver vids, ele é usado no lugar de vid)
    Sem img nem vid, o PSP mostra uma tela gerada com o título.
    ============================================================ */
 window.PF = {
@@ -85,6 +88,19 @@ window.PF = {
   ],
 
   projects: [
+    {
+      title: 'Goldspotting',
+      sub: 'Jogo feito para a GBJAM 14, publicado no itch.io',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Feito para a GBJAM 14, uma game jam com as limitações do Game Boy: tela de 160×144 e paleta de quatro cores.',
+      why: 'É o projeto que mais mostra como eu termino um jogo: do zero ao publicado, dentro do prazo da jam.',
+      stack: 'Jogo · GBJAM 14',
+      year: '2026',
+      link: 'https://joaobyss.itch.io',   // troque pela página do jogo no itch.io, se quiser
+      img: 'assets/projects/goldspotting.jpg',
+      // trechos de uma partida completa, 6–9 s cada
+      vids: [1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { return 'assets/projects/goldspotting-' + n + '.mp4'; })
+    },
     {
       title: 'Casa Acessível',
       sub: 'Casa e banheiro para cadeira de rodas, em realidade virtual',

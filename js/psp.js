@@ -38,18 +38,46 @@ const g = scr.getContext('2d');
 const media = new Map();          // índice → { img?, vid? }, criado só quando o projeto é escolhido
 let switchedAt = performance.now();
 
+function makeVid(src, loop) {
+  const v = document.createElement('video');
+  v.muted = true; v.loop = loop; v.playsInline = true; v.preload = 'auto';
+  v.src = src;
+  return v;
+}
+
 function mediaFor(i) {
   if (media.has(i)) return media.get(i);
   const p = BUS.projects[i] || {}, m = {};
-  if (p.vid) {
-    m.vid = document.createElement('video');
-    m.vid.muted = true; m.vid.loop = true; m.vid.playsInline = true; m.vid.preload = 'auto';
-    m.vid.src = p.vid;
-    // o projeto que abre a página não passa pelo BUS.on: sem este play() o vídeo ficava parado no 1º quadro
-    if (i === BUS.index) m.vid.play().catch(() => {});
-  } else if (p.img) {
+  const clips = (p.vids && p.vids.length) ? p.vids : p.vid ? [p.vid] : [];
+  if (p.img) {                    // capa: aparece enquanto o vídeo ainda carrega
     m.img = new Image();
     m.img.src = p.img;
+  }
+  if (clips.length) {
+    m.vid = makeVid(clips[0], clips.length === 1);
+    if (clips.length > 1) {
+      /* vários clipes: um toca, o próximo já fica carregando no outro <video>.
+         Quando um acaba, os dois trocam de papel e a tela dá um chuvisco rápido. */
+      m.k = 0;
+      m.next = makeVid(clips[1], false);
+      const onEnd = (e) => {
+        if (e.target !== m.vid) return;
+        const old = m.vid;
+        m.k = (m.k + 1) % clips.length;
+        m.vid = m.next;
+        m.vid.currentTime = 0;
+        m.vid.play().catch(() => {});
+        old.pause();
+        old.src = clips[(m.k + 1) % clips.length];
+        old.load();
+        m.next = old;
+        switchedAt = performance.now() - 90;   // chuvisco um pouco mais curto que o da troca de projeto
+      };
+      m.vid.addEventListener('ended', onEnd);
+      m.next.addEventListener('ended', onEnd);
+    }
+    // o projeto que abre a página não passa pelo BUS.on: sem este play() o vídeo ficava parado no 1º quadro
+    if (i === BUS.index) m.vid.play().catch(() => {});
   }
   media.set(i, m);
   return m;
