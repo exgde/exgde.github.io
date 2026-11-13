@@ -41,7 +41,7 @@ window.PF = {
     lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Meu foco é AI engineering: ligar modelos de linguagem a ferramentas, dados e rotinas reais.',
     bio: [
       'Rodo LLMs na minha própria máquina desde 2023 e uso o Claude Code ligado via MCP à Unity, à Unreal e ao Blender. Sei quando não usar IA, e consigo explicar cada decisão do código que publico.',
-      'Antes de programar, eu já desenhava: faço ilustração, pixel art e modelagem 3D, e faço jogos desde 2019.'
+      'Antes de programar, eu já desenhava: faço ilustração, pixel art e modelagem 3D, e faço jogos desde 2019. Com 10 anos, meu segundo jogo publicado foi pra Game Jaaj 2, a jam do youtuber Andre Young, e ficou entre os 3 cotados pra vencer no vídeo de premiação.'
     ],
     // uma linha cada, embaixo da bio
     built: [
