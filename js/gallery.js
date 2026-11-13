@@ -28,6 +28,8 @@
   var MOVE_TOL = 6;                 // até 6 px ainda conta como clique, não arrasto
   var MAX_V = 4000;                 // limite do arremesso, px/s
   var HOVER_MAX_V = 400;            // arremesso forte não é freado só por passar o mouse
+  var t = (window.PF_I18N || { t: function (k) { return k === 'tileView' ? 'Ver em tela cheia: ' : 'desenho'; } }).t;
+  function tileLabel(it) { return t('tileView') + (it.alt || t('drawing')); }
 
   /* ---- montagem ---- */
   var items = [];                   // todos os desenhos, sem repetição (para a tela cheia)
@@ -47,7 +49,7 @@
       b.className = 'gallery__tile';
       b.setAttribute('data-i', idx);
       if (copy) { b.setAttribute('aria-hidden', 'true'); b.tabIndex = -1; }
-      else b.setAttribute('aria-label', 'Ver em tela cheia: ' + (it.alt || 'desenho'));
+      else b.setAttribute('aria-label', tileLabel(it));
       var img = document.createElement('img');
       img.src = it.img; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async'; img.draggable = false;
       // o botão é só a área de hover/clique e nunca se mexe; quem "salta" no destaque é a
@@ -357,4 +359,12 @@
       start();
     });
   }
+
+  /* ---- idioma trocado (js/i18n.js): os alt já mudaram dentro de PF.art ---- */
+  document.addEventListener('pf:lang', function () {
+    [].forEach.call(plane.querySelectorAll('.gallery__tile:not([aria-hidden])'), function (b) {
+      b.setAttribute('aria-label', tileLabel(items[+b.getAttribute('data-i')]));
+    });
+    if (lb.open) { lbImg.alt = items[cur].alt || ''; lbCap.textContent = items[cur].alt || ''; }
+  });
 })();

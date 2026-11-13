@@ -21,6 +21,11 @@
             o PSP toca um depois do outro, em ciclo, com um chuvisco na troca
             (se tiver vids, ele é usado no lugar de vid)
    Sem img nem vid, o PSP mostra uma tela gerada com o título.
+
+   Inglês: a versão em inglês fica em window.PF_EN, no fim deste arquivo.
+   Ela tem o mesmo formato, mas só com os textos (links, imagens e vídeos
+   vêm daqui de cima). Mudou um texto aqui? Mude o equivalente lá também.
+   Quem vê qual idioma: js/i18n.js.
    ============================================================ */
 window.PF = {
   name: 'JoaoByss',                 // título da aba do navegador
@@ -186,6 +191,116 @@ window.PF = {
       year: '2026',
       link: 'https://github.com/exgde/biblioteca-sql',
       img: '', vid: ''
+    }
+  ]
+};
+
+/* ============================================================
+   ENGLISH — mesmo formato de window.PF, só com os textos.
+   Listas (projetos, grupos de links, fileiras de desenhos) seguem a
+   mesma ordem de cima. O que faltar aqui aparece em português.
+   ============================================================ */
+window.PF_EN = {
+  role: 'games · mods · code',
+
+  about: {
+    art: {
+      kicker: 'art · 2019—now',
+      title: ['work', 'as an artist'],
+      sub: 'illustration · pixel art · 3D modeling'
+    },
+    photo: { alt: 'Black-and-white portrait of João' },
+    heading: 'about me',
+    lead: 'I study Computer Science at UFJ and hold a technical degree in IT from IFG. My focus is AI engineering: connecting language models to real tools, data and workflows.',
+    bio: [
+      'I have been running LLMs on my own machine since 2023, and I use Claude Code connected via MCP to Unity, Unreal and Blender. I know when not to use AI, and I can explain every decision in the code I publish.',
+      'Before I coded, I drew: I do illustration, pixel art and 3D modeling, and I have been making games since 2019.'
+    ],
+    built: [
+      'CUTSCENE-LOADER — 3D animation from an ordinary video, no mocap',
+      'Dashboard with its own MCP server and a second opinion from a local Qwen',
+      'AI video factory, with human approval before anything is published'
+    ],
+    now: 'Looking for a junior role in AI engineering or automation · open to freelance · fluent in English'
+  },
+
+  art: {
+    rows: [
+      [
+        { alt: 'Soldier in a gas mask with a glowing blue heart on his chest' },
+        { alt: 'Short-haired girl hugging herself' },
+        { alt: 'Giant with tentacles rising from the sea, next to a ship' },
+        { alt: 'Pixel art scene from the game Goldspotting with the character Sofia' }
+      ],
+      [
+        { alt: 'Profile of a girl with bangs, eyes closed' },
+        { alt: 'Girl sitting at a café table' },
+        { alt: 'Man with a bandaged face pointing a gun' },
+        { alt: 'Cover art for the game Goldspotting' }
+      ],
+      [
+        { alt: 'Sketch of a fair-haired girl\'s face' },
+        { alt: 'Girl running on a beach with palm trees' },
+        { alt: 'Character study sheet' }
+      ]
+    ]
+  },
+
+  contact: ['get in', 'touch.'],
+  contactKicker: 'contact · links',
+  contactNote: 'Junior role, freelance or a collab on games and AI: just reach out.',
+  linkGroups: [
+    { title: 'career & code', links: [
+      { note: 'résumé and experience' },
+      { note: 'code and projects' }
+    ] },
+    { title: 'art & video', links: [
+      { note: 'illustration and 3D' },
+      { note: 'videos' }
+    ] },
+    { title: 'games', links: [
+      { note: 'published games' },
+      { note: 'profile and games' }
+    ] }
+  ],
+
+  projects: [
+    {
+      sub: 'A 3D game that looks like a Game Boy game, published on itch.io',
+      how: 'For GBJAM 14, I challenged myself to fit a fully 3D game into the Game Boy\'s four-color palette and low resolution, without it stopping being fun.',
+      why: 'It is the project that best shows how I finish a game: from scratch to published, within the jam deadline.',
+      stack: '3D game · GBJAM 14'
+    },
+    {
+      sub: 'A wheelchair-accessible house and bathroom, in virtual reality',
+      how: 'I modeled the house and bathroom in Blender, built the scene and the VR interaction in Unreal Engine 5.8, and used Python to automate steps of the process.',
+      why: 'To experience, at real scale and from the inside, what a house needs to be like for a wheelchair user: doorways, heights and turning space.'
+    },
+    {
+      sub: 'Third-person horror, in development',
+      how: 'Made in Unreal Engine 5.8, with all the logic in Blueprint: the character, the third-person camera and the game\'s tension systems.',
+      why: 'A horror game set in World War I, and my main project right now.'
+    },
+    {
+      sub: 'PlayStation, Xbox and Steam Deck button icons for OOT (Switch 2)',
+      how: 'I replaced the game\'s button icons with versions for each controller, keeping the original visual style.',
+      why: 'So people playing with a PlayStation, Xbox or Steam Deck controller see on screen the buttons they are holding.',
+      stack: 'Mod · 43 stars'
+    },
+    {
+      sub: 'OOT (Switch 2) on Lichii with keyboard and mouse',
+      how: 'A Python script that translates keyboard and mouse input into controller commands.',
+      why: 'To play OOT (Switch 2) on Lichii with keyboard and mouse, no controller needed.'
+    },
+    {
+      sub: 'My personal crossover',
+      how: 'Written in Swift.',
+      why: 'A personal project, made for my own use.'
+    },
+    {
+      sub: 'MySQL modeling for a library system',
+      how: 'I modeled the tables, relationships and keys in MySQL, with queries for the day-to-day of a library.',
+      why: 'To practice database modeling on a real case: books, readers and loans.'
     }
   ]
 };

@@ -69,9 +69,15 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .boot__pct{ font-family:var(--mono); font-size:1.1rem; letter-spacing:.18em; color:var(--mute) }
 
 /* ---- controles fixos ---- */
-.ctl{ position:fixed; right:var(--gutter); bottom:var(--gutter); z-index:10; mix-blend-mode:difference; color:#fff }
+.ctl{ position:fixed; right:var(--gutter); bottom:var(--gutter); z-index:10; mix-blend-mode:difference; color:#fff;
+  display:flex; align-items:center; gap:1.3rem }
 .ctl__b{ font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em; padding:.5rem 0 .2rem; min-height:44px }
 .ctl__b[aria-pressed="true"]{ text-decoration:underline; text-underline-offset:.3em }
+/* idioma: bandeira em preto e branco + nome (js/i18n.js) */
+.ctl__lang{ display:inline-flex; align-items:center; gap:.45rem }
+.flag{ flex:none; display:block; height:.82em; width:auto; margin-top:-.1rem; fill:currentColor }
+.flag__o{ fill:none; stroke:currentColor; stroke-width:1 }
+.ctl__lang:hover .flag, .ctl__lang:focus-visible .flag{ transform:scale(1.08) }
 
 /* ---- linha de título com recorte no meio (capa e contato) ---- */
 .line{
