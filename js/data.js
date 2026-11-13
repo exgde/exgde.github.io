@@ -90,13 +90,12 @@ window.PF = {
   projects: [
     {
       title: 'Goldspotting',
-      sub: 'Jogo feito para a GBJAM 14, publicado no itch.io',
-      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
-      how: 'Feito para a GBJAM 14, uma game jam com as limitações do Game Boy: tela de 160×144 e paleta de quatro cores.',
+      sub: 'Um jogo 3D com cara de Game Boy, publicado no itch.io',
+      how: 'Para a GBJAM 14, me desafiei a encaixar um jogo totalmente 3D na paleta de quatro cores e na resolução baixa do Game Boy, sem deixar de ser divertido.',
       why: 'É o projeto que mais mostra como eu termino um jogo: do zero ao publicado, dentro do prazo da jam.',
-      stack: 'Jogo · GBJAM 14',
+      stack: 'Jogo 3D · GBJAM 14',
       year: '2026',
-      link: 'https://joaobyss.itch.io',   // troque pela página do jogo no itch.io, se quiser
+      link: 'https://joaobyss.itch.io/goldspotting',
       img: 'assets/projects/goldspotting.jpg',
       // trechos de uma partida completa, 6–9 s cada
       vids: [1, 2, 3, 4, 5, 6, 7, 8].map(function (n) { return 'assets/projects/goldspotting-' + n + '.mp4'; })
