@@ -308,6 +308,28 @@ body.is-invert .about.is-in .me img:not(.me__light){ opacity:0 }
   .about{ --wrap:104rem; --me-w:clamp(11rem,15vw,20rem); --me:calc(var(--me-w) + clamp(.5rem,1.5vw,1.5rem)) }
   .about__wrap{ grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) }
 }
+/* telas bem largas (≥1600px): tudo cresce junto com a largura para ocupar o espaço,
+   mas devagar. --u vale 0 em 1600px e ~9.6px em 2560px; cada medida soma um pouco dele
+   e para num teto, para não exagerar em monitores maiores ainda. */
+@media (min-width:1600px){
+  .about{
+    --u:calc((100vw - 1600px) / 100);
+    --wrap:min(calc(104rem + var(--u) * 90), 170rem);
+    --me-w:min(calc(20rem + var(--u) * 10), 30rem);
+  }
+  .about__wrap{ gap:min(calc(4rem + var(--u) * 2), 7rem) }
+  .gallery{ --h:min(66vh, calc(38rem + var(--u) * 14), 56rem) }
+  .about .art__t{ font-size:min(calc(3.2rem + var(--u) * 1.4), 4.6rem) }
+  .about .art__k, .about .art__s{ font-size:min(calc(1.05rem + var(--u) * .3), 1.35rem) }
+  .about .card{ padding:min(calc(2.4rem + var(--u) * 1.2), 3.6rem); gap:min(calc(.85rem + var(--u) * .5), 1.4rem); border-radius:min(calc(22px + var(--u) * .6), 30px) }
+  .about .card__h{ font-size:min(calc(2.8rem + var(--u) * 1.2), 3.8rem) }
+  .about .card__lead{ font-size:min(calc(1.22rem + var(--u) * .6), 1.65rem) }
+  .about .card__bio p{ font-size:min(calc(.96rem + var(--u) * .4), 1.25rem) }
+  .about .card__built{ font-size:min(calc(.92rem + var(--u) * .38), 1.2rem) }
+  .about .card__now{ font-size:min(calc(1.02rem + var(--u) * .35), 1.3rem) }
+  .about .card__links{ gap:min(calc(.5rem + var(--u) * .2), .8rem) }
+  .about .card__links a{ min-height:min(calc(40px + var(--u) * .8), 52px); padding:0 min(calc(.95rem + var(--u) * .3), 1.3rem); font-size:min(calc(1.08rem + var(--u) * .35), 1.38rem) }
+}
 /* abaixo disso não sobra coluna: o retrato vira um "adesivo" no canto do cartão */
 @media (max-width:1179px){
   /* só a cabeça, na altura do título "sobre mim", cruzando a borda de cima do cartão */
