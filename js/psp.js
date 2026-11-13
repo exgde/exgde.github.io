@@ -189,24 +189,20 @@ BUS.on((i, dir) => {
    Ponteiro e arrasto
    ------------------------------------------------------------ */
 let px = 0, py = 0;
-/* Perto dos botões (anterior/próximo/abrir) o PSP congela: para de seguir o cursor e
-   de balançar, para os botões não fugirem do dedo. NEAR_KEYS = folga em volta deles, em px. */
-const NEAR_KEYS = 56;
-let nearKeys = false, holdUntil = 0;
+/* Com o cursor em cima de um dos botões (anterior/próximo/abrir), e só em cima deles,
+   o PSP congela: para de balançar e de seguir o cursor, para os botões não fugirem. */
+let overKey = false, holdUntil = 0;
 window.addEventListener('pointermove', (e) => {
   px = (e.clientX / innerWidth) * 2 - 1;
   py = (e.clientY / innerHeight) * 2 - 1;
-  const k = document.querySelector('.keys.is-placed');
-  if (k && e.pointerType === 'mouse') {
-    const r = k.getBoundingClientRect();
-    nearKeys = e.clientX > r.left - NEAR_KEYS && e.clientX < r.right + NEAR_KEYS &&
-               e.clientY > r.top - NEAR_KEYS && e.clientY < r.bottom + NEAR_KEYS;
-  }
 }, { passive: true });
-document.documentElement.addEventListener('pointerleave', () => { nearKeys = false; });   // mouse saiu da janela
-// toque: encostar num botão segura o PSP parado por um instante
 const keysEl = document.querySelector('.keys');
-if (keysEl) keysEl.addEventListener('pointerdown', () => { holdUntil = performance.now() + 1600; });
+if (keysEl) keysEl.querySelectorAll('button, a').forEach((el) => {
+  el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') overKey = true; });
+  el.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') overKey = false; });
+});
+// toque: encostar num botão segura o PSP parado por um instante
+if (keysEl) keysEl.addEventListener('pointerdown', (e) => { if (e.pointerType !== 'mouse') holdUntil = performance.now() + 1600; });
 
 /* Tocar em qualquer parte do PSP (carcaça, botões ou tela) leva ao próximo
    projeto. Arrastar para o lado continua trocando nos dois sentidos.
@@ -475,14 +471,19 @@ function boot3d() {
     }
 
     const base = { x: 0, y: 0 };  // inclinação do cursor/balanço, sem a mola do dedo
-    let mt = 0, lastNow = 0, holdK = 0, lpx = 0, lpy = 0;   // relógio do balanço e cursor "travado"
+    /* congelar e descongelar: holdP anda em linha reta de 0 a 1 (FREEZE_S para parar,
+       RELEASE_S para voltar) e holdK = smoothstep(holdP), que começa e termina devagar.
+       Congelado (holdK = 1), o balanço para e a inclinação deixa de seguir o cursor. */
+    const FREEZE_S = .5, RELEASE_S = .85;
+    let mt = 0, lastNow = 0, holdP = 0, holdK = 0;
     frameFn = (now) => {
       const dt = lastNow ? Math.min(.1, (now - lastNow) / 1000) : 0;
       lastNow = now;
-      const frozen = nearKeys || now < holdUntil;
-      holdK += ((frozen ? 1 : 0) - holdK) * .18;   // congela e descongela suave, sem tranco
-      mt += dt * (1 - holdK);                        // o balanço para de andar enquanto congelado
-      if (!frozen) { lpx = px; lpy = py; }           // e a inclinação para de seguir o cursor
+      const frozen = overKey || now < holdUntil;
+      holdP = frozen ? Math.min(1, holdP + dt / FREEZE_S) : Math.max(0, holdP - dt / RELEASE_S);
+      holdK = holdP * holdP * (3 - 2 * holdP);
+      const free = 1 - holdK;
+      mt += dt * free;                               // o relógio do balanço desacelera até parar
       const t = mt;
       drawScreen(now);
       tex.needsUpdate = true;
@@ -494,11 +495,12 @@ function boot3d() {
       const calm = reduce ? 0 : 1;
       // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY).
       // Congelado, o empurrão da troca de projeto também some (clicar → → → não mexe o PSP).
-      const ry = (lpx * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick * (1 - holdK) - (1 - rise) * .9;
-      const rx = (lpy * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
+      const ry = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick * free - (1 - rise) * .9;
+      const rx = (py * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
       step();
-      base.y += (ry - base.y) * .09;
-      base.x += (rx - base.x) * .09;
+      // a velocidade com que segue o cursor também vai a zero e volta suave
+      base.y += (ry - base.y) * .09 * free;
+      base.x += (rx - base.x) * .09 * free;
       pivot.rotation.y = base.y + spring.ry;
       pivot.rotation.x = base.x + spring.rx;
       pivot.rotation.z = Math.sin(t * .5) * .012 * calm;

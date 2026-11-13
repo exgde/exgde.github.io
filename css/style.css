@@ -204,7 +204,8 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .keys button:focus-visible, .keys a:focus-visible{ outline:2px solid #fff; outline-offset:2px }
 .keys button:active, .keys a:active{ transform:scale(.88) }
 .keys svg{ width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
-.keys a[aria-disabled="true"]{ opacity:.3; pointer-events:none }
+.keys a[aria-disabled="true"]{ opacity:.3; cursor:default }               /* sem link: fica no lugar, sem ação */
+.keys a[aria-disabled="true"]:hover{ background:none; color:#fff }
 
 /* o "dedo" no PSP: anel que abre onde a pessoa tocou (psp.js) */
 .poke{
