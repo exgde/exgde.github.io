@@ -57,6 +57,8 @@
   if (about.photo) {
     var me = $('meImg');
     me.src = about.photo.src; me.alt = about.photo.alt || '';
+    // versão para o tema claro (pontos escuros); sem ela, a escura fica nos dois temas
+    if (about.photo.light) $('meLight').src = about.photo.light; else $('meLight').remove();
     // o tracking contorna a cabeça, não o retângulo todo da imagem (pontos 0..1)
     me._contour = [];
     for (var a = 0; a < 18; a++) {
@@ -224,7 +226,11 @@
   /* ---- seções: entrada e "qual está na tela" ---- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
-      if (en.isIntersecting) en.target.classList.add('is-in');
+      if (en.isIntersecting && !en.target.classList.contains('is-in')) {
+        en.target.classList.add('is-in');
+        // retrato: quando a entrada termina, a troca de tema passa a ser rápida
+        if (en.target.id === 'about') setTimeout(function () { $('me').classList.add('is-set'); }, 2300);
+      }
       if (en.target.id === 'hero') workOn = en.intersectionRatio > 0.5;
     });
   }, { threshold: [0.15, 0.5] });

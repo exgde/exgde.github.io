@@ -36,7 +36,7 @@ window.PF = {
       sub: 'ilustração · pixel art · modelagem 3D'
     },
     // retrato ao lado do cartão (gerado por tools/portrait.py)
-    photo: { src: 'assets/portrait.webp', alt: 'Retrato de João em preto e branco' },
+    photo: { src: 'assets/portrait.webp', light: 'assets/portrait-light.webp', alt: 'Retrato de João em preto e branco' },
     heading: 'sobre mim',
     lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Meu foco é AI engineering: ligar modelos de linguagem a ferramentas, dados e rotinas reais.',
     bio: [

@@ -295,9 +295,14 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
   transition:opacity 1.4s var(--ease) .5s, filter 1.6s var(--ease) .5s, transform 1.6s var(--ease) .5s;
 }
 .about.is-in .me img{ opacity:1; filter:none; transform:translate(calc(var(--mx)*-6px),calc(var(--my)*-6px)) }
-/* invertido (fundo branco): o retrato vira um negativo claro em vez de sumir */
-body.is-invert .me img{ filter:invert(1) blur(12px) }
-body.is-invert .about.is-in .me img{ filter:invert(1) }
+/* tema claro: em vez de inverter (o rosto viraria negativo), troca para a versão
+   feita para fundo branco (tools/portrait.py ... light), com pontos escuros.
+   As duas ficam empilhadas e cruzam suave ao trocar o tema. */
+.me .me__light{ position:absolute; left:0; top:0 }
+body:not(.is-invert) .about.is-in .me .me__light,
+body.is-invert .about.is-in .me img:not(.me__light){ opacity:0 }
+/* depois da entrada (main.js põe .is-set), a troca de tema é rápida e sem atraso */
+.me.is-set img{ transition:opacity .45s var(--ease), filter 1.6s var(--ease), transform .8s var(--ease) }
 /* telas largas: o retrato ganha uma coluna própria à direita do cartão */
 @media (min-width:1180px){
   .about{ --wrap:104rem; --me-w:clamp(11rem,15vw,20rem); --me:calc(var(--me-w) + clamp(.5rem,1.5vw,1.5rem)) }

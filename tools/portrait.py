@@ -1,7 +1,10 @@
+# uso: python3 tools/portrait.py foto.jpg assets/portrait.webp [light]
 import sys
 from PIL import Image, ImageFilter, ImageDraw
 import numpy as np
 src, out = sys.argv[1], sys.argv[2]
+# "light": versão para o tema claro (fundo branco) — mesma foto, pontos escuros
+LIGHT = len(sys.argv) > 3 and sys.argv[3] == 'light'
 im = Image.open(src).convert('RGB'); W, H = im.size
 a = np.asarray(im).astype(float); r, g, b = a[..., 0], a[..., 1], a[..., 2]
 # fundo azul -> matte
@@ -30,7 +33,7 @@ dotK *= sm(u / 0.06) * sm((1 - u) / 0.06) * sm(v / 0.04)
 S = 3; cell = 7
 hw, hh = W * S, H * S
 dots = Image.new('L', (hw, hh), 0); dr = ImageDraw.Draw(dots)
-lum = L * m
+lum = (1 - L) * m if LIGHT else L * m   # no claro, como impressão: ponto maior onde é escuro
 for cy in range(0, H, cell):
     for cx in range(0, W, cell):
         sl = (slice(cy, min(cy + cell, H)), slice(cx, min(cx + cell, W)))
@@ -43,10 +46,10 @@ for cy in range(0, H, cell):
 D = np.asarray(dots.resize((W, H), Image.LANCZOS)).astype(float) / 255
 
 pa = m * photoW                 # alfa da foto
-col = L * pa + 0.86 * D * (1 - pa)
+col = L * pa + (0.16 if LIGHT else 0.86) * D * (1 - pa)
 alpha = np.clip(pa + D * (1 - pa), 0, 1)
 rgb = np.where(alpha > 1e-3, col / np.maximum(alpha, 1e-3), 0)
 o = np.dstack([rgb, rgb, rgb, alpha]) * 255
 img = Image.fromarray(o.clip(0, 255).astype('uint8'), 'RGBA')
 img.save(out, quality=88, method=6)
-bg = Image.new('RGBA', img.size, (0, 0, 0, 255)); bg.alpha_composite(img); bg.convert('RGB').save(out + '.preview.png')
+bg = Image.new('RGBA', img.size, (255, 255, 255, 255) if LIGHT else (0, 0, 0, 255)); bg.alpha_composite(img); bg.convert('RGB').save(out + '.preview.png')
