@@ -151,12 +151,12 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 .info__in{ display:flex; flex-direction:column; gap:.7rem; overflow:auto; transition:opacity .22s, transform .22s var(--ease) }
 .info.is-swap .info__in{ opacity:0; transform:translateY(6px) }
-.info__in > *, .info__dl > div, .info .keys{
+.info__in > *, .info__dl > div{
   opacity:0; transform:translateX(16px);
   transition:opacity .8s var(--ease), transform .9s var(--ease);
   transition-delay:calc(var(--i,0)*90ms);
 }
-.is-info .info__in > *, .is-info .info__dl > div, .is-info .info .keys{ opacity:1; transform:none }
+.is-info .info__in > *, .is-info .info__dl > div{ opacity:1; transform:none }
 
 .info__count{ font-family:var(--mono); line-height:.8; white-space:nowrap }
 .info__count b{ font-weight:400; font-size:3.2rem }
@@ -170,14 +170,31 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .info__dl > div[hidden]{ display:none }
 .info__meta{ margin:0; font-family:var(--mono); font-size:1rem; color:var(--mute); letter-spacing:.04em }
 
-.keys{ display:flex; gap:.5rem }
-.keys button, .keys a{
-  width:44px; height:44px; display:grid; place-items:center;
-  border:1px solid currentColor; font-family:var(--mono); font-size:1.3rem; text-decoration:none;
-  transition:background-color .2s, color .2s;
+/* anterior / próximo / abrir: pequenos e apagados no canto de baixo, ao lado do "inverter";
+   acendem no hover */
+.keys{
+  position:absolute; z-index:5; bottom:calc(var(--gutter) + 2px); right:calc(var(--gutter) + 5.6rem);
+  display:flex; gap:.15rem;
+  opacity:0; transition:opacity 1s var(--ease) .5s;
 }
-.keys button:hover, .keys a:hover{ background:var(--fg); color:var(--bg) }
+.is-info .keys{ opacity:1 }
+.keys button, .keys a{
+  width:34px; height:34px; display:grid; place-items:center;
+  font-family:var(--mono); font-size:1.15rem; line-height:1; text-decoration:none;
+  color:var(--mute); transition:color .2s, transform .15s var(--ease);
+}
+.keys button:hover, .keys a:hover, .keys button:focus-visible, .keys a:focus-visible{ color:var(--fg) }
+.keys button:active, .keys a:active{ transform:scale(.88) }
+.keys svg{ width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
 .keys a[hidden]{ display:none }
+
+/* o "dedo" no PSP: anel que abre onde a pessoa tocou (psp.js) */
+.poke{
+  position:absolute; z-index:4; width:56px; height:56px; margin:-28px 0 0 -28px;
+  border:1.5px solid var(--fg); border-radius:50%; pointer-events:none;
+  animation:poke .55s var(--ease) forwards;
+}
+@keyframes poke{ from{ transform:scale(.2); opacity:.9 } to{ transform:scale(1.4); opacity:0 } }
 
 .stage .cue{ opacity:0; transition:opacity 1s var(--ease) .6s }
 .stage.is-info .cue{ opacity:1 }
@@ -212,7 +229,7 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
   .info__count b{ font-size:2.4rem }
   .info__dl{ gap:.5rem }
   .info__dl dd, .info__sub{ font-size:.88rem; line-height:1.4 }
-  .info .keys{ padding-right:6rem }       /* deixa o "inverter" no canto */
+  .keys{ top:calc(49% - 38px); bottom:auto; right:var(--gutter) }          /* embaixo, à direita do PSP, entre ele e a descrição */
   .stage .cue{ display:none }
   .stage .el--late{ top:30%; width:78vmin; height:78vmin }       /* a flor fica atrás do PSP, não do texto */
   .stage .el:not(.el--late){ opacity:.35 }                         /* estrelas mais discretas atrás da descrição */
@@ -222,9 +239,10 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto }
   .sec .lay{ transform:none; transition:opacity .3s }
-  .cue i, .spin{ animation:none }
+  .cue i, .spin, .poke{ animation:none }
+  .poke{ display:none }
   .brand, .brand__w, .brand__cut, .brand .role, .machine__stage, .el--late,
-  .info__in, .info__in > *, .info__dl > div, .info .keys{ transition:opacity .4s !important; filter:none !important }
+  .info__in, .info__in > *, .info__dl > div, .keys{ transition:opacity .4s !important; filter:none !important }
   .el, .cut{ transform:translate(-50%,-50%) }
   .cut{ transform:none }
 }
