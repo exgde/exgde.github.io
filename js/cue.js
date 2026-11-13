@@ -16,8 +16,8 @@
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   /* ---- a forma: haste + ponta, numa grade de COLS × ROWS pontos ---- */
-  var COLS = 9, ROWS = 15, STEP = 5;          // STEP: px entre pontos
-  var PAD = 26;                                // folga para os pontos se espalharem
+  var COLS = 13, ROWS = 19, STEP = 6;         // STEP: px entre pontos
+  var PAD = 34;                                // folga para os pontos se espalharem
   var W = COLS * STEP + PAD * 2, H = ROWS * STEP + PAD * 2;
 
   function segDist(px, py, ax, ay, bx, by) {   // distância do ponto ao segmento
@@ -27,11 +27,11 @@
   }
   function smooth(t) { t = t < 0 ? 0 : t > 1 ? 1 : t; return t * t * (3 - 2 * t); }
 
-  var cx = (COLS - 1) / 2, tipY = ROWS - 1.2;
+  var cx = (COLS - 1) / 2, tipY = ROWS - 1.6;
   var SEGS = [
     [cx, 0, cx, tipY],                           // haste
-    [cx, tipY, cx - 3.7, tipY - 3.9],            // ponta, lado esquerdo
-    [cx, tipY, cx + 3.7, tipY - 3.9]             // ponta, lado direito
+    [cx, tipY, cx - 4.9, tipY - 5.1],            // ponta, lado esquerdo
+    [cx, tipY, cx + 4.9, tipY - 5.1]             // ponta, lado direito
   ];
 
   var dots = [];
@@ -39,16 +39,16 @@
     for (var i = 0; i < COLS; i++) {
       var d = Infinity;
       SEGS.forEach(function (s) { d = Math.min(d, segDist(i, j, s[0], s[1], s[2], s[3])); });
-      var v = smooth(1 - d / 1.05);
+      var v = smooth(1 - d / 1.75);              // traço grosso: ~3 pontos de largura
       if (v < 0.08) continue;
-      v *= 0.3 + 0.7 * smooth(j / (ROWS * 0.75));        // a haste nasce apagada e acende em direção à ponta
+      v *= 0.45 + 0.55 * smooth(j / (ROWS * 0.7));        // a haste nasce apagada e acende em direção à ponta
       if (v < 0.06) continue;
       var a = Math.random() * Math.PI * 2;
       dots.push({
         x: PAD + (i + 0.5) * STEP, y: PAD + (j + 0.5) * STEP, j: j, v: v,
         // para onde se espalha ao desfazer, e quando começa (a ponta por último)
         dx: Math.cos(a), dy: Math.sin(a) * 0.8 - 0.35,
-        far: 8 + Math.random() * 18,
+        far: 10 + Math.random() * 24,
         at: Math.random() * 0.45 + (1 - j / ROWS) * 0.15
       });
     }
