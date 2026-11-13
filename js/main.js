@@ -28,7 +28,9 @@
       this._subs.forEach(function (fn) { fn(self.index, dir || 0); });
     },
     next: function () { this.set(this.index + 1, 1); },
-    prev: function () { this.set(this.index - 1, -1); }
+    prev: function () { this.set(this.index - 1, -1); },
+    pspAt: 0,                       // quando o PSP deve entrar (psp.js lê)
+    showPsp: function () { this.pspAt = performance.now(); }
   };
 
   /* ---- texto ---- */
@@ -57,18 +59,30 @@
     $('links').appendChild(a);
   });
 
-  /* ---- rodapé da máquina ---- */
-  function paintRail(i) {
+  /* ---- descrição do projeto, ao lado do PSP ---- */
+  var info = $('info'), introDone = false, swapT = 0;
+  function fillInfo(i) {
     var p = projects[i] || {};
     text('railIdx', pad(i + 1));
     text('railTot', '/' + pad(projects.length));
     text('railTitle', p.title);
+    text('infoSub', p.sub);
+    text('infoHow', p.how);
+    text('infoWhy', p.why);
+    $('infoHow').parentNode.hidden = !p.how;
+    $('infoWhy').parentNode.hidden = !p.why;
     text('railMeta', [p.stack, p.year].filter(Boolean).join(' · '));
     var open = $('railOpen');
     if (p.link) { open.href = p.link; open.hidden = false; } else { open.hidden = true; }
   }
-  BUS.on(paintRail);
-  paintRail(0);
+  function paintInfo(i) {
+    if (!introDone || reduce) { fillInfo(i); return; }
+    info.classList.add('is-swap');                  // some, troca o texto, volta
+    clearTimeout(swapT);
+    swapT = setTimeout(function () { fillInfo(i); info.classList.remove('is-swap'); }, 220);
+  }
+  BUS.on(paintInfo);
+  fillInfo(0);
 
   $('prevBtn').addEventListener('click', function () { BUS.prev(); });
   $('nextBtn').addEventListener('click', function () { BUS.next(); });
@@ -81,11 +95,50 @@
     else if (e.key === 'ArrowLeft') { BUS.prev(); e.preventDefault(); }
   });
 
+  /* ---- entrada da capa ----
+     1. o nome e o disquete surgem no centro
+     2. deslizam para a esquerda (retrato: para o topo)
+     3. o PSP aparece          4. a descrição entra ao lado dele */
+  var hero = $('hero'), brand = $('brand');
+  var portrait = window.matchMedia('(max-aspect-ratio: 4/5)');
+
+  function dock() {                                  // para onde o nome vai e em que tamanho
+    var W = hero.clientWidth, H = hero.clientHeight;
+    var bw = brand.offsetWidth, bh = brand.offsetHeight;
+    var g = parseFloat(getComputedStyle(hero).paddingLeft) || 16;
+    var s, x, y;
+    if (portrait.matches) {
+      s = Math.min(0.62, (W - 2 * g) / bw);
+      x = 0;
+      y = g + bh * s / 2 - H / 2;
+    } else {
+      s = Math.min(0.6, (W * 0.25 - g * 1.4) / bw);  // cabe na coluna da esquerda (25%)
+      x = g + bw * s / 2 - W / 2;
+      y = 0;
+    }
+    brand.style.setProperty('--bx', x.toFixed(1) + 'px');
+    brand.style.setProperty('--by', y.toFixed(1) + 'px');
+    brand.style.setProperty('--bs', s.toFixed(3));
+  }
+  window.addEventListener('resize', function () { if (hero.classList.contains('is-dock')) dock(); });
+
+  function intro() {
+    var steps = [
+      [0,    function () { hero.classList.add('is-name'); }],
+      [1700, function () { hero.classList.add('is-dock'); dock(); }],
+      [2500, function () { hero.classList.add('is-psp'); if (BUS.showPsp) BUS.showPsp(); }],
+      [3300, function () { hero.classList.add('is-info'); introDone = true; }]
+    ];
+    steps.forEach(function (st) {
+      if (reduce) st[1](); else setTimeout(st[1], st[0]);
+    });
+  }
+
   /* ---- seções: entrada e "qual está na tela" ---- */
   var io = new IntersectionObserver(function (entries) {
     entries.forEach(function (en) {
       if (en.isIntersecting) en.target.classList.add('is-in');
-      if (en.target.id === 'work') workOn = en.intersectionRatio > 0.5;
+      if (en.target.id === 'hero') workOn = en.intersectionRatio > 0.5;
     });
   }, { threshold: [0.15, 0.5] });
   [].forEach.call(document.querySelectorAll('.sec'), function (s) { io.observe(s); });
@@ -131,7 +184,8 @@
     finished = true;
     document.body.classList.remove('is-booting');
     boot.classList.add('is-done');
-    var hero = $('hero'); if (hero) hero.classList.add('is-in');
+    hero.classList.add('is-in');
+    intro();
   }
   var last = performance.now();
   function tick(now) {

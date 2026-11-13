@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611121343" />
+<link rel="stylesheet" href="css/style.css?v=2611131200" />
 </head>
 <body class="is-booting">
 
@@ -29,35 +29,47 @@
 
 <main>
 
-<!-- 01 · CAPA -->
-<section class="sec hero" id="hero">
-  <canvas class="el" data-art="star" data-trk style="--x:17;--y:80;--w:80;--d:1.6" aria-hidden="true"></canvas>
-  <canvas class="el" data-art="star" data-trk style="--x:99;--y:20;--w:54;--d:.8" aria-hidden="true"></canvas>
-  <h1 class="line lay">
-    <span id="heroA"></span>
-    <canvas class="cut" data-art="floppy" data-trk aria-hidden="true"></canvas>
-    <span id="heroB"></span>
-  </h1>
-  <p class="role lay" id="heroRole"></p>
-  <a class="cue" href="#work" aria-label="Ir para os projetos"><i></i></a>
-</section>
+<!-- 01 · CAPA + PROJETOS
+     Sequência de entrada (main.js): o nome surge no centro, desliza para a
+     esquerda, o PSP aparece e a descrição do projeto entra ao lado dele. -->
+<section class="sec stage" id="hero">
+  <canvas class="el" data-art="star" data-trk style="--x:10;--y:86;--w:62;--d:1.6" aria-hidden="true"></canvas>
+  <canvas class="el" data-art="star" data-trk style="--x:99;--y:12;--w:44;--d:.8" aria-hidden="true"></canvas>
+  <canvas class="el el--late" data-art="burst" style="--x:49;--y:50;--w:82;--d:.5" aria-hidden="true"></canvas>
 
-<!-- 02 · PROJETOS -->
-<section class="sec machine" id="work">
-  <canvas class="el" data-art="burst" style="--x:60;--y:47;--w:108;--d:.5" aria-hidden="true"></canvas>
+  <div class="brand" id="brand">
+    <h1 class="line">
+      <span class="brand__w" id="heroA"></span>
+      <canvas class="cut brand__cut" data-art="floppy" data-trk aria-hidden="true"></canvas>
+      <span class="brand__w brand__w--b" id="heroB"></span>
+    </h1>
+    <p class="role" id="heroRole"></p>
+  </div>
+
   <div class="machine__stage" id="machine">
     <canvas id="pspCanvas" role="img" aria-label="PSP mostrando o projeto selecionado"></canvas>
     <div class="machine__loading" id="pspLoading"><i class="spin" aria-hidden="true"></i></div>
   </div>
-  <div class="rail lay" aria-live="polite">
-    <div class="rail__count"><b id="railIdx">01</b><i id="railTot">/00</i></div>
-    <div class="rail__txt"><strong id="railTitle"></strong><span id="railMeta"></span></div>
-  </div>
-  <div class="keys lay">
-    <button id="prevBtn" aria-label="Projeto anterior">←</button>
-    <button id="nextBtn" aria-label="Próximo projeto">→</button>
-    <a id="railOpen" href="#" target="_blank" rel="noopener" aria-label="Abrir este projeto">↗</a>
-  </div>
+
+  <aside class="info" id="info" aria-live="polite" aria-label="Sobre o projeto na tela">
+    <div class="info__in" id="infoIn">
+      <div class="info__count" style="--i:0"><b id="railIdx">01</b><i id="railTot">/00</i></div>
+      <h2 class="info__title" id="railTitle" style="--i:1"></h2>
+      <p class="info__sub" id="infoSub" style="--i:2"></p>
+      <dl class="info__dl">
+        <div style="--i:3"><dt>como fiz</dt><dd id="infoHow"></dd></div>
+        <div style="--i:4"><dt>pra quê</dt><dd id="infoWhy"></dd></div>
+      </dl>
+      <p class="info__meta" id="railMeta" style="--i:5"></p>
+    </div>
+    <div class="keys" style="--i:6">
+      <button id="prevBtn" aria-label="Projeto anterior">←</button>
+      <button id="nextBtn" aria-label="Próximo projeto">→</button>
+      <a id="railOpen" href="#" target="_blank" rel="noopener" aria-label="Abrir este projeto">↗</a>
+    </div>
+  </aside>
+
+  <a class="cue" href="#about" aria-label="Ir para o sobre"><i></i></a>
 </section>
 
 <!-- 03 · SOBRE -->
@@ -96,10 +108,10 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611121343"></script>
-<script src="js/art.js?v=2611121343"></script>
-<script src="js/main.js?v=2611121343"></script>
-<script src="js/track.js?v=2611121343"></script>
-<script type="module" src="js/psp.js?v=2611121343"></script>
+<script src="js/data.js?v=2611131200"></script>
+<script src="js/art.js?v=2611131200"></script>
+<script src="js/main.js?v=2611131200"></script>
+<script src="js/track.js?v=2611131200"></script>
+<script type="module" src="js/psp.js?v=2611131200"></script>
 </body>
 </html>

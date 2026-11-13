@@ -287,25 +287,25 @@ function boot3d() {
     resize();
 
     loading.classList.add('is-off');
-    let riseFrom = null;           // o PSP sobe na primeira vez que aparece
 
     frameFn = (now) => {
       const t = now / 1000;
       drawScreen(now);
       tex.needsUpdate = true;
 
-      if (riseFrom === null) riseFrom = now;
-      const q = reduce ? 1 : Math.min(1, (now - riseFrom) / 1500);
+      // entrada suave: espera a capa liberar (BUS.showPsp) e então gira, cresce e assenta
+      const q = !BUS.pspAt ? 0 : reduce ? 1 : Math.min(1, (now - BUS.pspAt) / 2200);
       const rise = 1 - Math.pow(1 - q, 4);
       kick *= .9;
       const calm = reduce ? 0 : 1;
       // o cursor inclina até TILT; por cima disso o PSP balança sozinho (SWAY)
-      const ry = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick;
+      const ry = (px * TILT_Y + Math.sin(t * .55) * SWAY) * calm + kick - (1 - rise) * .9;
       const rx = (py * TILT_X + Math.sin(t * .4 + 1.3) * SWAY * .45) * calm - .04;
       pivot.rotation.y += (ry - pivot.rotation.y) * .09;
       pivot.rotation.x += (rx - pivot.rotation.x) * .09;
       pivot.rotation.z = Math.sin(t * .5) * .012 * calm;
-      pivot.position.y = (rise - 1) * 2.4 + Math.sin(t * .8) * .035 * calm;
+      pivot.position.y = (rise - 1) * .5 + Math.sin(t * .8) * .035 * calm;
+      pivot.scale.setScalar(.82 + .18 * rise);
       renderer.render(scene, camera);
     };
     BUS.modelReady();

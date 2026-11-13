@@ -7,6 +7,9 @@
    Projetos:
      title  nome do projeto (aparece na tela do PSP e no rodapé)
      sub    uma linha dizendo o que é
+     how    "como fiz": um parágrafo curto sobre o processo
+     why    "pra quê": para que serve / por que existe
+            (how e why aparecem na descrição ao lado do PSP; vazio = some)
      stack  tecnologias, separadas por " · "
      year   ano
      link   para onde o botão ↗ leva (GitHub, demo...). Deixe '' para esconder
@@ -44,6 +47,9 @@ window.PF = {
     {
       title: 'Casa Acessível',
       sub: 'Casa e banheiro para cadeira de rodas, em realidade virtual',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Modelei a casa e o banheiro no Blender, montei a cena e a interação em VR na Unreal Engine 5.8 e usei Python para automatizar etapas do processo.',
+      why: 'Para experimentar, em escala real e de dentro, como uma casa precisa ser para quem usa cadeira de rodas: passagens, alturas e espaço de giro.',
       stack: 'Unreal Engine 5.8 · Blender · Python',
       year: '2026',
       link: '',                     // repositório privado: sem link
@@ -53,6 +59,9 @@ window.PF = {
     {
       title: 'WW1-Thriller',
       sub: 'Terror em terceira pessoa, em desenvolvimento',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Feito na Unreal Engine 5.8, com toda a lógica em Blueprint: personagem, câmera em terceira pessoa e os sistemas de tensão do jogo.',
+      why: 'Um jogo de terror ambientado na Primeira Guerra, o meu projeto principal no momento.',
       stack: 'Unreal Engine 5.8 · Blueprint',
       year: '2026',
       link: '',                     // repositório privado: sem link
@@ -62,6 +71,9 @@ window.PF = {
     {
       title: 'oot-switch2-button-prompts',
       sub: 'Ícones de botão PlayStation, Xbox e Steam Deck para OOT (Switch 2)',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Substituí os ícones de botão do jogo por versões de cada controle, mantendo o estilo visual original.',
+      why: 'Para quem joga com controle de PlayStation, Xbox ou Steam Deck ver na tela os botões que tem na mão.',
       stack: 'Mod · 43 estrelas',
       year: '2026',
       link: 'https://github.com/exgde/oot-switch2-button-prompts',
@@ -70,6 +82,9 @@ window.PF = {
     {
       title: 'oot-lichii-keyboard-mouse',
       sub: 'OOT (Switch 2) no Lichii com teclado e mouse',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Um script em Python que traduz teclado e mouse para os comandos do controle.',
+      why: 'Para jogar OOT (Switch 2) no Lichii com teclado e mouse, sem precisar de controle.',
       stack: 'Python · Mod',
       year: '2026',
       link: 'https://github.com/exgde/oot-lichii-keyboard-mouse',
@@ -78,6 +93,9 @@ window.PF = {
     {
       title: 'adega',
       sub: 'Meu crossover pessoal',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Escrito em Swift.',
+      why: 'Um projeto pessoal, feito para o meu próprio uso.',
       stack: 'Swift',
       year: '2026',
       link: 'https://github.com/exgde/adega',
@@ -86,6 +104,9 @@ window.PF = {
     {
       title: 'biblioteca-sql',
       sub: 'Modelagem MySQL para um sistema de biblioteca',
+      // RASCUNHO — reescreva "how" e "why" com as suas palavras.
+      how: 'Modelei as tabelas, relações e chaves em MySQL, com consultas para o dia a dia de uma biblioteca.',
+      why: 'Para praticar modelagem de banco de dados num caso real: livros, leitores e empréstimos.',
       stack: 'MySQL',
       year: '2026',
       link: 'https://github.com/exgde/biblioteca-sql',
