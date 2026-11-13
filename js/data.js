@@ -38,7 +38,7 @@ window.PF = {
     art: {
       kicker: 'arte · 2019—hoje',
       title: ['trabalhos', 'como artista'],
-      sub: 'ilustração · pixel art · modelagem 3D'
+      sub: 'mangá e preto e branco · pixel art · modelagem 3D'
     },
     // retrato ao lado do cartão (gerado por tools/portrait.py)
     photo: { src: 'assets/portrait.webp', light: 'assets/portrait-light.webp', alt: 'Retrato de João em preto e branco' },
@@ -46,7 +46,7 @@ window.PF = {
     lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Meu foco é AI engineering: ligar modelos de linguagem a ferramentas, dados e rotinas reais.',
     bio: [
       'Rodo LLMs na minha própria máquina desde 2023 e uso o Claude Code ligado via MCP à Unity, à Unreal e ao Blender. Sei quando não usar IA, e consigo explicar cada decisão do código que publico.',
-      'Antes de programar, eu já desenhava: faço ilustração, pixel art e modelagem 3D, e faço jogos desde 2019. Com 10 anos, meu segundo jogo publicado foi pra Game Jaaj 2, a jam do youtuber Andre Young, e ficou entre os 3 cotados pra vencer no vídeo de premiação.'
+      'Antes de programar, eu já desenhava. Minha especialidade é arte em preto e branco, com foco em mangá, e na galeria e no ArtStation tem trabalhos meus em outros estilos e em cor. Também faço pixel art e modelagem 3D, e faço jogos desde 2019. Com 10 anos, meu segundo jogo publicado foi pra Game Jaaj 2, a jam do youtuber Andre Young, e ficou entre os 3 cotados pra vencer no vídeo de premiação.'
     ],
     // uma linha cada, embaixo da bio
     built: [
@@ -209,14 +209,14 @@ window.PF_EN = {
     art: {
       kicker: 'art · 2019—now',
       title: ['work', 'as an artist'],
-      sub: 'illustration · pixel art · 3D modeling'
+      sub: 'manga and black & white · pixel art · 3D modeling'
     },
     photo: { alt: 'Black-and-white portrait of João' },
     heading: 'about me',
     lead: 'I study Computer Science at UFJ and hold a technical degree in IT from IFG. My focus is AI engineering: connecting language models to real tools, data and workflows.',
     bio: [
       'I have been running LLMs on my own machine since 2023, and I use Claude Code connected via MCP to Unity, Unreal and Blender. I know when not to use AI, and I can explain every decision in the code I publish.',
-      'Before I coded, I drew: I do illustration, pixel art and 3D modeling, and I have been making games since 2019. At 10, my second published game was for Game Jaaj 2, the jam run by YouTuber Andre Young, and it was one of the 3 shortlisted to win in the awards video.'
+      'Before I coded, I drew. My specialty is black and white art, with a focus on manga, and you can see my work in other styles and in color in the gallery and on ArtStation. I also do pixel art and 3D modeling, and I have been making games since 2019. At 10, my second published game was for Game Jaaj 2, the jam run by YouTuber Andre Young, and it was one of the 3 shortlisted to win in the awards video.'
     ],
     built: [
       'CUTSCENE-LOADER — 3D animation from an ordinary video, no mocap',
