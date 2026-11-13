@@ -58,7 +58,8 @@ window.PF = {
     links: [
       { label: 'artstation', href: 'https://joaobyss.artstation.com' },
       { label: 'itch.io',    href: 'https://joaobyss.itch.io' },
-      { label: 'github',     href: 'https://github.com/exgde' }
+      { label: 'github',     href: 'https://github.com/exgde' },
+      { label: 'ko-fi',      href: 'https://ko-fi.com/joaobyss' }
     ]
   },
 
@@ -103,7 +104,8 @@ window.PF = {
     ] },
     { title: 'arte & vídeo', links: [
       { icon: 'artstation', label: 'ArtStation', handle: 'joaobyss',          note: 'ilustração e 3D',    href: 'https://joaobyss.artstation.com/' },
-      { icon: 'youtube',    label: 'YouTube',    handle: '@joaobernardes4169', note: 'vídeos', href: 'https://www.youtube.com/@joaobernardes4169' }
+      { icon: 'youtube',    label: 'YouTube',    handle: '@joaobernardes4169', note: 'vídeos', href: 'https://www.youtube.com/@joaobernardes4169' },
+      { icon: 'kofi',       label: 'Ko-fi',      handle: 'joaobyss',          note: 'apoie meu trabalho', href: 'https://ko-fi.com/joaobyss' }
     ] },
     { title: 'jogos', links: [
       { icon: 'itch',     label: 'itch.io',   handle: 'joaobyss',  note: 'jogos publicados', href: 'https://joaobyss.itch.io/' },
@@ -214,7 +216,7 @@ window.PF_EN = {
     lead: 'I study Computer Science at UFJ and hold a technical degree in IT from IFG. My focus is AI engineering: connecting language models to real tools, data and workflows.',
     bio: [
       'I have been running LLMs on my own machine since 2023, and I use Claude Code connected via MCP to Unity, Unreal and Blender. I know when not to use AI, and I can explain every decision in the code I publish.',
-      'Before I coded, I drew: I do illustration, pixel art and 3D modeling, and I have been making games since 2019.'
+      'Before I coded, I drew: I do illustration, pixel art and 3D modeling, and I have been making games since 2019. At 10, my second published game was for Game Jaaj 2, the jam run by YouTuber Andre Young, and it was one of the 3 shortlisted to win in the awards video.'
     ],
     built: [
       'CUTSCENE-LOADER — 3D animation from an ordinary video, no mocap',
@@ -256,7 +258,8 @@ window.PF_EN = {
     ] },
     { title: 'art & video', links: [
       { note: 'illustration and 3D' },
-      { note: 'videos' }
+      { note: 'videos' },
+      { note: 'support my work' }
     ] },
     { title: 'games', links: [
       { note: 'published games' },

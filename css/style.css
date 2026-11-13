@@ -530,6 +530,9 @@ html.is-lb{ overflow:hidden }
 
 /* ---- contato ---- */
 .contact{ justify-content:center }
+/* última seção: pode passar da altura da tela (telas baixas, mais links) em vez de cortar,
+   e guarda espaço embaixo para os créditos (.foot) */
+.contact{ height:auto; min-height:100svh; padding-bottom:calc(var(--gutter) + 3.6rem) }
 .contact__wrap{
   position:relative; z-index:3; width:min(100%,72rem);
   display:flex; flex-direction:column; align-items:center; gap:clamp(1.6rem,4.5vh,3.2rem);
