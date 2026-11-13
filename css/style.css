@@ -476,22 +476,94 @@ html.is-lb{ overflow:hidden }
 
 @media (prefers-reduced-motion:reduce){
   .art__k, .art__w, .art__s, .art__s::before, .me img{ transition:opacity .4s !important; filter:none !important; transform:none !important; clip-path:none !important }
-  .art__k i{ animation:none }
+  .art__k i, .kick i{ animation:none }
+  .hubs__t, .hub{ transform:none !important; transition:opacity .4s, background-color .25s, color .25s !important }
   .lb[open], .lb__stage img{ animation:none !important }
   .gallery__art, .gallery__art img{ transition:none }
 }
 
 /* ---- contato ---- */
-.links{ margin-top:2rem; display:flex; flex-wrap:wrap; justify-content:center; gap:.4rem 2rem; font-family:var(--mono); font-size:1.4rem; letter-spacing:.05em }
-.links a{ text-underline-offset:.3em; min-height:44px; display:inline-flex; align-items:center }
-.links a::after{ content:" ↗"; white-space:pre }
-.links a:hover{ text-decoration:none }
-.credit{ position:absolute; left:var(--gutter); bottom:var(--gutter); margin:0; max-width:calc(100% - 2*var(--gutter) - 6rem); font-family:var(--mono); font-size:.95rem; color:var(--mute); line-height:1.3 }
+.contact{ justify-content:center }
+.contact__wrap{
+  position:relative; z-index:3; width:min(100%,72rem);
+  display:flex; flex-direction:column; align-items:center; gap:clamp(1.6rem,4.5vh,3.2rem);
+}
+.contact__head{ display:flex; flex-direction:column; align-items:center; text-align:center }
+.contact .line{ font-size:clamp(2rem,5.6vw,4.6rem) }
+.contact .cut{ width:clamp(5.5rem,17vmin,10.5rem); height:clamp(5.5rem,17vmin,10.5rem) }
+.kick{
+  margin:0 0 .4rem; display:flex; align-items:center; gap:.4rem;
+  font-family:var(--mono); font-size:1.05rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mute);
+}
+.kick i{ display:inline-block; width:.5em; height:1em; background:currentColor; animation:caret 1.1s steps(1) infinite }
+.contact__note{ margin:.6rem 0 0; max-width:34rem; font-size:clamp(.98rem,1.2vw,1.12rem); color:color-mix(in srgb, var(--fg) 78%, transparent) }
+
+/* e-mail: o contato principal, com botão de copiar */
+.mail{
+  margin-top:1.1rem; display:flex; align-items:stretch;
+  border:1px solid color-mix(in srgb, var(--fg) 30%, transparent); border-radius:999px; overflow:hidden;
+}
+.mail__a, .mail__copy{
+  min-height:44px; display:inline-flex; align-items:center; gap:.55rem; padding:0 1.05rem;
+  font-family:var(--mono); font-size:1.12rem; letter-spacing:.04em; text-decoration:none;
+  transition:background-color .2s, color .2s;
+}
+.mail__a svg{ width:18px; height:18px; fill:none; stroke:currentColor; stroke-width:1.6; stroke-linejoin:round; stroke-linecap:round }
+.mail__copy{ border-left:1px solid color-mix(in srgb, var(--fg) 30%, transparent); color:var(--mute); min-width:7.2em; justify-content:center }
+.mail__a:hover, .mail__a:focus-visible, .mail__copy:hover, .mail__copy:focus-visible{ background:var(--fg); color:var(--bg); outline:none }
+.mail__copy.is-ok{ color:var(--fg) }
+
+/* links: três grupos lado a lado, cada um com dois cartões */
+.hubs{ width:100%; display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:clamp(.8rem,2vw,1.6rem) }
+.hubs__g{ display:flex; flex-direction:column; gap:.55rem; min-width:0 }
+.hubs__t{
+  margin:0 0 .15rem; padding-bottom:.45rem; border-bottom:1px solid color-mix(in srgb, var(--fg) 16%, transparent);
+  font-family:var(--mono); font-size:1rem; letter-spacing:.12em; text-transform:uppercase; color:var(--mute);
+}
+.hubs__t b{ font-weight:400; color:var(--fg); margin-right:.35em }
+.hub{
+  position:relative; display:grid; grid-template-columns:auto minmax(0,1fr) auto; align-items:center; gap:.85rem;
+  min-height:64px; padding:.7rem .95rem; border-radius:14px; text-decoration:none;
+  border:1px solid color-mix(in srgb, var(--fg) 20%, transparent);
+  background:color-mix(in srgb, var(--bg) 70%, transparent);
+  transition:background-color .25s, color .25s, border-color .25s, transform .35s var(--ease);
+}
+.hub__i{ width:26px; height:26px; fill:currentColor; flex:none }
+.hub__tx{ display:flex; flex-direction:column; min-width:0; line-height:1.2 }
+.hub__tx b{ font-weight:500; font-size:1.02rem }
+.hub__tx small{ font-family:var(--mono); font-size:.98rem; letter-spacing:.03em; color:var(--mute); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.hub__n{ font-size:.8rem; color:color-mix(in srgb, var(--fg) 55%, transparent); overflow:hidden; text-overflow:ellipsis; white-space:nowrap }
+.hub__ar{ font-style:normal; font-family:var(--mono); font-size:1.2rem; color:var(--mute); transition:transform .35s var(--ease), color .25s }
+.hub:hover, .hub:focus-visible{ background:var(--fg); color:var(--bg); border-color:var(--fg); transform:translateY(-2px); outline:none }
+.hub:hover small, .hub:hover .hub__n, .hub:hover .hub__ar,
+.hub:focus-visible small, .hub:focus-visible .hub__n, .hub:focus-visible .hub__ar{ color:color-mix(in srgb, var(--bg) 70%, transparent) }
+.hub:hover .hub__ar, .hub:focus-visible .hub__ar{ transform:translate(2px,-2px) }
+
+/* entrada: títulos e cartões em cascata */
+.hubs__t, .hub{ opacity:0; transform:translateY(14px); transition:opacity .7s var(--ease), transform .8s var(--ease), background-color .25s, color .25s, border-color .25s }
+.contact.is-in .hubs__t, .contact.is-in .hub{ opacity:1; transform:none; transition-delay:calc(.35s + var(--i) * .07s), calc(.35s + var(--i) * .07s), 0s, 0s, 0s }
+.contact.is-in .hub:hover, .contact.is-in .hub:focus-visible{ transform:translateY(-2px); transition-delay:0s }
+
+.credit{ position:absolute; left:0; right:0; bottom:var(--gutter); margin:0 auto; padding:0 6rem; text-align:center; font-family:var(--mono); font-size:.95rem; color:var(--mute); line-height:1.3 }
+
+/* ---- contato em telas estreitas: grupos um embaixo do outro, cartões em duas colunas ---- */
+@media (max-width:900px){
+  .contact{ height:auto; min-height:100svh; padding-block:calc(var(--gutter) + 2rem) calc(var(--gutter) + 5rem) }
+  .hubs{ grid-template-columns:minmax(0,1fr); gap:1.2rem }
+  .hubs__g{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem }
+  .hubs__t{ grid-column:1 / -1 }
+  .hub{ grid-template-columns:auto minmax(0,1fr); gap:.6rem; padding:.65rem .75rem }
+  .hub__ar{ display:none }
+  .credit{ padding:0 var(--gutter) 0 var(--gutter); text-align:left; max-width:calc(100% - 6rem); margin:0 }
+}
+@media (max-width:420px){ .hub__n{ display:none } .mail__a, .mail__copy{ font-size:1rem; padding:0 .8rem } }
 
 /* ---- retrato: o título empilha em volta do recorte ---- */
 @media (max-aspect-ratio:4/5){
   .line{ flex-direction:column; font-size:clamp(2.6rem,15vw,5rem); gap:0 }
   .cut{ width:44vmin; height:44vmin; margin:-.5rem 0 }
+  .contact .line{ flex-direction:row; font-size:clamp(2rem,11vw,3.4rem); gap:.04em }
+  .contact .cut{ width:clamp(4.5rem,22vmin,7rem); height:clamp(4.5rem,22vmin,7rem); margin:0 }
   /* capa em retrato: nome no topo, PSP no meio, descrição embaixo */
   .brand .line{ flex-direction:row; font-size:clamp(1.6rem,9vw,3.4rem); gap:.04em }
   .brand .cut{ width:30vmin; height:30vmin; margin:0 }
@@ -504,7 +576,6 @@ html.is-lb{ overflow:hidden }
   .stage .cue{ display:none }
   .stage .el--late{ top:30%; width:78vmin; height:78vmin }       /* a flor fica atrás do PSP, não do texto */
   .stage .el:not(.el--late){ opacity:.35 }                         /* estrelas mais discretas atrás da descrição */
-  .contact .el{ left:80%; top:16% }      /* o cursor sobe para não cobrir os links */
 }
 
 @media (prefers-reduced-motion:reduce){

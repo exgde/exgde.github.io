@@ -51,7 +51,7 @@ window.PF = {
     ],
     now: 'Procuro vaga júnior em AI engineering ou automação · topo freela · inglês fluente',
     links: [
-      { label: 'artstation', href: 'https://www.artstation.com/joaobyss' },
+      { label: 'artstation', href: 'https://joaobyss.artstation.com' },
       { label: 'itch.io',    href: 'https://joaobyss.itch.io' },
       { label: 'github',     href: 'https://github.com/exgde' }
     ]
@@ -63,7 +63,7 @@ window.PF = {
      Clicar num desenho abre ele em tela cheia (js/gallery.js); "link" é o
      botão "ver no artstation" que aparece lá. */
   art: {
-    link: 'https://www.artstation.com/joaobyss',
+    link: 'https://joaobyss.artstation.com',
     rows: [
       [
         { img: 'assets/art/art-01.webp', alt: 'Soldado com máscara de gás e coração azul brilhando no peito' },
@@ -86,13 +86,24 @@ window.PF = {
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
-  links: [
-    { label: 'github', href: 'https://github.com/exgde' },
-    { label: 'artstation', href: 'https://www.artstation.com/joaobyss' },
-    { label: 'itch.io', href: 'https://joaobyss.itch.io' },
-    { label: 'email',  href: 'mailto:jbmidiasxboy@gmail.com' }
-    // para mostrar mais contatos, adicione linhas como:
-    // { label: 'linkedin', href: 'https://www.linkedin.com/in/seu-usuario' }
+  contactKicker: 'contato · links',
+  contactNote: 'Vaga júnior, freela ou collab em jogos e IA: é só chamar.',
+  email: 'jbmidiasxboy@gmail.com',
+  // links da seção de contato, em grupos (uma coluna cada).
+  // icon: nome em js/icons.js · handle: como você aparece lá · note: o que tem lá
+  linkGroups: [
+    { title: 'carreira & código', links: [
+      { icon: 'linkedin', label: 'LinkedIn', handle: 'joao-bernardes', note: 'currículo e experiência', href: 'https://www.linkedin.com/in/joao-bernardes-478749415/' },
+      { icon: 'github',   label: 'GitHub',   handle: '@exgde',         note: 'código e projetos',      href: 'https://github.com/exgde' }
+    ] },
+    { title: 'arte & vídeo', links: [
+      { icon: 'artstation', label: 'ArtStation', handle: 'joaobyss',          note: 'ilustração e 3D',    href: 'https://joaobyss.artstation.com/' },
+      { icon: 'youtube',    label: 'YouTube',    handle: '@joaobernardes4169', note: 'vídeos', href: 'https://www.youtube.com/@joaobernardes4169' }
+    ] },
+    { title: 'jogos', links: [
+      { icon: 'itch',     label: 'itch.io',   handle: 'joaobyss',  note: 'jogos publicados', href: 'https://joaobyss.itch.io/' },
+      { icon: 'gamejolt', label: 'Game Jolt', handle: '@joaobyss', note: 'perfil e jogos',             href: 'https://gamejolt.com/@joaobyss' }
+    ] }
   ],
 
   projects: [

@@ -83,11 +83,60 @@
 
   /* a galeria de desenhos do "sobre mim" é montada em js/gallery.js */
 
-  (PF.links || []).forEach(function (l) {
-    var a = document.createElement('a');
-    a.textContent = l.label; a.href = l.href;
-    if (!/^mailto:/.test(l.href)) { a.target = '_blank'; a.rel = 'noopener'; }
-    $('links').appendChild(a);
+  /* ---- contato: e-mail + links em grupos, com o ícone de cada plataforma ---- */
+  text('contactK', PF.contactKicker);
+  text('contactNote', PF.contactNote);
+  var SVGNS = 'http://www.w3.org/2000/svg';
+  function icon(name) {
+    var svg = document.createElementNS(SVGNS, 'svg');
+    svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('aria-hidden', 'true');
+    svg.setAttribute('class', 'hub__i');
+    var d = (window.PF_ICONS || {})[name];
+    if (d) { var path = document.createElementNS(SVGNS, 'path'); path.setAttribute('d', d); svg.appendChild(path); }
+    return svg;
+  }
+  if (PF.email) {
+    $('mailA').href = 'mailto:' + PF.email;
+    text('mailT', PF.email);
+    var copyBtn = $('mailCopy'), copyT;
+    copyBtn.addEventListener('click', function () {
+      var done = function () {
+        copyBtn.textContent = 'copiado ✓'; copyBtn.classList.add('is-ok');
+        clearTimeout(copyT);
+        copyT = setTimeout(function () { copyBtn.textContent = 'copiar'; copyBtn.classList.remove('is-ok'); }, 1800);
+      };
+      if (navigator.clipboard) navigator.clipboard.writeText(PF.email).then(done, function () { location.href = 'mailto:' + PF.email; });
+      else location.href = 'mailto:' + PF.email;
+    });
+  } else {
+    document.querySelector('.mail').hidden = true;
+  }
+  var n = 0;
+  (PF.linkGroups || []).forEach(function (g, gi) {
+    var col = document.createElement('div');
+    col.className = 'hubs__g';
+    var h = document.createElement('p');
+    h.className = 'hubs__t'; h.style.setProperty('--i', n);
+    h.innerHTML = '<b>0' + (gi + 1) + '</b> ';
+    h.appendChild(document.createTextNode(g.title));
+    col.appendChild(h);
+    (g.links || []).forEach(function (l) {
+      var a = document.createElement('a');
+      a.className = 'hub'; a.href = l.href; a.target = '_blank'; a.rel = 'noopener';
+      a.style.setProperty('--i', ++n);
+      a.setAttribute('aria-label', l.label + ' — ' + (l.note || l.handle || ''));
+      a.appendChild(icon(l.icon));
+      var tx = document.createElement('span'); tx.className = 'hub__tx';
+      var nm = document.createElement('b'); nm.textContent = l.label;
+      var hd = document.createElement('small'); hd.textContent = l.handle || '';
+      tx.appendChild(nm); tx.appendChild(hd);
+      if (l.note) { var nt = document.createElement('span'); nt.className = 'hub__n'; nt.textContent = l.note; tx.appendChild(nt); }
+      a.appendChild(tx);
+      var ar = document.createElement('i'); ar.className = 'hub__ar'; ar.setAttribute('aria-hidden', 'true'); ar.textContent = '↗';
+      a.appendChild(ar);
+      col.appendChild(a);
+    });
+    $('hubs').appendChild(col);
   });
 
   /* ---- descrição do projeto, ao lado do PSP ---- */
