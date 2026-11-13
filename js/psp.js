@@ -148,18 +148,41 @@ function crt(now) {
   g.fillStyle = vig; g.fillRect(0, 0, SW, SH);
 }
 
-/* toques na tela: um anel abre onde o dedo encostou (coordenadas do canvas da tela) */
+/* Anel de toque em halftone, no mesmo estilo dos recortes da página (js/art.js):
+   uma grade de pontos quadrados. O anel abre a partir do ponto tocado e, enquanto
+   some, cada ponto vai encolhendo até desaparecer (nada de transparência).
+   Junto, um miolo de pontos que encolhe mais rápido.
+     c: contexto · (cx, cy): centro · t: 0..1 · step: distância entre pontos
+     reach: raio final do anel */
+const smooth01 = (v) => { v = v < 0 ? 0 : v > 1 ? 1 : v; return v * v * (3 - 2 * v); };
+function dotRing(c, cx, cy, t, step, reach) {
+  const e = 1 - Math.pow(1 - t, 3);                 // abre rápido e desacelera
+  const R = step * 1.2 + e * (reach - step * 1.2);  // raio do anel
+  const band = step * (2.4 - 1.2 * t);              // espessura: afina enquanto abre
+  const life = Math.pow(1 - t, 1.3);                // quanto do tamanho cheio cada ponto ainda tem
+  const core = Math.max(0, 1 - t / .55);            // o miolo só dura o começo
+  const coreR = step * (1.6 + 2.6 * e);
+  const lim = Math.ceil((R + band) / step);
+  for (let j = -lim; j <= lim; j++) {
+    for (let i = -lim; i <= lim; i++) {
+      const d = Math.hypot(i, j) * step;
+      let v = smooth01(1 - Math.abs(d - R) / band) * life;
+      if (core > 0) v = Math.max(v, smooth01(1 - d / coreR) * core * .7);
+      if (v < .12) continue;
+      const w = step * .92 * Math.sqrt(v);          // como nos recortes: lado ∝ √brilho
+      c.fillRect(cx + i * step - w / 2, cy + j * step - w / 2, w, w);
+    }
+  }
+}
+
+/* toques na tela: o anel abre onde o dedo encostou (coordenadas do canvas da tela) */
 const taps = [];
 function tapRings(now) {
   for (let k = taps.length - 1; k >= 0; k--) {
-    const t = Math.max(0, (now - taps[k].at) / 520);   // o quadro pode ter carimbo anterior ao toque
+    const t = Math.max(0, (now - taps[k].at) / 620);   // o quadro pode ter carimbo anterior ao toque
     if (t >= 1) { taps.splice(k, 1); continue; }
-    const e = 1 - Math.pow(1 - t, 3);
-    g.strokeStyle = `rgba(255,255,255,${(1 - t) * .9})`;
-    g.lineWidth = 6 * (1 - t) + 1;
-    g.beginPath(); g.arc(taps[k].x, taps[k].y, 14 + e * 110, 0, Math.PI * 2); g.stroke();
-    g.fillStyle = `rgba(255,255,255,${(1 - t) * .18})`;
-    g.beginPath(); g.arc(taps[k].x, taps[k].y, 10 + e * 40, 0, Math.PI * 2); g.fill();
+    g.fillStyle = '#fff';
+    dotRing(g, taps[k].x, taps[k].y, t, 14, 150);
   }
 }
 
@@ -212,13 +235,28 @@ let poke = () => {};              // reação ao dedo
 let release = () => {};           // dedo saiu
 let down = null;
 
-function ring(x, y) {             // anel na página, onde o dedo encostou
-  const r = stage.getBoundingClientRect(), el = document.createElement('i');
+/* anel na página, onde o dedo encostou: um canvas pequeno, animado quadro a quadro,
+   na cor do texto (branco; preto com "inverter") */
+const POKE_STEP = 9, POKE_REACH = 58, POKE_MS = 650;
+function ring(x, y) {
+  if (reduce) return;
+  const r = stage.getBoundingClientRect(), el = document.createElement('canvas');
+  const half = POKE_REACH + POKE_STEP * 3, size = half * 2, dpr = Math.min(devicePixelRatio || 1, 2);
   el.className = 'poke';
-  el.style.left = (x - r.left) + 'px'; el.style.top = (y - r.top) + 'px';
+  el.width = el.height = Math.round(size * dpr);
+  el.style.width = el.style.height = size + 'px';
+  el.style.left = (x - r.left - half) + 'px'; el.style.top = (y - r.top - half) + 'px';
   stage.appendChild(el);
-  el.addEventListener('animationend', () => el.remove());
-  setTimeout(() => el.remove(), 900);
+  const c = el.getContext('2d'), color = getComputedStyle(document.body).color, t0 = performance.now();
+  c.scale(dpr, dpr);
+  (function frame(now) {
+    const t = Math.max(0, (now - t0) / POKE_MS);
+    c.clearRect(0, 0, size, size);
+    if (t >= 1) { el.remove(); return; }
+    c.fillStyle = color;
+    dotRing(c, half, half, t, POKE_STEP, POKE_REACH);
+    requestAnimationFrame(frame);
+  })(t0);
 }
 
 stage.addEventListener('pointerdown', (e) => {

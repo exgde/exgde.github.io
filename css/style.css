@@ -69,15 +69,32 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .boot__pct{ font-family:var(--mono); font-size:1.1rem; letter-spacing:.18em; color:var(--mute) }
 
 /* ---- controles fixos ---- */
-.ctl{ position:fixed; right:var(--gutter); bottom:var(--gutter); z-index:10; mix-blend-mode:difference; color:#fff;
-  display:flex; align-items:center; gap:1.3rem }
-.ctl__b{ font-family:var(--mono); font-size:1.05rem; letter-spacing:.04em; padding:.5rem 0 .2rem; min-height:44px }
-.ctl__b[aria-pressed="true"]{ text-decoration:underline; text-underline-offset:.3em }
-/* idioma: bandeira em preto e branco + nome (js/i18n.js) */
-.ctl__lang{ display:inline-flex; align-items:center; gap:.45rem }
-.flag{ flex:none; display:block; height:.82em; width:auto; margin-top:-.1rem; fill:currentColor }
+.ctl{ position:fixed; right:var(--gutter); bottom:var(--gutter); z-index:10 }
+/* idioma e inverter: mesmo visual dos botões ← → ↗ da tela do PSP (.keys),
+   mas nas cores do tema, para funcionar também com "inverter" ligado */
+.ctl{
+  display:flex; gap:.3rem; padding:.3rem;
+  border-radius:999px; border:1px solid color-mix(in srgb, var(--fg) 22%, transparent);
+  background:color-mix(in srgb, var(--bg) 58%, transparent);
+  -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  color:var(--fg); transition:background-color .35s, border-color .35s, color .35s;
+}
+.ctl__b{
+  width:40px; height:40px; display:grid; place-items:center; border-radius:50%;
+  color:var(--fg); transition:background-color .2s, color .2s, transform .15s var(--ease);
+}
+.ctl__b:hover{ background:var(--fg); color:var(--bg) }
+.ctl__b:focus-visible{ outline:2px solid var(--fg); outline-offset:2px }
+.ctl__b:active{ transform:scale(.88) }
+.ctl__b svg{ display:block }
+/* inverter: círculo meio cheio; ligado, gira e a metade cheia troca de lado */
+.ctl__inv svg{ width:20px; height:20px; transition:transform .45s var(--ease) }
+.ctl__inv svg circle{ fill:none; stroke:currentColor; stroke-width:2 }
+.ctl__inv svg path{ fill:currentColor }
+.ctl__inv[aria-pressed="true"] svg{ transform:rotate(180deg) }
+/* idioma: bandeira em preto e branco (js/i18n.js) */
+.flag{ height:14px; width:auto; fill:currentColor }
 .flag__o{ fill:none; stroke:currentColor; stroke-width:1 }
-.ctl__lang:hover .flag, .ctl__lang:focus-visible .flag{ transform:scale(1.08) }
 
 /* ---- linha de título com recorte no meio (capa e contato) ---- */
 .line{
@@ -214,12 +231,8 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .keys a[aria-disabled="true"]:hover{ background:none; color:#fff }
 
 /* o "dedo" no PSP: anel que abre onde a pessoa tocou (psp.js) */
-.poke{
-  position:absolute; z-index:4; width:56px; height:56px; margin:-28px 0 0 -28px;
-  border:1.5px solid var(--fg); border-radius:50%; pointer-events:none;
-  animation:poke .55s var(--ease) forwards;
-}
-@keyframes poke{ from{ transform:scale(.2); opacity:.9 } to{ transform:scale(1.4); opacity:0 } }
+/* anel de toque em halftone (desenhado por psp.js, quadro a quadro) */
+.poke{ position:absolute; z-index:4; pointer-events:none }
 
 .stage .cue{ opacity:0; transition:opacity 1s var(--ease) .6s }
 .stage.is-info .cue{ opacity:1 }
@@ -577,17 +590,35 @@ html.is-lb{ overflow:hidden }
 .contact.is-in .hubs__t, .contact.is-in .hub{ opacity:1; transform:none; transition-delay:calc(.35s + var(--i) * .07s), calc(.35s + var(--i) * .07s), 0s, 0s, 0s }
 .contact.is-in .hub:hover, .contact.is-in .hub:focus-visible{ transform:translateY(-2px); transition-delay:0s }
 
-.credit{ position:absolute; left:0; right:0; bottom:var(--gutter); margin:0 auto; padding:0 6rem; text-align:center; font-family:var(--mono); font-size:.95rem; color:var(--mute); line-height:1.3 }
+/* ---- créditos no fim da página: centralizados, pequenos, apagados ----
+   Surgem devagar só quando o rodapé entra na tela (main.js põe .is-seen). */
+.foot{
+  position:absolute; left:0; right:0; bottom:var(--gutter); z-index:3;
+  display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:.35rem 1rem;
+  padding:0 10rem; text-align:center;
+  font-family:var(--mono); font-size:.9rem; letter-spacing:.04em; line-height:1.3;
+  color:var(--mute); opacity:0; transform:translateY(6px);
+  transition:opacity 1.2s var(--ease), transform 1.2s var(--ease);
+}
+.foot.is-seen{ opacity:.7; transform:none }
+.foot:hover, .foot:focus-within{ opacity:1 }
+.foot__i{ margin:0 }
+.foot__i span{ opacity:.75 }
+.foot a{ color:inherit; text-decoration:none; border-bottom:1px solid color-mix(in srgb, var(--mute) 45%, transparent); transition:color .2s, border-color .2s }
+.foot a:hover, .foot a:focus-visible{ color:var(--fg); border-color:var(--fg) }
+.foot__sep{ width:3px; height:3px; border-radius:50%; background:currentColor; opacity:.6 }
 
 /* ---- contato em telas estreitas: grupos um embaixo do outro, cartões em duas colunas ---- */
 @media (max-width:900px){
-  .contact{ height:auto; min-height:100svh; padding-block:calc(var(--gutter) + 2rem) calc(var(--gutter) + 5rem) }
+  .contact{ height:auto; min-height:100svh; padding-block:calc(var(--gutter) + 2rem) calc(var(--gutter) + 58px + 4.5rem) }
   .hubs{ grid-template-columns:minmax(0,1fr); gap:1.2rem }
   .hubs__g{ display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:.55rem }
   .hubs__t{ grid-column:1 / -1 }
   .hub{ grid-template-columns:auto minmax(0,1fr); gap:.6rem; padding:.65rem .75rem }
   .hub__ar{ display:none }
-  .credit{ padding:0 var(--gutter) 0 var(--gutter); text-align:left; max-width:calc(100% - 6rem); margin:0 }
+  /* estreito: um crédito por linha, acima dos botões de idioma/inverter (que ficam no canto) */
+  .foot{ flex-direction:column; gap:.3rem; padding:0 var(--gutter); bottom:calc(var(--gutter) + 58px); font-size:.82rem }
+  .foot__sep{ display:none }
 }
 @media (max-width:420px){ .hub__n{ display:none } .mail__a, .mail__copy{ font-size:1rem; padding:0 .8rem } }
 
@@ -614,7 +645,7 @@ html.is-lb{ overflow:hidden }
 @media (prefers-reduced-motion:reduce){
   html{ scroll-behavior:auto }
   .sec .lay{ transform:none; transition:opacity .3s }
-  .cue i, .spin, .poke{ animation:none }
+  .cue i, .spin{ animation:none }
   .poke{ display:none }
   .brand, .brand__w, .brand__cut, .brand .role, .machine__stage, .el--late,
   .info__in, .info__in > *, .info__dl > div{ transition:opacity .4s !important; filter:none !important }

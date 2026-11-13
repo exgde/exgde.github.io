@@ -21,7 +21,7 @@
   var UI = {
     pt: {
       loading: 'Carregando',
-      invert: 'inverter',
+      invert: 'Inverter cores',
       pspLabel: 'PSP mostrando o projeto selecionado',
       infoLabel: 'Sobre o projeto na tela',
       how: 'como fiz',
@@ -38,6 +38,8 @@
       copied: 'copiado ✓',
       hubs: 'Onde me encontrar',
       by: 'por',
+      origRepo: 'portfolio original',
+      pspModel: 'modelo do PSP',
       lbLabel: 'Desenho em tela cheia',
       lbLink: 'ver no artstation',
       lbPrev: 'Desenho anterior',
@@ -50,7 +52,7 @@
     },
     en: {
       loading: 'Loading',
-      invert: 'invert',
+      invert: 'Invert colors',
       pspLabel: 'PSP showing the selected project',
       infoLabel: 'About the project on screen',
       how: 'how i made it',
@@ -67,6 +69,8 @@
       copied: 'copied ✓',
       hubs: 'Where to find me',
       by: 'by',
+      origRepo: 'original portfolio',
+      pspModel: 'PSP model',
       lbLabel: 'Full-screen drawing',
       lbLink: 'view on artstation',
       lbPrev: 'Previous drawing',
@@ -81,15 +85,22 @@
 
   /* ---- bandeiras em preto e branco (cor = currentColor) ----
      O botão mostra o idioma para o qual ele troca. */
+  function stars() {                // 3 + 2 + 3 pontos, em quincôncio, dentro do cantão
+    var d = '', rows = [[1.6, [1.9, 4.5, 7.1]], [4, [3.2, 5.8]], [6.4, [1.9, 4.5, 7.1]]];
+    rows.forEach(function (r) {
+      r[1].forEach(function (x) {
+        d += 'M' + (x + .62) + ' ' + r[0] + 'a.62 .62 0 1 0-1.24 0 .62 .62 0 1 0 1.24 0z';
+      });
+    });
+    return d;
+  }
   var FLAG = {
-    // EUA: listras alternadas e o cantão cheio com as "estrelas" vazadas
-    us: '<svg class="flag" viewBox="0 0 26 14" aria-hidden="true">' +
-          '<path d="M0 0h26v2H0zM0 4h26v2H0zM0 8h26v2H0zM0 12h26v2H0z"/>' +
-          '<path fill-rule="evenodd" d="M0 0h12v8H0z' +
-            'M2 1.5h1v1H2zM5.5 1.5h1v1h-1zM9 1.5h1v1H9z' +
-            'M3.75 3.5h1v1h-1zM7.25 3.5h1v1h-1z' +
-            'M2 5.5h1v1H2zM5.5 5.5h1v1h-1zM9 5.5h1v1H9z"/>' +
-          '<rect class="flag__o" x=".5" y=".5" width="25" height="13"/>' +
+    // EUA: sete listras (simplificado para o tamanho de ícone) e o cantão cheio
+    // com as estrelas vazadas em pontos redondos
+    us: '<svg class="flag" viewBox="0 0 20 14" aria-hidden="true">' +
+          '<path d="M9 0h11v2H9zM9 4h11v2H9zM0 8h20v2H0zM0 12h20v2H0z"/>' +
+          '<path fill-rule="evenodd" d="M0 0h9v8H0z' + stars() + '"/>' +
+          '<rect class="flag__o" x=".5" y=".5" width="19" height="13"/>' +
         '</svg>',
     // Brasil: losango cheio, globo vazado e a faixa atravessando
     br: '<svg class="flag" viewBox="0 0 20 14" aria-hidden="true">' +
@@ -100,8 +111,8 @@
         '</svg>'
   };
   var SWITCH = {                    // o que o botão mostra em cada idioma
-    pt: { flag: FLAG.us, label: 'english' },
-    en: { flag: FLAG.br, label: 'pt-br' }
+    pt: { flag: FLAG.us, label: 'English' },
+    en: { flag: FLAG.br, label: 'Português (Brasil)' }
   };
 
   /* ---- Brasil ou não ---- */
@@ -153,11 +164,15 @@
     [].forEach.call(document.querySelectorAll('[data-t-aria]'), function (el) {
       el.setAttribute('aria-label', t(el.getAttribute('data-t-aria')));
     });
+    [].forEach.call(document.querySelectorAll('[data-t-title]'), function (el) {
+      el.title = t(el.getAttribute('data-t-title'));
+    });
     var btn = document.getElementById('langToggle');
     if (btn) {
       var s = SWITCH[lang];
-      btn.innerHTML = s.flag + '<span>' + s.label + '</span>';
+      btn.innerHTML = s.flag;
       btn.setAttribute('aria-label', t('switchTo'));
+      btn.title = s.label;
       btn.setAttribute('lang', lang === 'en' ? 'pt-BR' : 'en');
     }
   }

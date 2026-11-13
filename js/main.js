@@ -265,6 +265,12 @@
   }, { threshold: [0.15, 0.5] });
   [].forEach.call(document.querySelectorAll('.sec'), function (s) { io.observe(s); });
 
+  /* ---- créditos: aparecem quando o fim da página chega na tela ---- */
+  var foot = $('foot');
+  if (foot) new IntersectionObserver(function (es, obs) {
+    if (es[0].isIntersecting) { foot.classList.add('is-seen'); obs.disconnect(); }
+  }, { threshold: 1 }).observe(foot);
+
   /* ---- inverter ---- */
   var invertBtn = $('invertToggle');
   function setInvert(on) {

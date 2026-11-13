@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611131400" />
+<link rel="stylesheet" href="css/style.css?v=2611131700" />
 </head>
 <body class="is-booting">
 
@@ -25,7 +25,7 @@
 
 <div class="ctl">
   <button class="ctl__b ctl__lang" id="langToggle" type="button"></button>
-  <button class="ctl__b" id="invertToggle" aria-pressed="false" data-t="invert">inverter</button>
+  <button class="ctl__b ctl__inv" id="invertToggle" type="button" aria-pressed="false" aria-label="inverter" title="inverter" data-t-aria="invert" data-t-title="invert"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><path d="M12 4a8 8 0 0 1 0 16z"/></svg></button>
 </div>
 
 <main>
@@ -129,11 +129,14 @@
     <nav class="hubs" id="hubs" aria-label="Onde me encontrar" data-t-aria="hubs"></nav>
   </div>
 
-  <p class="credit">
-    PSP 3D: <a href="https://sketchfab.com/3d-models/sony-psp-dca89d10ec304d0cab76837750df7761" target="_blank" rel="noopener">“Sony PSP”</a>
-    <span data-t="by">por</span> <a href="https://sketchfab.com/strov" target="_blank" rel="noopener">Ilya Ostrovsky</a>,
-    <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>
-  </p>
+  <!-- créditos: no fim da página, centralizados e discretos; aparecem quando o rodapé entra na tela (main.js) -->
+  <footer class="foot" id="foot">
+    <p class="foot__i"><span data-t="origRepo">portfolio original</span> <a href="https://github.com/exgde/exgde.github.io" target="_blank" rel="noopener">github.com/exgde/exgde.github.io</a></p>
+    <i class="foot__sep" aria-hidden="true"></i>
+    <p class="foot__i"><span data-t="pspModel">modelo do PSP</span> <a href="https://sketchfab.com/3d-models/sony-psp-dca89d10ec304d0cab76837750df7761" target="_blank" rel="noopener">“Sony PSP”</a>
+      <span data-t="by">por</span> <a href="https://sketchfab.com/strov" target="_blank" rel="noopener">Ilya Ostrovsky</a>
+      · <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a></p>
+  </footer>
 </section>
 
 </main>
@@ -159,13 +162,13 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611131400"></script>
-<script src="js/i18n.js?v=2611131400"></script>
-<script src="js/icons.js?v=2611131400"></script>
-<script src="js/art.js?v=2611131400"></script>
-<script src="js/main.js?v=2611131400"></script>
-<script src="js/gallery.js?v=2611131400"></script>
-<script src="js/track.js?v=2611131400"></script>
-<script type="module" src="js/psp.js?v=2611131400"></script>
+<script src="js/data.js?v=2611131700"></script>
+<script src="js/i18n.js?v=2611131700"></script>
+<script src="js/icons.js?v=2611131700"></script>
+<script src="js/art.js?v=2611131700"></script>
+<script src="js/main.js?v=2611131700"></script>
+<script src="js/gallery.js?v=2611131700"></script>
+<script src="js/track.js?v=2611131700"></script>
+<script type="module" src="js/psp.js?v=2611131700"></script>
 </body>
 </html>
