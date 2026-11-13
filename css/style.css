@@ -223,26 +223,93 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
   -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 72%, transparent 92%);
           mask-image:linear-gradient(90deg, transparent, #000 7%, #000 72%, transparent 92%);
 }
+/* as fileiras andam por js/gallery.js (dá para parar, arrastar e arremessar) */
 .gallery__row{
   flex:1; min-height:0; display:flex; gap:var(--gap); width:max-content;
-  animation:row-l var(--t,70s) linear infinite;
+  will-change:transform; touch-action:pan-y; cursor:grab;
+  -webkit-user-select:none; user-select:none;
 }
-.gallery__row:nth-child(2){ animation-name:row-r }      /* a do meio vai no sentido contrário */
-.gallery:hover .gallery__row{ animation-play-state:paused }
-@keyframes row-l{ from{ transform:translateX(0) } to{ transform:translateX(-50%) } }
-@keyframes row-r{ from{ transform:translateX(-50%) } to{ transform:translateX(0) } }
+.gallery__row.is-drag, .gallery__row.is-drag .gallery__tile{ cursor:grabbing }
 
 .gallery__tile{
-  flex:none; height:100%; aspect-ratio:1; overflow:hidden; display:block;
-  border-radius:10px; background:color-mix(in srgb, var(--fg) 8%, transparent);
-  outline-offset:2px;
+  position:relative; flex:none; height:100%; aspect-ratio:1; display:block;
+  padding:0; border:0; margin:0; font:inherit; color:inherit; cursor:zoom-in;
+  overflow:hidden; border-radius:10px; background:color-mix(in srgb, var(--fg) 8%, transparent);
+  outline-offset:3px; -webkit-tap-highlight-color:transparent;
+  transition:transform .45s var(--ease), box-shadow .45s var(--ease);
 }
 .gallery__tile img{
   display:block; width:100%; height:100%; object-fit:cover; object-position:50% 30%;
-  filter:grayscale(1) contrast(1.05); transform:scale(1.02);
-  transition:filter .5s var(--ease), transform .7s var(--ease);
+  filter:grayscale(1) contrast(1.05); pointer-events:none;
+  transition:filter .45s var(--ease);
 }
-.gallery__tile:hover img, .gallery__tile:focus-visible img{ filter:none; transform:scale(1.07) }
+/* o quadro debaixo do mouse vem para a frente (continua dentro do plano inclinado,
+   então mantém a perspectiva); os vizinhos da mesma fileira apagam um pouco */
+.gallery__tile.is-front{
+  z-index:3; transform:scale(1.14);
+  box-shadow:0 18px 44px rgba(0,0,0,.65), 0 0 0 1px color-mix(in srgb, var(--fg) 55%, transparent);
+}
+.gallery__tile.is-front img{ filter:grayscale(.8) brightness(1.08) contrast(1.1) }
+.gallery__row.is-hover .gallery__tile:not(.is-front) img{ filter:grayscale(1) brightness(.55) }
+
+/* ---- tela cheia (js/gallery.js) ---- */
+html.is-lb{ overflow:hidden }
+.lb{
+  position:fixed; inset:0; width:100%; height:100%; max-width:none; max-height:none;
+  margin:0; padding:0; border:0; color:var(--fg);
+  background:color-mix(in srgb, var(--bg) 93%, transparent);
+  -webkit-backdrop-filter:blur(8px); backdrop-filter:blur(8px);
+}
+.lb::backdrop{ background:transparent }
+.lb[open]{ display:grid; grid-template-rows:minmax(0,1fr) auto; animation:lb-fade .3s var(--ease) }
+.lb__stage{ min-height:0; display:grid; place-items:center; padding:clamp(3.5rem,8vh,5rem) clamp(4.5rem,9vw,7rem) 1rem }
+.lb__stage img{
+  max-width:100%; max-height:100%; object-fit:contain; display:block;
+  border-radius:10px; box-shadow:0 30px 80px rgba(0,0,0,.6);
+  touch-action:pan-y; cursor:grab; -webkit-user-select:none; user-select:none;
+}
+.lb__stage img.is-in{ animation:lb-in .45s var(--ease) }
+.lb__stage img.is-r{ animation:lb-r .4s var(--ease) }
+.lb__stage img.is-l{ animation:lb-l .4s var(--ease) }
+.lb__bar{
+  display:flex; align-items:center; justify-content:center; flex-wrap:wrap; gap:.6rem 1.4rem;
+  padding:0 var(--gutter) clamp(1.2rem,4vh,2rem); text-align:center;
+}
+.lb__cap{ font-size:.95rem; color:color-mix(in srgb, var(--fg) 80%, transparent); max-width:40rem }
+.lb__n{ font-family:var(--mono); font-size:1.05rem; color:var(--mute); letter-spacing:.06em }
+.lb__link{
+  min-height:38px; display:inline-flex; align-items:center; padding:0 .95rem;
+  border:1px solid color-mix(in srgb, var(--fg) 30%, transparent); border-radius:999px;
+  font-family:var(--mono); font-size:1.02rem; letter-spacing:.04em; text-decoration:none;
+  transition:background-color .2s, color .2s;
+}
+.lb__link::after{ content:" ↗"; white-space:pre }
+.lb__link:hover, .lb__link:focus-visible{ background:var(--fg); color:var(--bg) }
+.lb__link[hidden]{ display:none }
+.lb__b{
+  position:absolute; width:48px; height:48px; display:grid; place-items:center;
+  border:1px solid color-mix(in srgb, var(--fg) 28%, transparent); border-radius:50%;
+  font-family:var(--mono); font-size:1.35rem; line-height:1;
+  background:color-mix(in srgb, var(--bg) 60%, transparent);
+  transition:background-color .2s, color .2s, transform .15s var(--ease);
+}
+.lb__b:hover{ background:var(--fg); color:var(--bg) }
+.lb__b:focus-visible{ outline:2px solid var(--fg); outline-offset:3px }
+.lb__b:active{ transform:scale(.9) }
+.lb__prev{ left:clamp(.8rem,2.5vw,2rem); top:50%; margin-top:-24px }
+.lb__next{ right:clamp(.8rem,2.5vw,2rem); top:50%; margin-top:-24px }
+.lb__close{ right:clamp(.8rem,2.5vw,2rem); top:clamp(.8rem,2.5vw,2rem) }
+@keyframes lb-fade{ from{ opacity:0 } to{ opacity:1 } }
+@keyframes lb-in{ from{ opacity:0; transform:scale(.92) } to{ opacity:1; transform:none } }
+@keyframes lb-r{ from{ opacity:0; transform:translateX(40px) } to{ opacity:1; transform:none } }
+@keyframes lb-l{ from{ opacity:0; transform:translateX(-40px) } to{ opacity:1; transform:none } }
+
+/* celular: imagem quase de ponta a ponta; ← → descem para perto do polegar */
+@media (max-width:640px){
+  .lb__stage{ padding:4rem .8rem .6rem }
+  .lb__prev, .lb__next{ top:auto; bottom:clamp(1.2rem,4vh,2rem); margin-top:0 }
+  .lb__bar{ padding-inline:4.6rem }
+}
 
 /* o cartão */
 .card{
@@ -292,8 +359,8 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 
 @media (prefers-reduced-motion:reduce){
-  .gallery__row{ animation:none }
-  .gallery__row:nth-child(2){ transform:translateX(-25%) }
+  .lb[open], .lb__stage img{ animation:none !important }
+  .gallery__tile, .gallery__tile img{ transition:none }
 }
 
 /* ---- contato ---- */

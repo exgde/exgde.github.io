@@ -49,7 +49,8 @@ window.PF = {
   /* Desenhos da galeria em perspectiva, ao lado do "sobre mim".
      rows: as três fileiras, de cima para baixo (cada uma repete os seus
      desenhos até encher a largura). alt descreve o desenho para leitor de tela.
-     Clicar num desenho abre o "link" (o ArtStation). */
+     Clicar num desenho abre ele em tela cheia (js/gallery.js); "link" é o
+     botão "ver no artstation" que aparece lá. */
   art: {
     link: 'https://www.artstation.com/joaobyss',
     rows: [

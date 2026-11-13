@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611132100" />
+<link rel="stylesheet" href="css/style.css?v=2611140100" />
 </head>
 <body class="is-booting">
 
@@ -113,6 +113,19 @@
 
 </main>
 
+<!-- desenho em tela cheia (js/gallery.js) -->
+<dialog class="lb" id="lb" aria-label="Desenho em tela cheia">
+  <div class="lb__stage"><img id="lbImg" alt="" draggable="false" /></div>
+  <div class="lb__bar">
+    <span class="lb__n" id="lbN"></span>
+    <span class="lb__cap" id="lbCap"></span>
+    <a class="lb__link" id="lbLink" href="#" target="_blank" rel="noopener">ver no artstation</a>
+  </div>
+  <button class="lb__b lb__prev" id="lbPrev" type="button" aria-label="Desenho anterior">←</button>
+  <button class="lb__b lb__next" id="lbNext" type="button" aria-label="Próximo desenho">→</button>
+  <button class="lb__b lb__close" id="lbClose" type="button" aria-label="Fechar">✕</button>
+</dialog>
+
 <noscript><p style="padding:2rem;font-family:sans-serif">Este portfolio precisa de JavaScript para funcionar.</p></noscript>
 
 <script type="importmap">
@@ -121,10 +134,11 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611132100"></script>
-<script src="js/art.js?v=2611132100"></script>
-<script src="js/main.js?v=2611132100"></script>
-<script src="js/track.js?v=2611132100"></script>
-<script type="module" src="js/psp.js?v=2611132100"></script>
+<script src="js/data.js?v=2611140100"></script>
+<script src="js/art.js?v=2611140100"></script>
+<script src="js/main.js?v=2611140100"></script>
+<script src="js/gallery.js?v=2611140100"></script>
+<script src="js/track.js?v=2611140100"></script>
+<script type="module" src="js/psp.js?v=2611140100"></script>
 </body>
 </html>

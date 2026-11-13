@@ -60,29 +60,8 @@
     $('aboutLinks').appendChild(a);
   });
 
-  /* galeria: cada fileira repete os desenhos até passar de 2× a largura e
-     depois se duplica inteira, para o loop do CSS (vai até -50%) não ter emenda.
-     As cópias ficam escondidas do leitor de tela e do Tab. */
-  var art = PF.art || {}, plane = $('galleryPlane');
-  (art.rows || []).forEach(function (row, r) {
-    if (!row.length) return;
-    var track = document.createElement('div');
-    track.className = 'gallery__row';
-    track.style.setProperty('--t', (70 + r * 12) + 's');     // cada fileira num ritmo
-    var set = [];
-    while (set.length < 6) set = set.concat(row);
-    set.concat(set).forEach(function (it, i) {
-      var copy = i >= row.length;
-      var a = document.createElement(art.link ? 'a' : 'span');
-      a.className = 'gallery__tile';
-      if (art.link) { a.href = art.link; a.target = '_blank'; a.rel = 'noopener'; }
-      if (copy) { a.setAttribute('aria-hidden', 'true'); a.tabIndex = -1; }
-      var img = document.createElement('img');
-      img.src = it.img; img.alt = copy ? '' : (it.alt || ''); img.loading = 'lazy'; img.decoding = 'async';
-      a.appendChild(img); track.appendChild(a);
-    });
-    plane.appendChild(track);
-  });
+  /* a galeria de desenhos do "sobre mim" é montada em js/gallery.js */
+
   (PF.links || []).forEach(function (l) {
     var a = document.createElement('a');
     a.textContent = l.label; a.href = l.href;
