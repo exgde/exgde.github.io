@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=VT323&display=swap" rel="stylesheet" />
-<link rel="stylesheet" href="css/style.css?v=2611130500" />
+<link rel="stylesheet" href="css/style.css?v=2611130600" />
 </head>
 <body class="is-booting">
 
@@ -80,8 +80,15 @@
      Direita: o cartão com o "sobre mim". -->
 <section class="sec about" id="about">
   <div class="about__wrap lay">
-    <div class="gallery" id="gallery" aria-label="Desenhos">
-      <div class="gallery__plane" id="galleryPlane"></div>
+    <div class="art">
+      <header class="art__h" id="artH">
+        <p class="art__k"><span id="artK"></span><i aria-hidden="true"></i></p>
+        <h2 class="art__t" id="artT"></h2>
+        <p class="art__s" id="artS"></p>
+      </header>
+      <div class="gallery" id="gallery" aria-label="Desenhos">
+        <div class="gallery__plane" id="galleryPlane"></div>
+      </div>
     </div>
 
     <article class="card">
@@ -91,6 +98,9 @@
       <ul class="card__built" id="aboutBuilt"></ul>
       <p class="card__now" id="aboutNow"></p>
       <nav class="card__links" id="aboutLinks" aria-label="Onde ver mais"></nav>
+      <figure class="me" id="me">
+        <img id="meImg" alt="" width="593" height="1140" decoding="async" data-trk />
+      </figure>
     </article>
   </div>
 </section>
@@ -134,11 +144,11 @@
     "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.1/examples/jsm/"
 } }
 </script>
-<script src="js/data.js?v=2611130500"></script>
-<script src="js/art.js?v=2611130500"></script>
-<script src="js/main.js?v=2611130500"></script>
-<script src="js/gallery.js?v=2611130500"></script>
-<script src="js/track.js?v=2611130500"></script>
-<script type="module" src="js/psp.js?v=2611130500"></script>
+<script src="js/data.js?v=2611130600"></script>
+<script src="js/art.js?v=2611130600"></script>
+<script src="js/main.js?v=2611130600"></script>
+<script src="js/gallery.js?v=2611130600"></script>
+<script src="js/track.js?v=2611130600"></script>
+<script type="module" src="js/psp.js?v=2611130600"></script>
 </body>
 </html>

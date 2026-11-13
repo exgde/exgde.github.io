@@ -45,6 +45,27 @@
   text('contactB', (PF.contact || [])[1]);
 
   var about = PF.about || {};
+  var art = about.art || {};
+  text('artK', art.kicker);
+  text('artS', art.sub);
+  (art.title || []).forEach(function (w, i) {      // cada pedaço do título entra separado
+    var sp = document.createElement('span');
+    sp.className = 'art__w'; sp.style.setProperty('--i', i); sp.textContent = w;
+    $('artT').appendChild(sp);
+    $('artT').appendChild(document.createTextNode(' '));
+  });
+  if (about.photo) {
+    var me = $('meImg');
+    me.src = about.photo.src; me.alt = about.photo.alt || '';
+    // o tracking contorna a cabeça, não o retângulo todo da imagem (pontos 0..1)
+    me._contour = [];
+    for (var a = 0; a < 18; a++) {
+      var th = a / 18 * Math.PI * 2;
+      me._contour.push([0.5 + Math.cos(th) * 0.4, 0.46 + Math.sin(th) * 0.36]);
+    }
+  } else {
+    $('me').hidden = true;
+  }
   text('aboutH', about.heading);
   text('aboutLead', about.lead);
   text('aboutNow', about.now);

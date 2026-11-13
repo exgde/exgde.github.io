@@ -29,6 +29,14 @@ window.PF = {
   role: 'jogos · mods · código',
 
   about: {
+    // título que surge em cima da galeria de desenhos
+    art: {
+      kicker: 'arte · 2019—hoje',
+      title: ['trabalhos', 'como artista'],
+      sub: 'ilustração · pixel art · modelagem 3D'
+    },
+    // retrato ao lado do cartão (gerado por tools/portrait.py)
+    photo: { src: 'assets/portrait.webp', alt: 'Retrato de João em preto e branco' },
     heading: 'sobre mim',
     lead: 'Estudo Ciência da Computação na UFJ e sou técnico em Informática pelo IFG. Meu foco é AI engineering: ligar modelos de linguagem a ferramentas, dados e rotinas reais.',
     bio: [

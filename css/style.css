@@ -222,24 +222,98 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
    Esquerda: galeria num plano em perspectiva (perto à esquerda, longe à direita).
    Direita: cartão com o texto. */
 .about{ justify-content:center }
+.about{ --wrap:82rem; --me:0px }
 .about__wrap{
-  width:min(100%,82rem); height:100%; margin:0 auto;
+  width:min(100%,var(--wrap)); height:100%; margin:0 auto; padding-right:var(--me);
   display:grid; grid-template-columns:minmax(0,1.45fr) minmax(0,1fr); gap:clamp(1.5rem,4vw,4rem); align-items:center;
 }
 
 .gallery{
   --gap:clamp(.5rem,1vw,.9rem);
   --room:3.2rem;                  /* folga em cima e embaixo para o quadro em destaque "saltar" sem ser cortado */
-  --h:min(74vh,40rem);            /* altura das três fileiras */
+  --h:min(64vh,38rem);            /* altura das três fileiras (o título fica em cima) */
   position:relative; height:calc(var(--h) + 2 * var(--room)); margin-block:calc(-1 * var(--room));
   perspective:1100px; perspective-origin:30% 50%;
   /* encosta na borda esquerda da tela, mesmo com a grade centralizada */
-  margin-left:calc(-1 * var(--gutter) - max(0px, (100vw - 82rem - 2 * var(--gutter)) / 2));
+  margin-left:calc(-1 * var(--gutter) - max(0px, (100vw - var(--wrap) - 2 * var(--gutter)) / 2));
   /* os desenhos surgem e somem nas pontas, sem corte seco. A máscara fica aqui e não no
      plano: no plano ela achataria o 3D e o quadro em destaque não conseguiria vir para a frente */
   -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 76%, transparent);
           mask-image:linear-gradient(90deg, transparent, #000 7%, #000 76%, transparent);
 }
+/* ---- título da galeria ----
+   Surge quando a seção entra na tela: o rótulo em mono com cursor piscando,
+   as palavras subindo de um recorte e saindo do desfoque, e um fio que se desenha. */
+.art{ position:relative; min-width:0; display:flex; flex-direction:column }
+.art__h{ position:relative; z-index:3; margin:0; pointer-events:none }
+.art__k{
+  margin:0 0 .55rem; display:flex; align-items:center; gap:.4rem;
+  font-family:var(--mono); font-size:1.05rem; letter-spacing:.14em; text-transform:uppercase; color:var(--mute);
+  opacity:0; transform:translateX(-10px); transition:opacity .8s var(--ease) .1s, transform .9s var(--ease) .1s;
+}
+.art__k i{ display:inline-block; width:.5em; height:1em; background:currentColor; animation:caret 1.1s steps(1) infinite }
+@keyframes caret{ 50%{ opacity:0 } }
+.art__t{
+  margin:0; font-weight:400; font-style:italic; font-size:clamp(1.8rem,3.4vw,3.2rem);
+  line-height:1; letter-spacing:-.02em;
+}
+.art__w{
+  display:inline-block; clip-path:inset(0 0 100% 0); filter:blur(10px); opacity:0;
+  transform:translateY(.45em);
+  transition:clip-path 1s var(--ease), filter 1.1s var(--ease), opacity .8s var(--ease), transform 1.1s var(--ease);
+  transition-delay:calc(.25s + var(--i) * .14s);
+}
+.art__w:last-child{ color:color-mix(in srgb, var(--fg) 62%, transparent) }
+.art__s{
+  position:relative; margin:.8rem 0 0; padding-top:.6rem; max-width:max-content;
+  font-family:var(--mono); font-size:1.05rem; letter-spacing:.06em; color:var(--mute);
+  opacity:0; transition:opacity 1s var(--ease) .75s;
+}
+.art__s::before{                 /* o fio que se desenha da esquerda para a direita */
+  content:""; position:absolute; left:0; top:0; width:100%; height:1px;
+  background:color-mix(in srgb, var(--fg) 35%, transparent);
+  transform:scaleX(0); transform-origin:left; transition:transform 1.3s var(--ease) .6s;
+}
+.about.is-in .art__k{ opacity:1; transform:none }
+.about.is-in .art__w{ clip-path:inset(-.2em 0 -.2em 0); filter:none; opacity:1; transform:none }
+.about.is-in .art__s{ opacity:1 }
+.about.is-in .art__s::before{ transform:scaleX(1) }
+
+/* ---- retrato ao lado do cartão ----
+   A arte (tools/portrait.py) já sai sem fundo e com as bordas desfeitas em halftone;
+   aqui ela só ganha uma máscara macia extra e entra devagar, saindo do desfoque. */
+.me{
+  position:absolute; z-index:1; margin:0; pointer-events:none;
+  left:calc(100% + clamp(.5rem,1.5vw,1.5rem)); top:50%; width:var(--me-w,0px);
+  transform:translateY(-50%);
+}
+.me img{
+  display:block; width:100%; height:auto;
+  -webkit-mask-image:radial-gradient(78% 66% at 50% 48%, #000 70%, transparent 100%);
+          mask-image:radial-gradient(78% 66% at 50% 48%, #000 70%, transparent 100%);
+  opacity:0; filter:blur(12px); transform:translateY(14px) scale(.97);
+  transition:opacity 1.4s var(--ease) .5s, filter 1.6s var(--ease) .5s, transform 1.6s var(--ease) .5s;
+}
+.about.is-in .me img{ opacity:1; filter:none; transform:translate(calc(var(--mx)*-6px),calc(var(--my)*-6px)) }
+/* invertido (fundo branco): o retrato vira um negativo claro em vez de sumir */
+body.is-invert .me img{ filter:invert(1) blur(12px) }
+body.is-invert .about.is-in .me img{ filter:invert(1) }
+/* telas largas: o retrato ganha uma coluna própria à direita do cartão */
+@media (min-width:1180px){
+  .about{ --wrap:104rem; --me-w:clamp(11rem,15vw,20rem); --me:calc(var(--me-w) + clamp(.5rem,1.5vw,1.5rem)) }
+  .about__wrap{ grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) }
+}
+/* abaixo disso não sobra coluna: o retrato vira um "adesivo" no canto do cartão */
+@media (max-width:1179px){
+  /* só a cabeça, na altura do título "sobre mim", cruzando a borda de cima do cartão */
+  .me{ --s:clamp(5.2rem,10vw,6.6rem); left:auto; right:clamp(.8rem,2.4vw,1.6rem); top:calc(var(--s) * -.42); width:var(--s); transform:none }
+  .me img{
+    aspect-ratio:1/1.05; object-fit:cover; object-position:50% 34%;
+    -webkit-mask-image:radial-gradient(50% 50% at 50% 50%, #000 58%, transparent 100%);
+            mask-image:radial-gradient(50% 50% at 50% 50%, #000 58%, transparent 100%);
+  }
+}
+
 .gallery__plane{
   position:absolute; top:var(--room); bottom:var(--room); left:-4%; width:175%;
   display:flex; flex-direction:column; gap:var(--gap);
@@ -401,6 +475,8 @@ html.is-lb{ overflow:hidden }
 }
 
 @media (prefers-reduced-motion:reduce){
+  .art__k, .art__w, .art__s, .art__s::before, .me img{ transition:opacity .4s !important; filter:none !important; transform:none !important; clip-path:none !important }
+  .art__k i{ animation:none }
   .lb[open], .lb__stage img{ animation:none !important }
   .gallery__art, .gallery__art img{ transition:none }
 }
