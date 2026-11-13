@@ -94,6 +94,9 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .ctl__inv[aria-pressed="true"] svg{ transform:rotate(180deg) }
 /* idioma: bandeira em preto e branco (js/i18n.js) */
 .flag{ height:14px; width:auto; fill:currentColor }
+/* bandeira + sigla: o botão vira uma pílula em vez de círculo, mesma altura */
+.ctl__lang{ width:auto; padding:0 .85rem 0 .8rem; border-radius:999px; display:flex; align-items:center; gap:.5rem }
+.ctl__code{ font-family:var(--mono); font-size:1.15rem; letter-spacing:.06em; line-height:1; margin-top:-.1rem }
 .flag__o{ fill:none; stroke:currentColor; stroke-width:1 }
 
 /* ---- linha de título com recorte no meio (capa e contato) ---- */

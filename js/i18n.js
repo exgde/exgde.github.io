@@ -84,7 +84,7 @@
   };
 
   /* ---- bandeiras em preto e branco (cor = currentColor) ----
-     O botão mostra o idioma para o qual ele troca. */
+     O botão mostra o idioma atual (bandeira + sigla); clicar troca para o outro. */
   function stars() {                // 3 + 2 + 3 pontos, em quincôncio, dentro do cantão
     var d = '', rows = [[1.6, [1.9, 4.5, 7.1]], [4, [3.2, 5.8]], [6.4, [1.9, 4.5, 7.1]]];
     rows.forEach(function (r) {
@@ -110,9 +110,9 @@
           '<rect class="flag__o" x=".5" y=".5" width="19" height="13"/>' +
         '</svg>'
   };
-  var SWITCH = {                    // o que o botão mostra em cada idioma
-    pt: { flag: FLAG.us, label: 'English' },
-    en: { flag: FLAG.br, label: 'Português (Brasil)' }
+  var CURRENT = {                   // o que o botão mostra em cada idioma
+    pt: { flag: FLAG.br, code: 'PT-BR' },
+    en: { flag: FLAG.us, code: 'EN' }
   };
 
   /* ---- Brasil ou não ---- */
@@ -169,11 +169,10 @@
     });
     var btn = document.getElementById('langToggle');
     if (btn) {
-      var s = SWITCH[lang];
-      btn.innerHTML = s.flag;
-      btn.setAttribute('aria-label', t('switchTo'));
-      btn.title = s.label;
-      btn.setAttribute('lang', lang === 'en' ? 'pt-BR' : 'en');
+      var s = CURRENT[lang];
+      btn.innerHTML = s.flag + '<span class="ctl__code" aria-hidden="true">' + s.code + '</span>';
+      btn.setAttribute('aria-label', t('switchTo'));   // leitor de tela: a ação, não a sigla
+      btn.title = t('switchTo');
     }
   }
 
