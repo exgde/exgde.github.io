@@ -33,19 +33,15 @@
   var items = [];                   // todos os desenhos, sem repetição (para a tela cheia)
   var rows = [];
 
-  art.rows.forEach(function (row, r) {
-    if (!row.length) return;
-    var first = items.length;
-    row.forEach(function (it) { items.push(it); });
-
-    var track = document.createElement('div');
-    track.className = 'gallery__row';
-    // repete os desenhos até ter pelo menos 6 e duplica tudo: o loop anda meia trilha sem emenda
-    var set = [];
-    while (set.length < 6) set = set.concat(row.map(function (it, k) { return first + k; }));
-    var all = set.concat(set);
-    all.forEach(function (idx, k) {
-      var it = items[idx], copy = k >= row.length;
+  /* Cada fileira repete os seus desenhos (sempre em múltiplos da fileira, para a
+     sequência não "pular" na emenda) até a meia trilha cobrir o plano inteiro, e
+     depois se duplica: o loop anda meia trilha sem nunca abrir um vão. Quantos
+     quadros cabem depende do tamanho da tela, então measure() refaz quando precisa. */
+  function build(R, count) {
+    var frag = document.createDocumentFragment(), set = [];
+    while (set.length < count) set = set.concat(R.idx);
+    set.concat(set).forEach(function (idx, k) {
+      var it = items[idx], copy = k >= R.idx.length;
       var b = document.createElement('button');
       b.type = 'button';
       b.className = 'gallery__tile';
@@ -55,24 +51,54 @@
       var img = document.createElement('img');
       img.src = it.img; img.alt = ''; img.loading = 'lazy'; img.decoding = 'async'; img.draggable = false;
       b.appendChild(img);
-      track.appendChild(b);
+      frag.appendChild(b);
     });
+    if (front && front.parentNode === R.el) front = null;
+    R.el.textContent = '';
+    R.el.appendChild(frag);
+    R.n = set.length;
+  }
+
+  art.rows.forEach(function (row, r) {
+    if (!row.length) return;
+    var first = items.length;
+    row.forEach(function (it) { items.push(it); });
+
+    var track = document.createElement('div');
+    track.className = 'gallery__row';
     plane.appendChild(track);
 
     var dir = r % 2 ? 1 : -1;       // a do meio vai no sentido contrário
     var base = dir * SPEED * (1 - r * 0.12);
-    rows.push({
-      el: track, tiles: track.children, n: set.length,
+    var R = {
+      el: track, tiles: track.children, n: 0,
+      idx: row.map(function (it, k) { return first + k; }),
       x: 0, v: base, base: base, half: 0,
       mode: 'run',                  // run | hover | drag | coast
       drag: null
-    });
+    };
+    build(R, Math.ceil(6 / R.idx.length) * R.idx.length);
+    rows.push(R);
   });
 
-  function measure() {              // largura de meia trilha = onde começa a cópia
+  function measure() {
+    var planeW = plane.offsetWidth;
     rows.forEach(function (R) {
-      var a = R.tiles[0], b = R.tiles[R.n];
-      R.half = b && a ? b.offsetLeft - a.offsetLeft : 0;
+      var t0 = R.tiles[0], t1 = R.tiles[1];
+      if (!t0 || !t1) return;
+      var step = t1.offsetLeft - t0.offsetLeft;              // um quadro + o espaço entre eles
+      if (step > 0 && planeW) {
+        // meia trilha precisa ser pelo menos do tamanho do plano (+1 quadro de folga)
+        var need = Math.ceil(planeW / step) + 1;
+        need = Math.ceil(need / R.idx.length) * R.idx.length;
+        if (need > R.n && R.mode !== 'drag') {
+          var frac = R.half ? R.x / R.half : 0;             // mantém a posição relativa no loop
+          build(R, need);
+          R.half = R.tiles[R.n].offsetLeft - R.tiles[0].offsetLeft;
+          R.x = frac * R.half;
+        }
+      }
+      R.half = R.tiles[R.n].offsetLeft - R.tiles[0].offsetLeft;  // onde começa a cópia
       if (R.half && !R.placed) { R.x = R.base > 0 ? -R.half * 0.5 : -R.half * 0.15; R.placed = true; }
     });
   }
@@ -106,14 +132,12 @@
   var dragging = null;              // a fileira sendo arrastada, se houver
   var mouse = { x: 0, y: 0, in: false };
 
-  /* as pontas do plano esmaecem (mask-image no CSS, de 0–7% e de 72–92% da largura):
+  /* as pontas da galeria esmaecem (mask-image no CSS, até 7% e a partir de 76% da largura):
      um quadro ali quase transparente não conta como "debaixo do mouse" */
-  var SEEN_FROM = 0.05, SEEN_TO = 0.84;
+  var SEEN_FROM = 0.05, SEEN_TO = 0.86;
   function seen(tile, x) {
-    var R = rowOf(tile.parentNode), r = tile.getBoundingClientRect();
-    if (!R || !r.width) return false;
-    var inTile = (x - r.left) / r.width * tile.offsetWidth;          // posição dentro do quadro, sem perspectiva
-    var f = (tile.offsetLeft + R.x + inTile) / plane.offsetWidth;    // fração da largura do plano
+    var g = gallery.getBoundingClientRect();
+    var f = (x - g.left) / g.width;
     return f > SEEN_FROM && f < SEEN_TO;
   }
 

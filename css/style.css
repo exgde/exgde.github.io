@@ -170,22 +170,40 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 .info__dl > div[hidden]{ display:none }
 .info__meta{ margin:0; font-family:var(--mono); font-size:1rem; color:var(--mute); letter-spacing:.04em }
 
-/* anterior / próximo / abrir: pequenos e apagados no canto de baixo, ao lado do "inverter";
-   acendem no hover */
+/* anterior / próximo / abrir: presos no canto inferior direito da tela do PSP
+   (psp.js move o bloco a cada quadro) e visíveis só com o cursor em cima do PSP.
+   Somem com um pequeno atraso, para dar tempo de levar o mouse até eles. */
 .keys{
-  position:absolute; z-index:5; bottom:calc(var(--gutter) + 2px); right:calc(var(--gutter) + 5.6rem);
-  display:flex; gap:.15rem;
-  opacity:0; transition:opacity 1s var(--ease) .5s;
+  position:absolute; z-index:5; left:0; top:0;
+  translate:-12px -12px;          /* um respiro para dentro da tela */
+  display:flex; gap:.3rem; padding:.3rem;
+  border-radius:999px; border:1px solid rgba(255,255,255,.22);
+  background:rgba(0,0,0,.58); -webkit-backdrop-filter:blur(6px); backdrop-filter:blur(6px);
+  color:#fff;                     /* fica sobre a tela do PSP, que é sempre escura */
+  opacity:0; pointer-events:none;                 /* escondido, mas o Tab ainda chega neles */
+  transition:opacity .25s var(--ease) .4s;
+  will-change:transform;
 }
-.is-info .keys{ opacity:1 }
+.is-info .keys.is-placed.is-on, .is-info .keys.is-placed:hover, .is-info .keys.is-placed:has(:focus-visible){
+  opacity:1; pointer-events:auto;
+  transition:opacity .2s var(--ease);
+}
+/* toque: não existe "cursor em cima", então os botões ficam sempre à mostra */
+@media (hover:none){ .is-info .keys.is-placed{ opacity:1; pointer-events:auto } }
+@media (max-width:640px){
+  .keys{ gap:.1rem; padding:.15rem; translate:-7px -7px }
+  .keys button, .keys a{ width:30px; height:30px; font-size:1.05rem }
+  .keys svg{ width:15px; height:15px }
+}
 .keys button, .keys a{
-  width:34px; height:34px; display:grid; place-items:center;
-  font-family:var(--mono); font-size:1.15rem; line-height:1; text-decoration:none;
-  color:var(--mute); transition:color .2s, transform .15s var(--ease);
+  width:40px; height:40px; display:grid; place-items:center; border-radius:50%;
+  font-family:var(--mono); font-size:1.35rem; line-height:1; text-decoration:none;
+  color:#fff; transition:background-color .2s, color .2s, transform .15s var(--ease);
 }
-.keys button:hover, .keys a:hover, .keys button:focus-visible, .keys a:focus-visible{ color:var(--fg) }
+.keys button:hover, .keys a:hover{ background:#fff; color:#000 }
+.keys button:focus-visible, .keys a:focus-visible{ outline:2px solid #fff; outline-offset:2px }
 .keys button:active, .keys a:active{ transform:scale(.88) }
-.keys svg{ width:17px; height:17px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
+.keys svg{ width:19px; height:19px; fill:none; stroke:currentColor; stroke-width:2; stroke-linecap:round; stroke-linejoin:round }
 .keys a[hidden]{ display:none }
 
 /* o "dedo" no PSP: anel que abre onde a pessoa tocou (psp.js) */
@@ -210,23 +228,27 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 
 .gallery{
   --gap:clamp(.5rem,1vw,.9rem);
-  position:relative; height:min(74vh,40rem);
+  --room:3.2rem;                  /* folga em cima e embaixo para o quadro em destaque "saltar" sem ser cortado */
+  --h:min(74vh,40rem);            /* altura das três fileiras */
+  position:relative; height:calc(var(--h) + 2 * var(--room)); margin-block:calc(-1 * var(--room));
   perspective:1100px; perspective-origin:30% 50%;
   /* encosta na borda esquerda da tela, mesmo com a grade centralizada */
   margin-left:calc(-1 * var(--gutter) - max(0px, (100vw - 82rem - 2 * var(--gutter)) / 2));
+  /* os desenhos surgem e somem nas pontas, sem corte seco. A máscara fica aqui e não no
+     plano: no plano ela achataria o 3D e o quadro em destaque não conseguiria vir para a frente */
+  -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 76%, transparent);
+          mask-image:linear-gradient(90deg, transparent, #000 7%, #000 76%, transparent);
 }
 .gallery__plane{
-  position:absolute; top:0; bottom:0; left:-4%; width:175%;
+  position:absolute; top:var(--room); bottom:var(--room); left:-4%; width:175%;
   display:flex; flex-direction:column; gap:var(--gap);
   transform:rotateY(28deg); transform-origin:left center;
-  /* os desenhos surgem e somem nas pontas, sem corte seco */
-  -webkit-mask-image:linear-gradient(90deg, transparent, #000 7%, #000 72%, transparent 92%);
-          mask-image:linear-gradient(90deg, transparent, #000 7%, #000 72%, transparent 92%);
+  transform-style:preserve-3d;    /* fileiras e quadros vivem no mesmo espaço 3D */
 }
 /* as fileiras andam por js/gallery.js (dá para parar, arrastar e arremessar) */
 .gallery__row{
   flex:1; min-height:0; display:flex; gap:var(--gap); width:max-content;
-  will-change:transform; touch-action:pan-y; cursor:grab;
+  will-change:transform; touch-action:pan-y; cursor:grab; transform-style:preserve-3d;
   -webkit-user-select:none; user-select:none;
 }
 .gallery__row.is-drag, .gallery__row.is-drag .gallery__tile{ cursor:grabbing }
@@ -245,9 +267,12 @@ body.is-invert .el, body.is-invert .cut{ filter:invert(1) }
 }
 /* o quadro debaixo do mouse vem para a frente (continua dentro do plano inclinado,
    então mantém a perspectiva); os vizinhos da mesma fileira apagam um pouco */
+/* o quadro debaixo do mouse sai do plano em direção a quem olha (translateZ dentro da
+   perspectiva, com um pequeno "quique"), e por estar mais perto fica por cima das outras fileiras */
 .gallery__tile.is-front{
-  z-index:3; transform:scale(1.14);
-  box-shadow:0 18px 44px rgba(0,0,0,.65), 0 0 0 1px color-mix(in srgb, var(--fg) 55%, transparent);
+  z-index:3; transform:translateZ(90px) scale(1.2);
+  transition:transform .55s cubic-bezier(.34,1.56,.64,1), box-shadow .45s var(--ease);
+  box-shadow:0 26px 60px rgba(0,0,0,.75), 0 0 0 1.5px color-mix(in srgb, var(--fg) 70%, transparent);
 }
 .gallery__tile.is-front img{ filter:grayscale(.8) brightness(1.08) contrast(1.1) }
 .gallery__row.is-hover .gallery__tile:not(.is-front) img{ filter:grayscale(1) brightness(.55) }
@@ -346,14 +371,14 @@ html.is-lb{ overflow:hidden }
   .card__built{ font-size:.85rem; padding-top:.6rem; gap:.2rem }
   .card__now{ font-size:.95rem }
   .card__links a{ min-height:36px; font-size:1rem }
-  .gallery{ height:68vh }
+  .gallery{ --h:68vh }
 }
 
 /* telas estreitas: galeria em cima (menos inclinada), cartão embaixo */
 @media (max-width:900px){
   .about{ height:auto; min-height:100svh; padding-block:calc(var(--gutter) + 1rem) calc(var(--gutter) + 4rem) }
   .about__wrap{ grid-template-columns:minmax(0,1fr); height:auto; gap:1.6rem }
-  .gallery{ height:min(46vh,24rem); margin:0 calc(var(--gutter) * -1) }
+  .gallery{ --h:min(46vh,24rem); --room:2.4rem; margin-inline:calc(var(--gutter) * -1) }
   .card{ -webkit-backdrop-filter:none; backdrop-filter:none }
   .gallery__plane{ transform:rotateY(20deg); left:-2%; width:130% }
 }
@@ -383,7 +408,6 @@ html.is-lb{ overflow:hidden }
   .info__count b{ font-size:2.4rem }
   .info__dl{ gap:.5rem }
   .info__dl dd, .info__sub{ font-size:.88rem; line-height:1.4 }
-  .keys{ top:calc(49% - 38px); bottom:auto; right:var(--gutter) }          /* embaixo, à direita do PSP, entre ele e a descrição */
   .stage .cue{ display:none }
   .stage .el--late{ top:30%; width:78vmin; height:78vmin }       /* a flor fica atrás do PSP, não do texto */
   .stage .el:not(.el--late){ opacity:.35 }                         /* estrelas mais discretas atrás da descrição */
@@ -396,7 +420,7 @@ html.is-lb{ overflow:hidden }
   .cue i, .spin, .poke{ animation:none }
   .poke{ display:none }
   .brand, .brand__w, .brand__cut, .brand .role, .machine__stage, .el--late,
-  .info__in, .info__in > *, .info__dl > div, .keys{ transition:opacity .4s !important; filter:none !important }
+  .info__in, .info__in > *, .info__dl > div{ transition:opacity .4s !important; filter:none !important }
   .el, .cut{ transform:translate(-50%,-50%) }
   .cut{ transform:none }
 }

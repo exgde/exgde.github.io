@@ -229,17 +229,35 @@ stage.addEventListener('pointerup', (e) => {
   else if (hit && Math.hypot(dx, dy) < 14) BUS.next();
 });
 stage.addEventListener('pointercancel', () => { release(); down = null; });
-stage.addEventListener('pointerleave', () => { stage.style.cursor = ''; });
+/* anterior / próximo / abrir ficam no canto inferior direito da tela do PSP
+   (placeKeys, a cada quadro) e só aparecem com o cursor em cima do modelo.
+   Em cima dos próprios botões eles continuam acesos (CSS :hover). */
+const keys = document.querySelector('.keys');
+function overPsp(on) { if (keys) keys.classList.toggle('is-on', on); }
+stage.addEventListener('pointerleave', () => { stage.style.cursor = ''; overPsp(false); });
 
-// a mãozinha só aparece em cima do PSP, não no espaço vazio em volta
+// a mãozinha (e os botões) só aparecem em cima do PSP, não no espaço vazio em volta
 let hoverQ = false, hx = 0, hy = 0, ht = null;
 stage.addEventListener('pointermove', (e) => {
   if (e.pointerType !== 'mouse') return;
   hx = e.clientX; hy = e.clientY; ht = e.target;
   if (hoverQ) return;
   hoverQ = true;
-  requestAnimationFrame(() => { hoverQ = false; stage.style.cursor = pick(hx, hy, ht) ? 'pointer' : ''; });
+  requestAnimationFrame(() => {
+    hoverQ = false;
+    const on = !!pick(hx, hy, ht);
+    stage.style.cursor = on ? 'pointer' : '';
+    overPsp(on);
+  });
 });
+
+// posiciona os botões com o canto de baixo-direita deles no ponto (x, y) da página
+function keysAt(x, y) {
+  if (!keys) return;
+  const h = keys.offsetParent ? keys.offsetParent.getBoundingClientRect() : { left: 0, top: 0 };
+  keys.style.transform = `translate3d(${(x - h.left).toFixed(1)}px,${(y - h.top).toFixed(1)}px,0) translate(-100%,-100%)`;
+  keys.classList.add('is-placed');
+}
 
 /* ------------------------------------------------------------
    Visibilidade: só desenha com a seção na tela
@@ -276,7 +294,11 @@ function flat(reason) {
     scr.animate([{ transform: 'translate(-50%,-50%) scale(.97)' }, { transform: 'translate(-50%,-50%)' }],
       { duration: 380, easing: 'cubic-bezier(.16,1,.3,1)' });
   };
-  frameFn = drawScreen;
+  frameFn = (now) => {
+    drawScreen(now);
+    const r = scr.getBoundingClientRect();
+    keysAt(r.right, r.bottom);
+  };
   BUS.modelReady();
   start();
 }
@@ -462,7 +484,28 @@ function boot3d() {
       pivot.position.z = spring.z;
       pivot.scale.setScalar((.82 + .18 * rise) * (1 + spring.s));
       renderer.render(scene, camera);
+      if (screen && BUS.pspAt) placeKeys();
     };
+
+    /* o canto de baixo-direita da tela, onde quer que o PSP esteja inclinado:
+       projeta os cantos da malha da tela e fica com o mais embaixo-à-direita */
+    const corners = [];
+    if (screen) {
+      screen.geometry.computeBoundingBox();
+      const bb = screen.geometry.boundingBox;
+      for (const x of [bb.min.x, bb.max.x]) for (const y of [bb.min.y, bb.max.y]) for (const z of [bb.min.z, bb.max.z]) corners.push(new THREE.Vector3(x, y, z));
+    }
+    const pv = new THREE.Vector3();
+    function placeKeys() {
+      const r = canvas.getBoundingClientRect();
+      let bx = 0, by = 0, best = -Infinity;
+      for (const c of corners) {
+        pv.copy(c).applyMatrix4(screen.matrixWorld).project(camera);
+        const x = (pv.x + 1) / 2 * r.width, y = (1 - pv.y) / 2 * r.height;
+        if (x + y > best) { best = x + y; bx = x; by = y; }
+      }
+      keysAt(r.left + bx, r.top + by);
+    }
     BUS.modelReady();
     start();
   }, undefined, (err) => {
