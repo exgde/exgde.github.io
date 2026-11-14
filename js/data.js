@@ -94,12 +94,8 @@ window.PF = {
   m3d: {
     kicker: '3D · meu processo',
     title: ['da ideia', 'ao modelo'],
-    lead: 'Sempre gostei de desenhar, e é daí que vem o meu 3D. Antes de colocar qualquer coisa em prática, já planejei o que quero ver pronto.',
-    list: [
-      'A visão criativa é minha e vem antes de qualquer ferramenta',
-      'Uso IA só para agilizar a parte técnica da modelagem',
-      'Ela não faz parte do processo criativo'
-    ],
+    lead: 'Sempre gostei de desenhar, e é daí que vem o meu 3D. Antes de colocar qualquer coisa em prática, já planejei o que quero ver pronto, porque a visão criativa é minha e vem antes de qualquer ferramenta. Uso IA só para agilizar a parte técnica da modelagem. Ela não faz parte do processo criativo.',
+    list: [],
     meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
     heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, em movimento, com a pistola erguida. Arraste para girar.',
@@ -266,12 +262,8 @@ window.PF_EN = {
   m3d: {
     kicker: '3D · my process',
     title: ['from idea', 'to model'],
-    lead: "I've always liked to draw, and that is where my 3D comes from. Before I put anything into practice, I have already planned what I want to see finished.",
-    list: [
-      'The creative vision is mine and comes before any tool',
-      'I use AI only to speed up the technical side of modeling',
-      'It is not part of the creative process'
-    ],
+    lead: "I've always liked to draw, and that is where my 3D comes from. Before I put anything into practice, I have already planned what I want to see finished, because the creative vision is mine and comes before any tool. I use AI only to speed up the technical side of modeling. It is not part of the creative process.",
+    list: [],
     meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',
     heroAlt: 'WW1-Thriller soldier in a gas mask, on the move, pistol raised. Drag to rotate.',

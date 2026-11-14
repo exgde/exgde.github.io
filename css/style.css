@@ -685,6 +685,7 @@ html.is-lb{ overflow:hidden }
 .m3d__t span:last-child{ color:color-mix(in srgb, var(--fg) 62%, transparent) }
 .m3d__lead{ margin:1rem 0 0; max-width:27em; font-size:clamp(1rem,2.1vh,1.6rem); line-height:1.45 }
 .m3d__list{ list-style:none; margin:1.1rem 0 0; padding:0; max-width:31em; font-size:clamp(.92rem,1.85vh,1.4rem); display:grid; gap:.5em }
+.m3d__list:empty{ display:none }
 .m3d__list li{
   position:relative; padding-left:1.1em; line-height:1.4;
   color:color-mix(in srgb, var(--fg) 80%, transparent);
