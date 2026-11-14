@@ -1,9 +1,9 @@
 /* ============================================================
    03 · MODELAGEM 3D
 
-   · À direita, o soldado do WW1-Thriller com a escopeta: 36 quadros renderizados
-     no Blender... agora 72, numa folha só (assets/m3d/soldier-turn.webp, 12 x 6).
-     Gira sozinho, devagar; arrastar gira na mão.
+   · À direita, o soldado do WW1-Thriller na pose feita à mão: 25 quadros renderizados
+     no Blender, numa folha só (assets/m3d/soldier-turn.webp, 5 x 5), em alto contraste.
+     Balança devagar de um lado para o outro; arrastar gira na mão.
    · À esquerda, o busto do soldado tático, parado (assets/m3d/bust.webp).
    · Nada aqui é imagem pronta de pontilhado: cada peça é um render em tons
      de cinza e os pontos são desenhados na hora, na cor do texto. Por isso
@@ -117,17 +117,20 @@
   function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL); }
 
   /* ---- o soldado girando ---- */
-  var FW = 456, FH = 400, COLS = 12, N = 72;
-  var hero = $('m3dHero'), sheet = null, frame = 0, visible = false, last = 0, held = false;
-  var STEP = 170;                                  // ms por quadro (5° cada): uma volta lenta, em ~12 s
+  var FW = 432, FH = 500, COLS = 5, N = 25;
+  var hero = $('m3dHero'), sheet = null, frame = 12, dir = 1, visible = false, last = 0, held = false;
+  var STEP = 210;                                  // ms por quadro (2° cada): vai e volta devagar, 48° ao todo
+  function clampF(f) { return f < 0 ? 0 : f > N - 1 ? N - 1 : f; }
   function drawHero() {
     if (!sheet || !hero) return;
-    var f = ((Math.round(frame) % N) + N) % N;
+    var f = clampF(Math.round(frame));
     draw(hero, sheet, (f % COLS) * FW, Math.floor(f / COLS) * FH, FW, FH, 1, CELL);
   }
   function tick(now) {
     if (!visible || document.hidden) { running = false; return; }
-    if (!held && !reduce && now - last >= STEP) { last = now; frame = (frame + 1) % N; drawHero(); }
+    if (!held && !reduce && now - last >= STEP) {
+      last = now; if (frame + dir < 0 || frame + dir > N - 1) dir = -dir; frame += dir; drawHero();
+    }
     requestAnimationFrame(tick);
   }
   var running = false;
@@ -142,15 +145,15 @@
     });
     hero.addEventListener('pointermove', function (e) {
       if (!held) return;
-      frame = f0 - (e.clientX - x0) / 5;           // 5 px de arrasto = um quadro (5°)
+      frame = clampF(f0 - (e.clientX - x0) / 8);   // 8 px de arrasto = um quadro (2°)
       drawHero();
     });
-    var up = function () { held = false; hero.classList.remove('is-held'); frame = ((Math.round(frame) % N) + N) % N; last = performance.now(); };
+    var up = function () { held = false; hero.classList.remove('is-held'); frame = clampF(Math.round(frame)); last = performance.now(); };
     hero.addEventListener('pointerup', up);
     hero.addEventListener('pointercancel', up);
     hero.addEventListener('keydown', function (e) {     // setas também giram
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      frame = (frame + (e.key === 'ArrowRight' ? 1 : -1) + N) % N; last = performance.now() + 1500; drawHero();
+      frame = clampF(frame + (e.key === 'ArrowRight' ? 1 : -1)); last = performance.now() + 1500; drawHero();
       e.preventDefault();
     });
   }

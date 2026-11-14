@@ -97,12 +97,12 @@ window.PF = {
     lead: 'Personagens e armas dos meus jogos, preparados para rodar no motor.',
     list: [
       'Soldado do WW1-Thriller: 15,6 mil triângulos, rig no esqueleto da Unreal e shape keys de respiração',
-      'Escopeta W1897 com ossos para telha, gatilho e carregador',
-      'Pose montada no Blender a partir da animação de mira que o jogo usa'
+      'Armas com ossos para ferrolho, gatilho e carregador',
+      'Pose feita à mão no Blender, osso por osso'
     ],
     meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
-    heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, segurando uma escopeta apontada para a frente. Arraste para girar.',
+    heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, em movimento, com a pistola erguida. Arraste para girar.',
     labels: { hero: 'WW1-Thriller', head: 'soldado tático' }
   },
 
@@ -269,12 +269,12 @@ window.PF_EN = {
     lead: 'Characters and weapons from my games, set up to run in the engine.',
     list: [
       'WW1-Thriller soldier: 15.6k triangles, rigged to the Unreal skeleton, with breathing shape keys',
-      'W1897 shotgun with bones for the pump, trigger and magazine',
-      'Pose built in Blender from the aiming animation the game uses'
+      'Weapons with bones for the slide, trigger and magazine',
+      'Pose made by hand in Blender, bone by bone'
     ],
     meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',
-    heroAlt: 'WW1-Thriller soldier in a gas mask, holding a shotgun pointed forward. Drag to rotate.',
+    heroAlt: 'WW1-Thriller soldier in a gas mask, on the move, pistol raised. Drag to rotate.',
     labels: { hero: 'WW1-Thriller', head: 'tactical soldier' }
   },
 
