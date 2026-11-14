@@ -94,16 +94,16 @@ window.PF = {
   m3d: {
     kicker: '3D · personagens e armas',
     title: ['modelos', 'para jogos'],
-    lead: 'Personagens, inimigos e armas dos meus jogos, preparados para rodar no motor.',
+    lead: 'Personagens e armas dos meus jogos, preparados para rodar no motor.',
     list: [
       'Soldado do WW1-Thriller: 15,6 mil triângulos, rig no esqueleto da Unreal e shape keys de respiração',
-      'Armas com ossos para ferrolho, gatilho e carregador',
-      'Low poly do Goldspotting: piratas com cerca de 1,2 mil triângulos cada'
+      'Escopeta W1897 com ossos para telha, gatilho e carregador',
+      'Pose montada no Blender a partir da animação de mira que o jogo usa'
     ],
-    meta: 'Blender · Unreal Engine 5 · Unity',
+    meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
-    heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, girando. Arraste para girar.',
-    labels: { hero: 'WW1-Thriller', head: 'soldado tático', crew: 'Goldspotting', w1897: 'W1897', fn1910: 'FN1910', lighter: 'isqueiro' }
+    heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, segurando uma escopeta apontada para a frente. Arraste para girar.',
+    labels: { hero: 'WW1-Thriller', head: 'soldado tático' }
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
@@ -266,16 +266,16 @@ window.PF_EN = {
   m3d: {
     kicker: '3D · characters and weapons',
     title: ['models', 'for games'],
-    lead: 'Characters, enemies and weapons from my games, set up to run in the engine.',
+    lead: 'Characters and weapons from my games, set up to run in the engine.',
     list: [
       'WW1-Thriller soldier: 15.6k triangles, rigged to the Unreal skeleton, with breathing shape keys',
-      'Weapons with bones for the slide, trigger and magazine',
-      'Goldspotting low poly: pirates at about 1.2k triangles each'
+      'W1897 shotgun with bones for the pump, trigger and magazine',
+      'Pose built in Blender from the aiming animation the game uses'
     ],
-    meta: 'Blender · Unreal Engine 5 · Unity',
+    meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',
-    heroAlt: 'WW1-Thriller soldier in a gas mask, rotating. Drag to rotate.',
-    labels: { hero: 'WW1-Thriller', head: 'tactical soldier', crew: 'Goldspotting', w1897: 'W1897', fn1910: 'FN1910', lighter: 'lighter' }
+    heroAlt: 'WW1-Thriller soldier in a gas mask, holding a shotgun pointed forward. Drag to rotate.',
+    labels: { hero: 'WW1-Thriller', head: 'tactical soldier' }
   },
 
   contact: ['get in', 'touch.'],

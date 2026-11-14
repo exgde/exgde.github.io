@@ -1,10 +1,10 @@
 /* ============================================================
    03 · MODELAGEM 3D
 
-   · No meio, o soldado do WW1-Thriller girando: 36 quadros renderizados no
-     Blender, guardados numa folha só (assets/m3d/soldier-turn.webp, 9 x 4).
-     Gira sozinho; arrastar para os lados gira na mão.
-   · Em volta, mais apagados, os outros modelos (assets/m3d/*.webp).
+   · À direita, o soldado do WW1-Thriller com a escopeta: 36 quadros renderizados
+     no Blender, guardados numa folha só (assets/m3d/soldier-turn.webp, 9 x 4).
+     Fica um tempo de frente, dá uma volta sozinho; arrastar gira na mão.
+   · À esquerda, a cabeça do soldado tático (assets/m3d/head.webp).
    · Nada aqui é imagem pronta de pontilhado: cada peça é um render em tons
      de cinza e os pontos são desenhados na hora, na cor do texto. Por isso
      o "inverter" funciona sem precisar de uma segunda versão das imagens.
@@ -83,7 +83,7 @@
     if (photo) {
       c.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
       var g = c.createLinearGradient(0, 0, 0, H);               // das coxas para baixo o render some
-      g.addColorStop(0, '#000'); g.addColorStop(.56, '#000'); g.addColorStop(.9, 'rgba(0,0,0,0)');
+      g.addColorStop(0, '#000'); g.addColorStop(.62, '#000'); g.addColorStop(.92, 'rgba(0,0,0,0)');
       c.globalCompositeOperation = 'destination-in';
       c.fillStyle = g; c.fillRect(0, 0, W, H);
       c.globalCompositeOperation = 'source-over';
@@ -94,7 +94,7 @@
     c.beginPath();
     for (var y = 0; y < rows; y++) {
       var v = (y + .5) / rows;
-      var k = photo ? 1 - (1 - sm((v - .56) / .34)) * .88 : 1;   // em cima do render, pontos bem pequenos
+      var k = photo ? 1 - (1 - sm((v - .62) / .30)) * .88 : 1;   // em cima do render, pontos bem pequenos
       for (var x = 0; x < cols; x++) {
         var i = (y * cols + x) * 4, a = px[i + 3] / 255;
         if (a < .04) continue;
@@ -114,12 +114,12 @@
   [].forEach.call(sec.querySelectorAll('canvas[data-dots]'), function (cv) {
     pieces.push({ cv: cv, src: cv.getAttribute('data-dots'), img: null });
   });
-  function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL_SMALL); }
+  function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL); }
 
   /* ---- o soldado girando ---- */
-  var FW = 300, FH = 545, COLS = 9, N = 36;
+  var FW = 380, FH = 440, COLS = 9, N = 36;
   var hero = $('m3dHero'), sheet = null, frame = 0, visible = false, last = 0, held = false;
-  var STEP = 130;                                  // ms por quadro: uma volta em ~4,7 s
+  var STEP = 110, HOLD = 4200;                     // ms por quadro; no quadro 0 (de frente) ele para um pouco
   function drawHero() {
     if (!sheet || !hero) return;
     var f = ((Math.round(frame) % N) + N) % N;
@@ -127,7 +127,7 @@
   }
   function tick(now) {
     if (!visible || document.hidden) { running = false; return; }
-    if (!held && !reduce && now - last >= STEP) { last = now; frame = (frame + 1) % N; drawHero(); }
+    if (!held && !reduce && now - last >= (Math.round(frame) % N === 0 ? HOLD : STEP)) { last = now; frame = (frame + 1) % N; drawHero(); }
     requestAnimationFrame(tick);
   }
   var running = false;
