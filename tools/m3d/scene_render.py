@@ -21,9 +21,20 @@ for o in meshes:
         mn = Vector(map(min, mn, w)); mx = Vector(map(max, mx, w))
     ev.to_mesh_clear()
 ctr = (mn + mx) / 2; h = mx.z - mn.z
-if 'center' in CFG: ctr.x, ctr.y = CFG['center']
-rad = CFG.get('rad') or max(math.hypot(mx.x - ctr.x, mx.y - ctr.y), math.hypot(mn.x - ctr.x, mn.y - ctr.y),
-                           math.hypot(mx.x - ctr.x, mn.y - ctr.y), math.hypot(mn.x - ctr.x, mx.y - ctr.y))
+if CFG.get('center') == 'pelvis':                      # gira em volta do eixo do corpo, não do centro da caixa
+    arm = bpy.data.objects['SENT_ARM']
+    pv = (arm.matrix_world @ arm.pose.bones['pelvis'].matrix).translation
+    ctr.x, ctr.y = pv.x, pv.y
+    rad = 0
+    for o in meshes:
+        ev = o.evaluated_get(dg); me = ev.to_mesh()
+        for v in me.vertices:
+            w = ev.matrix_world @ v.co
+            rad = max(rad, math.hypot(w.x - ctr.x, w.y - ctr.y))
+        ev.to_mesh_clear()
+else:
+    rad = max(math.hypot(mx.x - ctr.x, mx.y - ctr.y), math.hypot(mn.x - ctr.x, mn.y - ctr.y),
+              math.hypot(mx.x - ctr.x, mn.y - ctr.y), math.hypot(mn.x - ctr.x, mx.y - ctr.y))
 
 piv = bpy.data.objects.new('piv', None); sc.collection.objects.link(piv)
 piv.location = (ctr.x, ctr.y, 0); vl.update()

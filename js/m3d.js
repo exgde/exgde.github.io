@@ -117,7 +117,7 @@
   function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL); }
 
   /* ---- o soldado girando ---- */
-  var FW = 380, FH = 440, COLS = 9, N = 36;
+  var FW = 456, FH = 400, COLS = 9, N = 36;
   var hero = $('m3dHero'), sheet = null, frame = 0, visible = false, last = 0, held = false;
   var STEP = 110, HOLD = 4200;                     // ms por quadro; no quadro 0 (de frente) ele para um pouco
   function drawHero() {
