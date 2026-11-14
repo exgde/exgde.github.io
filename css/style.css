@@ -722,17 +722,27 @@ html.is-lb{ overflow:hidden }
 }
 .m3d__t--sm{ font-size:clamp(1.5rem,4.2vh,3.4rem) }
 .m3d__more .m3d__lead{ max-width:30em }
-.m3d__vids{ display:flex; gap:clamp(.8rem,1.6vw,1.6rem); align-items:flex-end; justify-content:flex-end }
+/* print e vídeos soltos no espaço, cada um virado para um lado e boiando devagar */
+.m3d__vids{
+  display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1.05fr); gap:clamp(1rem,2.4vw,2.6rem);
+  align-items:center; perspective:1600px;
+}
 .m3d__vid{ margin:0; min-width:0 }
-.m3d__vid video{
+.m3d__vid img, .m3d__vid video{
   display:block; width:100%; height:auto; background:#000; filter:grayscale(1) contrast(1.15);
   border:1px solid color-mix(in srgb, var(--fg) 22%, transparent);
 }
 /* o desenho tem fundo branco: no tema escuro ele entra invertido (traço claro no preto) */
 .m3d__vid--tall video{ filter:grayscale(1) invert(1) contrast(1.1) }
 body.is-invert .m3d__vid--tall video{ filter:grayscale(1) contrast(1.1) }
-.m3d__vid--tall{ flex:0 1 27% }
-.m3d__vid--wide{ flex:0 1 64% }
+.m3d__vid{ transition:transform .5s ease; animation:m3dFloat 9s ease-in-out infinite; will-change:translate }
+.m3d__vid img, .m3d__vid video{ box-shadow:0 1.2rem 2.6rem rgba(0,0,0,.45) }
+.m3d__vid--shot{ grid-column:1; grid-row:1 / span 2; margin-top:22%; transform:rotateY(18deg) rotateX(3deg) rotate(-2deg) }
+.m3d__vid--tall{ grid-column:2; grid-row:1; width:58%; justify-self:end; transform:rotateY(-20deg) rotateX(4deg) rotate(2deg); animation-duration:11s; animation-delay:-4s }
+.m3d__vid--wide{ grid-column:2; grid-row:2; width:90%; justify-self:start; transform:rotateY(-13deg) rotateX(-5deg) rotate(-3deg); animation-duration:13s; animation-delay:-7s }
+.m3d__vid:hover{ transform:none }
+@keyframes m3dFloat{ 50%{ translate:0 -12px } }
+@media (prefers-reduced-motion:reduce){ .m3d__vid{ animation:none } }
 .m3d__vid figcaption{
   padding-top:.5rem; font-family:var(--mono); font-size:.92rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mute);
 }
@@ -753,9 +763,7 @@ body.is-invert .m3d__vid--tall video{ filter:grayscale(1) contrast(1.1) }
 .m3d__jn{ margin:.7em 0 0; font-size:.88em; line-height:1.45; color:color-mix(in srgb, var(--fg) 70%, transparent) }
 @media (max-width:900px){
   .m3d__more{ grid-template-columns:1fr }
-  .m3d__vids{ justify-content:flex-start }
-  .m3d__vid--tall{ flex-basis:30% }
-  .m3d__vid--wide{ flex-basis:70% }
+  .m3d__vid--shot{ margin-top:10% }
 }
 
 @media (max-width:900px){

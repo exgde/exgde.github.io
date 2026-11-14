@@ -103,7 +103,7 @@ window.PF = {
       jams: {
         label: 'game jams',
         items: [
-          { year: 'recente', jam: 'GBJAM 14', game: 'Goldspotting', href: 'https://joaobyss.itch.io/goldspotting' },
+          { year: '2026', jam: 'GBJAM 14', game: 'Goldspotting', href: 'https://joaobyss.itch.io/goldspotting' },
           { year: '2020', jam: 'Game Jaaj 4', game: 'Slow Mold-Tion', href: 'https://gamejolt.com/games/slowmoldtion/458774', old: true },
           { year: '2019', jam: 'Game Jaaj 3', game: 'Barquinhos Tempest', href: 'https://gamejolt.com/games/barquinhostempest/426886', old: true },
           { year: '2019', jam: 'Game Jaaj 2', game: 'Retro Kingdom', href: 'https://gamejolt.com/games/retro_kingdom/392394', old: true }
@@ -114,7 +114,7 @@ window.PF = {
     meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
     heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, em movimento, com a pistola erguida. Arraste para girar.',
-    labels: { hero: 'WW1-Thriller', head: 'soldado tático', draw: 'desenho', model: 'modelagem' }
+    labels: { hero: 'WW1-Thriller', head: 'soldado tático', draw: 'desenho', model: 'modelagem', pose: 'pose no Blender' }
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
@@ -286,7 +286,7 @@ window.PF_EN = {
       jams: {
         label: 'game jams',
         items: [
-          { year: 'recent', jam: 'GBJAM 14', game: 'Goldspotting', href: 'https://joaobyss.itch.io/goldspotting' },
+          { year: '2026', jam: 'GBJAM 14', game: 'Goldspotting', href: 'https://joaobyss.itch.io/goldspotting' },
           { year: '2020', jam: 'Game Jaaj 4', game: 'Slow Mold-Tion', href: 'https://gamejolt.com/games/slowmoldtion/458774', old: true },
           { year: '2019', jam: 'Game Jaaj 3', game: 'Barquinhos Tempest', href: 'https://gamejolt.com/games/barquinhostempest/426886', old: true },
           { year: '2019', jam: 'Game Jaaj 2', game: 'Retro Kingdom', href: 'https://gamejolt.com/games/retro_kingdom/392394', old: true }
@@ -297,7 +297,7 @@ window.PF_EN = {
     meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',
     heroAlt: 'WW1-Thriller soldier in a gas mask, on the move, pistol raised. Drag to rotate.',
-    labels: { hero: 'WW1-Thriller', head: 'tactical soldier', draw: 'drawing', model: 'modeling' }
+    labels: { hero: 'WW1-Thriller', head: 'tactical soldier', draw: 'drawing', model: 'modeling', pose: 'posing in Blender' }
   },
 
   contact: ['get in', 'touch.'],
