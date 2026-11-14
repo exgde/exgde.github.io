@@ -54,6 +54,22 @@
       });
     }
     if ($('m3dMP')) $('m3dMP').textContent = mo.text || '';
+    var jm = mo.jams || {}, ju = $('m3dJ');
+    if ($('m3dJL')) $('m3dJL').textContent = jm.label || '';
+    if ($('m3dJN')) $('m3dJN').textContent = jm.note || '';
+    if (ju) {
+      ju.textContent = '';
+      (jm.items || []).forEach(function (it) {
+        var li = document.createElement('li'), a = document.createElement('a');
+        if (it.old) li.className = 'is-old';
+        a.href = it.href; a.target = '_blank'; a.rel = 'noopener';
+        [['m3d__jy', it.year], ['m3d__jj', it.jam], ['m3d__jg', it.game], ['m3d__ja', '\u2197']].forEach(function (p) {
+          var s = document.createElement('span'); s.className = p[0]; s.textContent = p[1] || ''; a.appendChild(s);
+        });
+        a.lastChild.setAttribute('aria-hidden', 'true');
+        li.appendChild(a); ju.appendChild(li);
+      });
+    }
     if ($('m3dHint')) $('m3dHint').textContent = d.hint || '';
     var lab = d.labels || {};
     [].forEach.call(sec.querySelectorAll('[data-lab]'), function (el) {

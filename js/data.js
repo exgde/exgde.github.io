@@ -99,7 +99,17 @@ window.PF = {
     more: {
       kicker: 'processo · game design',
       title: ['criar jogos', 'desde criança'],
-      text: 'Crio jogos desde criança e sempre quis entender o que faz um jogo ser bom e viciante. É por isso que quero trabalhar como game designer. Participo de game jams há vários anos, desde muito novo, então já sei como é trabalhar em equipe e entregar dentro do prazo. No mercado ainda sou iniciante, mas sou versátil e tenho muita vontade de aprender e evoluir, e de mostrar ao mundo do que sou capaz.'
+      text: 'Crio jogos desde criança e sempre quis entender o que faz um jogo ser bom e viciante. É por isso que quero trabalhar como game designer. Participo de game jams há vários anos, desde muito novo, então já sei como é trabalhar em equipe e entregar dentro do prazo. No mercado ainda sou iniciante, mas sou versátil e tenho muita vontade de aprender e evoluir, e de mostrar ao mundo do que sou capaz.',
+      jams: {
+        label: 'game jams',
+        items: [
+          { year: 'recente', jam: 'GBJAM 14', game: 'Goldspotting', href: 'https://joaobyss.itch.io/goldspotting' },
+          { year: '2020', jam: 'Game Jaaj 4', game: 'Slow Mold-Tion', href: 'https://gamejolt.com/games/slowmoldtion/458774', old: true },
+          { year: '2019', jam: 'Game Jaaj 3', game: 'Barquinhos Tempest', href: 'https://gamejolt.com/games/barquinhostempest/426886', old: true },
+          { year: '2019', jam: 'Game Jaaj 2', game: 'Retro Kingdom', href: 'https://gamejolt.com/games/retro_kingdom/392394', old: true }
+        ],
+        note: 'Os três de 2019 e 2020 são de quando eu era criança e ficam aqui pelo histórico. O que faço hoje está no Goldspotting.'
+      }
     },
     meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
@@ -272,7 +282,17 @@ window.PF_EN = {
     more: {
       kicker: 'process · game design',
       title: ['making games', 'since I was a kid'],
-      text: "I've been making games since I was a kid, and I've always wanted to understand what makes a game good and hard to put down. That is why I want to work as a game designer. I've been taking part in game jams for several years, since I was very young, so I already know what it is like to work in a team and deliver on a deadline. I'm still a beginner in the industry, but I'm versatile and eager to learn and grow, and to show the world what I can do."
+      text: "I've been making games since I was a kid, and I've always wanted to understand what makes a game good and hard to put down. That is why I want to work as a game designer. I've been taking part in game jams for several years, since I was very young, so I already know what it is like to work in a team and deliver on a deadline. I'm still a beginner in the industry, but I'm versatile and eager to learn and grow, and to show the world what I can do.",
+      jams: {
+        label: 'game jams',
+        items: [
+          { year: 'recent', jam: 'GBJAM 14', game: 'Goldspotting', href: 'https://joaobyss.itch.io/goldspotting' },
+          { year: '2020', jam: 'Game Jaaj 4', game: 'Slow Mold-Tion', href: 'https://gamejolt.com/games/slowmoldtion/458774', old: true },
+          { year: '2019', jam: 'Game Jaaj 3', game: 'Barquinhos Tempest', href: 'https://gamejolt.com/games/barquinhostempest/426886', old: true },
+          { year: '2019', jam: 'Game Jaaj 2', game: 'Retro Kingdom', href: 'https://gamejolt.com/games/retro_kingdom/392394', old: true }
+        ],
+        note: 'The three from 2019 and 2020 are from when I was a kid, and they stay here for the record. What I make today is in Goldspotting.'
+      }
     },
     meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',

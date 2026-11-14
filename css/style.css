@@ -736,6 +736,21 @@ body.is-invert .m3d__vid--tall video{ filter:grayscale(1) contrast(1.1) }
 .m3d__vid figcaption{
   padding-top:.5rem; font-family:var(--mono); font-size:.92rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mute);
 }
+/* game jams: a mais recente em cima; as antigas, de criança, mais apagadas */
+.m3d__jams{ margin-top:1.4em; max-width:30em; font-size:clamp(.9rem,1.8vh,1.3rem) }
+.m3d__jl{ margin:0 0 .5em; font-family:var(--mono); font-size:.8em; letter-spacing:.14em; text-transform:uppercase; color:var(--mute) }
+.m3d__jams ul{ list-style:none; margin:0; padding:0; border-top:1px solid color-mix(in srgb, var(--fg) 22%, transparent) }
+.m3d__jams li{ border-bottom:1px solid color-mix(in srgb, var(--fg) 22%, transparent) }
+.m3d__jams a{
+  display:grid; grid-template-columns:4.2em minmax(0,1fr) minmax(0,1.15fr) auto; gap:.8em; align-items:baseline;
+  padding:.5em .2em; color:inherit; text-decoration:none; transition:background .2s, opacity .2s;
+}
+.m3d__jams a:hover, .m3d__jams a:focus-visible{ background:color-mix(in srgb, var(--fg) 10%, transparent); opacity:1 }
+.m3d__jams li.is-old a{ opacity:.55 }
+.m3d__jams li.is-old a:hover, .m3d__jams li.is-old a:focus-visible{ opacity:1 }
+.m3d__jy{ font-family:var(--mono); font-size:.85em; color:var(--mute) }
+.m3d__jg{ font-style:italic }
+.m3d__jn{ margin:.7em 0 0; font-size:.88em; line-height:1.45; color:color-mix(in srgb, var(--fg) 70%, transparent) }
 @media (max-width:900px){
   .m3d__more{ grid-template-columns:1fr }
   .m3d__vids{ justify-content:flex-start }
