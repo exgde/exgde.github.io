@@ -1,8 +1,8 @@
 /* ============================================================
    03 · MODELAGEM 3D
 
-   · À direita, o soldado do WW1-Thriller na pose feita à mão: 25 quadros renderizados
-     no Blender, numa folha só (assets/m3d/soldier-turn.webp, 5 x 5), em alto contraste.
+   · À direita, o soldado do WW1-Thriller na pose feita à mão: 49 quadros renderizados
+     no Blender, numa folha só (assets/m3d/soldier-turn.webp, 7 x 7), em alto contraste.
      Balança devagar de um lado para o outro; arrastar gira na mão.
    · À esquerda, o busto do soldado tático, parado (assets/m3d/bust.webp).
    · Nada aqui é imagem pronta de pontilhado: cada peça é um render em tons
@@ -117,9 +117,9 @@
   function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL); }
 
   /* ---- o soldado girando ---- */
-  var FW = 432, FH = 500, COLS = 5, N = 25;
-  var hero = $('m3dHero'), sheet = null, frame = 12, dir = 1, visible = false, last = 0, held = false;
-  var STEP = 210;                                  // ms por quadro (2° cada): vai e volta devagar, 48° ao todo
+  var FW = 432, FH = 500, COLS = 7, N = 49;
+  var hero = $('m3dHero'), sheet = null, frame = 24, dir = 1, visible = false, last = 0, held = false;
+  var STEP = 105;                                  // ms por quadro (1° cada): vai e volta devagar, 48° ao todo
   function clampF(f) { return f < 0 ? 0 : f > N - 1 ? N - 1 : f; }
   function drawHero() {
     if (!sheet || !hero) return;
@@ -145,7 +145,7 @@
     });
     hero.addEventListener('pointermove', function (e) {
       if (!held) return;
-      frame = clampF(f0 - (e.clientX - x0) / 8);   // 8 px de arrasto = um quadro (2°)
+      frame = clampF(f0 - (e.clientX - x0) / 4);   // 4 px de arrasto = um quadro (1°)
       drawHero();
     });
     var up = function () { held = false; hero.classList.remove('is-held'); frame = clampF(Math.round(frame)); last = performance.now(); };
