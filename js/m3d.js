@@ -42,6 +42,18 @@
       });
     }
     if ($('m3dMeta')) $('m3dMeta').textContent = d.meta || '';
+    var mo = d.more || {};
+    if ($('m3dMK')) $('m3dMK').textContent = mo.kicker || '';
+    var mt = $('m3dMT');
+    if (mt) {
+      mt.textContent = '';
+      (mo.title || []).forEach(function (w, i) {
+        var s = document.createElement('span');
+        s.textContent = w; mt.appendChild(s);
+        if (i < mo.title.length - 1) mt.appendChild(document.createTextNode(' '));
+      });
+    }
+    if ($('m3dMP')) $('m3dMP').textContent = mo.text || '';
     if ($('m3dHint')) $('m3dHint').textContent = d.hint || '';
     var lab = d.labels || {};
     [].forEach.call(sec.querySelectorAll('[data-lab]'), function (el) {
@@ -161,6 +173,19 @@
       frame = wrapF(Math.round(frame) + (e.key === 'ArrowRight' ? 2 : -2)); drawHero();
       e.preventDefault();
     });
+  }
+
+  /* ---- vídeos de processo: tocam só enquanto aparecem na tela ---- */
+  var vids = [].slice.call(sec.querySelectorAll('.m3d__vid video'));
+  if (vids.length && 'IntersectionObserver' in window) {
+    var vo = new IntersectionObserver(function (es) {
+      es.forEach(function (e) {
+        var v = e.target;
+        if (e.isIntersecting && !reduce) { var p = v.play(); if (p && p.catch) p.catch(function () { /* autoplay barrado: fica o pôster */ }); }
+        else v.pause();
+      });
+    }, { threshold: .25 });
+    vids.forEach(function (v) { vo.observe(v); });
   }
 
   /* ---- carregar só quando a seção estiver chegando ---- */

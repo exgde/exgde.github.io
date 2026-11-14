@@ -96,10 +96,15 @@ window.PF = {
     title: ['da ideia', 'ao modelo'],
     lead: 'Sempre gostei de desenhar, e é daí que vem o meu 3D. Antes de colocar qualquer coisa em prática, já planejei o que quero ver pronto, porque a visão criativa é minha e vem antes de qualquer ferramenta. Uso IA só para agilizar a parte técnica da modelagem. Ela não faz parte do processo criativo.',
     list: [],
+    more: {
+      kicker: 'processo · game design',
+      title: ['criar jogos', 'desde criança'],
+      text: 'Crio jogos desde criança e sempre quis entender o que faz um jogo ser bom e viciante. É por isso que quero trabalhar como game designer. Participo de game jams há vários anos, desde muito novo, então já sei como é trabalhar em equipe e entregar dentro do prazo. No mercado ainda sou iniciante, mas sou versátil e tenho muita vontade de aprender e evoluir, e de mostrar ao mundo do que sou capaz.'
+    },
     meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
     heroAlt: 'Soldado do WW1-Thriller, de máscara de gás, em movimento, com a pistola erguida. Arraste para girar.',
-    labels: { hero: 'WW1-Thriller', head: 'soldado tático' }
+    labels: { hero: 'WW1-Thriller', head: 'soldado tático', draw: 'desenho', model: 'modelagem' }
   },
 
   contact: ['fale', 'comigo.'],     // as duas palavras em volta do @
@@ -264,10 +269,15 @@ window.PF_EN = {
     title: ['from idea', 'to model'],
     lead: "I've always liked to draw, and that is where my 3D comes from. Before I put anything into practice, I have already planned what I want to see finished, because the creative vision is mine and comes before any tool. I use AI only to speed up the technical side of modeling. It is not part of the creative process.",
     list: [],
+    more: {
+      kicker: 'process · game design',
+      title: ['making games', 'since I was a kid'],
+      text: "I've been making games since I was a kid, and I've always wanted to understand what makes a game good and hard to put down. That is why I want to work as a game designer. I've been taking part in game jams for several years, since I was very young, so I already know what it is like to work in a team and deliver on a deadline. I'm still a beginner in the industry, but I'm versatile and eager to learn and grow, and to show the world what I can do."
+    },
     meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',
     heroAlt: 'WW1-Thriller soldier in a gas mask, on the move, pistol raised. Drag to rotate.',
-    labels: { hero: 'WW1-Thriller', head: 'tactical soldier' }
+    labels: { hero: 'WW1-Thriller', head: 'tactical soldier', draw: 'drawing', model: 'modeling' }
   },
 
   contact: ['get in', 'touch.'],
