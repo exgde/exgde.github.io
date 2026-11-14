@@ -64,7 +64,18 @@ if 'L0' not in arm:      # guarda a pose original do braço para poder refazer
 for n, m in zip(('upperarm_l', 'lowerarm_l', 'hand_l'), arm['L0']):
     arm.pose.bones[n].matrix_basis = Matrix([list(r) for r in m])
 vl.update()
-T = gp.matrix_world @ Vector(P.get('pump', [30, 0, 0]))
+gb = (R @ Vector((1, 0, 0))).normalized(); gu = (R @ Vector((0, 0, 1))).normalized(); gr = gb.cross(gu).normalized()   # cano, cima, direita do atirador
+LG = P.get('lgrip')
+if LG:      # mão esquerda por baixo da arma: punho à esquerda e abaixo, palma para cima
+    S0 = W('upperarm_l'); reach0 = (W('lowerarm_l') - S0).length + (W('hand_l') - W('lowerarm_l')).length
+    gx = LG.get('x', 28)
+    while True:
+        T = gp.matrix_world @ Vector((gx, 0, LG.get('z', 3.5))) - gr * LG.get('side', 7) - gu * LG.get('down', 1.5)
+        if (T - S0).length <= reach0 - .3 or gx <= 6: break
+        gx -= 1
+else:
+    gx = None
+    T = gp.matrix_world @ Vector(P.get('pump', [30, 0, 0]))
 S, E, Wr = W('upperarm_l'), W('lowerarm_l'), W('hand_l')
 la, lb = (E - S).length, (Wr - E).length
 d = min((T - S).length, la + lb - .05)
@@ -84,6 +95,26 @@ if P.get('hand_l_rot'):
     q = Euler([math.radians(v) for v in P['hand_l_rot']], 'XYZ').to_matrix().to_4x4()
     pb.matrix = arm.matrix_world.inverted() @ Matrix.Translation(head) @ q @ Matrix.Translation(-head) @ arm.matrix_world @ pb.matrix
     vl.update()
+if LG:
+    def rot_about(name, M3):
+        pb = arm.pose.bones[name]; head = (arm.matrix_world @ pb.matrix).translation
+        pb.matrix = arm.matrix_world.inverted() @ Matrix.Translation(head) @ M3.to_4x4() @ Matrix.Translation(-head) @ arm.matrix_world @ pb.matrix
+        vl.update()
+    f0 = (W('middle_01_l') - W('hand_l')).normalized()
+    t0 = W('thumb_01_l') - W('hand_l'); t0 = (t0 - f0 * t0.dot(f0)).normalized()
+    al = math.radians(LG.get('fwd', 15))
+    fd = (gr * math.cos(al) + gb * math.sin(al)).normalized(); td = (gb * math.cos(al) - gr * math.sin(al)).normalized()
+    M0 = Matrix((f0, t0, f0.cross(t0))).transposed(); M1 = Matrix((fd, td, fd.cross(td))).transposed()
+    rot_about('hand_l', M1 @ M0.transposed())
+    if LG.get('roll'): rot_about('hand_l', Matrix.Rotation(math.radians(LG['roll']), 3, td))
+    # dedos sobem pelo lado direito da arma; o polegar sobe pelo lado esquerdo
+    cf = LG.get('curl', [20, 45, 35])
+    for fn in ('index', 'middle', 'ring', 'pinky'):
+        for k, ang in zip(('01', '02', '03'), cf):
+            rot_about('%s_%s_l' % (fn, k), Matrix.Rotation(math.radians(ang), 3, -td))
+    ct = LG.get('thumb', [35, 20, 15])
+    for k, ang in zip(('01', '02', '03'), ct):
+        rot_about('thumb_%s_l' % k, Matrix.Rotation(math.radians(ang), 3, fd))
 tgt = T
 result = {'palm': [round(v, 1) for v in palm], 'muzzle': [round(v, 1) for v in gp.matrix_world @ Vector((67, 0, 8))],
-          'hand_l': [round(v, 1) for v in W('hand_l')], 'tgt': [round(v, 1) for v in tgt], 'reach': round(la + lb, 1), 'dist': round((T - S).length, 1)}
+          'hand_l': [round(v, 1) for v in W('hand_l')], 'tgt': [round(v, 1) for v in tgt], 'reach': round(la + lb, 1), 'dist': round((T - S).length, 1), 'gx': gx}

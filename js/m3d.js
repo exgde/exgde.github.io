@@ -2,9 +2,9 @@
    03 · MODELAGEM 3D
 
    · À direita, o soldado do WW1-Thriller com a escopeta: 36 quadros renderizados
-     no Blender, guardados numa folha só (assets/m3d/soldier-turn.webp, 9 x 4).
-     Fica um tempo de frente, dá uma volta sozinho; arrastar gira na mão.
-   · À esquerda, a cabeça do soldado tático (assets/m3d/head.webp).
+     no Blender... agora 72, numa folha só (assets/m3d/soldier-turn.webp, 12 x 6).
+     Gira sozinho, devagar; arrastar gira na mão.
+   · À esquerda, o busto do soldado tático balançando de leve (assets/m3d/bust-sway.webp).
    · Nada aqui é imagem pronta de pontilhado: cada peça é um render em tons
      de cinza e os pontos são desenhados na hora, na cor do texto. Por isso
      o "inverter" funciona sem precisar de uma segunda versão das imagens.
@@ -117,21 +117,29 @@
   function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL); }
 
   /* ---- o soldado girando ---- */
-  var FW = 456, FH = 400, COLS = 9, N = 36;
+  var FW = 456, FH = 400, COLS = 12, N = 72;
   var hero = $('m3dHero'), sheet = null, frame = 0, visible = false, last = 0, held = false;
-  var STEP = 110, HOLD = 4200;                     // ms por quadro; no quadro 0 (de frente) ele para um pouco
+  var STEP = 170;                                  // ms por quadro (5° cada): uma volta lenta, em ~12 s
   function drawHero() {
     if (!sheet || !hero) return;
     var f = ((Math.round(frame) % N) + N) % N;
     draw(hero, sheet, (f % COLS) * FW, Math.floor(f / COLS) * FH, FW, FH, 1, CELL);
   }
+  /* ---- o busto do soldado tático: 13 quadros (24° ao todo), indo e voltando bem devagar ---- */
+  var bust = $('m3dBust'), bsheet = null, BW = 480, BCOLS = 7, BN = 13, BSTEP = 280, bi = 6, bdir = 1, blast = 0;
+  function drawBust() {
+    if (bsheet && bust) draw(bust, bsheet, (bi % BCOLS) * BW, Math.floor(bi / BCOLS) * BW, BW, BW, 0, CELL);
+  }
   function tick(now) {
     if (!visible || document.hidden) { running = false; return; }
-    if (!held && !reduce && now - last >= (Math.round(frame) % N === 0 ? HOLD : STEP)) { last = now; frame = (frame + 1) % N; drawHero(); }
+    if (!held && !reduce && now - last >= STEP) { last = now; frame = (frame + 1) % N; drawHero(); }
+    if (!reduce && bsheet && now - blast >= BSTEP) {            // o busto só balança: vai e volta
+      blast = now; if (bi + bdir < 0 || bi + bdir >= BN) bdir = -bdir; bi += bdir; drawBust();
+    }
     requestAnimationFrame(tick);
   }
   var running = false;
-  function start() { if (!running && visible && !document.hidden && sheet) { running = true; last = performance.now(); requestAnimationFrame(tick); } }
+  function start() { if (!running && visible && !document.hidden && (sheet || bsheet)) { running = true; last = performance.now(); requestAnimationFrame(tick); } }
 
   if (hero) {
     var x0 = 0, f0 = 0;
@@ -142,7 +150,7 @@
     });
     hero.addEventListener('pointermove', function (e) {
       if (!held) return;
-      frame = f0 - (e.clientX - x0) / 9;           // 9 px de arrasto = um quadro (10°)
+      frame = f0 - (e.clientX - x0) / 5;           // 5 px de arrasto = um quadro (5°)
       drawHero();
     });
     var up = function () { held = false; hero.classList.remove('is-held'); frame = ((Math.round(frame) % N) + N) % N; last = performance.now(); };
@@ -156,7 +164,7 @@
   }
 
   /* ---- carregar só quando a seção estiver chegando ---- */
-  function redrawAll() { pieces.forEach(drawPiece); drawHero(); }
+  function redrawAll() { pieces.forEach(drawPiece); drawHero(); drawBust(); }
   var loaded = false;
   function load() {
     if (loaded) return; loaded = true;
@@ -165,6 +173,11 @@
       im.onload = function () { p.img = im; drawPiece(p); p.cv.classList.add('is-on'); };
       im.src = p.src;
     });
+    if (bust) {
+      var b = new Image();
+      b.onload = function () { bsheet = b; drawBust(); bust.classList.add('is-on'); start(); };
+      b.src = bust.getAttribute('data-sheet');
+    }
     if (hero) {
       var s = new Image();
       s.onload = function () { sheet = s; drawHero(); hero.classList.add('is-on'); start(); };
