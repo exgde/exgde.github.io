@@ -703,7 +703,8 @@ html.is-lb{ overflow:hidden }
   padding-top:.5rem; font-family:var(--mono); font-size:.92rem; letter-spacing:.1em; text-transform:uppercase;
   color:var(--mute); white-space:nowrap; line-height:1.1; text-align:center;
 }
-.m3d__head{ justify-self:start; width:min(112%,66vh,36rem) }
+.m3d__head{ justify-self:start; width:min(135%,88vh,48rem); margin-right:-35% }
+.m3d__head figcaption{ position:absolute; left:0; right:0; bottom:9%; padding:0 }
 .m3d__hero{ justify-self:center; height:min(80vh,52rem); aspect-ratio:456/400; margin-inline:-40%; left:-2.5rem }
 .m3d__h{ position:relative; z-index:2 }
 .m3d__hero canvas{ height:100%; cursor:grab; touch-action:pan-y; outline:none }
@@ -716,7 +717,7 @@ html.is-lb{ overflow:hidden }
   .m3d__wrap{ grid-template-columns:minmax(0,.8fr) minmax(0,1fr); gap:1.4rem 1rem }
   .m3d__h{ grid-column:1 / -1; grid-row:1 }
   .m3d{ min-height:0 }
-  .m3d__head{ grid-column:1 / -1; justify-self:center; width:min(78%,22rem) }
+  .m3d__head{ grid-column:1 / -1; justify-self:center; width:min(100%,26rem); margin-right:0 }
   .m3d__hero{ grid-column:1 / -1; height:auto; width:118%; margin-inline:-9%; left:0 }
   .m3d__wrap figcaption{ font-size:.8rem }
   .m3d__hero figcaption{ flex-direction:column; gap:.2rem; align-items:center }

@@ -2,7 +2,7 @@
 import bpy, bmesh
 from mathutils import Vector
 TAC = r"E:\Backup PC\Project_DarknessFramework\Project_DarknessFramework 5.8\Saved\TacticalSoldierSwap\blender\SK_TacticalSoldier_maosManny.blend"
-ZMIN = .845
+ZMIN = -1          # corpo inteiro: o recorte agora é feito na imagem
 sc = bpy.context.scene; vl = bpy.context.view_layer
 for o in list(bpy.data.objects):
     bpy.data.objects.remove(o, do_unlink=True)
