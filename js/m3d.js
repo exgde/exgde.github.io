@@ -1,9 +1,9 @@
 /* ============================================================
    03 · MODELAGEM 3D
 
-   · À direita, o soldado do WW1-Thriller na pose feita à mão: 49 quadros renderizados
-     no Blender, numa folha só (assets/m3d/soldier-turn.webp, 7 x 7), em alto contraste.
-     Balança devagar de um lado para o outro; arrastar gira na mão.
+   · À direita, o soldado do WW1-Thriller na pose feita à mão: 120 quadros renderizados
+     no Blender, numa folha só (assets/m3d/soldier-turn.webp, 12 x 10), em alto contraste.
+     Dá a volta completa, devagar, misturando um quadro no outro; arrastar gira na mão.
    · À esquerda, o busto do soldado tático, parado (assets/m3d/bust.webp).
    · Nada aqui é imagem pronta de pontilhado: cada peça é um render em tons
      de cinza e os pontos são desenhados na hora, na cor do texto. Por isso
@@ -65,7 +65,7 @@
 
   /* Desenha em `cv` a região (sx, sy, sw, sh) de `img` como pontos.
      photo: 0 = só pontos; 1 = o render aparece em cima e vira pontos embaixo. */
-  function draw(cv, img, sx, sy, sw, sh, photo, cell) {
+  function draw(cv, img, sx, sy, sw, sh, photo, cell, mix) {
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
     var cw = cv.clientWidth, ch = cv.clientHeight;
     if (!cw || !ch) return;
@@ -78,10 +78,12 @@
     if (tiny.width !== cols || tiny.height !== rows) { tiny.width = cols; tiny.height = rows; }
     tctx.clearRect(0, 0, cols, rows);
     tctx.drawImage(img, sx, sy, sw, sh, 0, 0, cols, rows);      // cada pixel = a média de uma célula
+    if (mix) { tctx.globalAlpha = mix.t; tctx.drawImage(img, mix.sx, mix.sy, sw, sh, 0, 0, cols, rows); tctx.globalAlpha = 1; }
     var px = tctx.getImageData(0, 0, cols, rows).data;
 
     if (photo) {
       c.drawImage(img, sx, sy, sw, sh, 0, 0, W, H);
+      if (mix) { c.globalAlpha = mix.t; c.drawImage(img, mix.sx, mix.sy, sw, sh, 0, 0, W, H); c.globalAlpha = 1; }
       var g = c.createLinearGradient(0, 0, 0, H);               // das coxas para baixo o render some
       g.addColorStop(0, '#000'); g.addColorStop(.62, '#000'); g.addColorStop(.92, 'rgba(0,0,0,0)');
       c.globalCompositeOperation = 'destination-in';
@@ -116,20 +118,23 @@
   });
   function drawPiece(p) { if (p.img) draw(p.cv, p.img, 0, 0, p.img.naturalWidth, p.img.naturalHeight, 0, CELL); }
 
-  /* ---- o soldado girando ---- */
-  var FW = 432, FH = 500, COLS = 7, N = 49;
-  var hero = $('m3dHero'), sheet = null, frame = 24, dir = 1, visible = false, last = 0, held = false;
-  var STEP = 105;                                  // ms por quadro (1° cada): vai e volta devagar, 48° ao todo
-  function clampF(f) { return f < 0 ? 0 : f > N - 1 ? N - 1 : f; }
+  /* ---- o soldado girando: volta completa, devagar; entre dois quadros o desenho mistura um no outro ---- */
+  var FW = 360, FH = 417, COLS = 12, N = 120;
+  var hero = $('m3dHero'), sheet = null, frame = 0, visible = false, last = 0, drawn = 0, held = false;
+  var LAP = 26000, FPS = 30;                       // ms por volta; quantas vezes por segundo redesenha
+  function wrapF(f) { return ((f % N) + N) % N; }
   function drawHero() {
     if (!sheet || !hero) return;
-    var f = clampF(Math.round(frame));
-    draw(hero, sheet, (f % COLS) * FW, Math.floor(f / COLS) * FH, FW, FH, 1, CELL);
+    var f = wrapF(frame), a = Math.floor(f), b = (a + 1) % N, t = f - a;
+    draw(hero, sheet, (a % COLS) * FW, Math.floor(a / COLS) * FH, FW, FH, 1, CELL,
+         t > .02 ? { sx: (b % COLS) * FW, sy: Math.floor(b / COLS) * FH, t: t } : null);
   }
   function tick(now) {
     if (!visible || document.hidden) { running = false; return; }
-    if (!held && !reduce && now - last >= STEP) {
-      last = now; if (frame + dir < 0 || frame + dir > N - 1) dir = -dir; frame += dir; drawHero();
+    var dt = Math.min(now - last, 100); last = now;
+    if (!held && !reduce) {
+      frame = wrapF(frame + dt * N / LAP);
+      if (now - drawn >= 1000 / FPS) { drawn = now; drawHero(); }
     }
     requestAnimationFrame(tick);
   }
@@ -145,15 +150,15 @@
     });
     hero.addEventListener('pointermove', function (e) {
       if (!held) return;
-      frame = clampF(f0 - (e.clientX - x0) / 4);   // 4 px de arrasto = um quadro (1°)
+      frame = wrapF(f0 - (e.clientX - x0) / 5);    // 5 px de arrasto = um quadro (3°)
       drawHero();
     });
-    var up = function () { held = false; hero.classList.remove('is-held'); frame = clampF(Math.round(frame)); last = performance.now(); };
+    var up = function () { held = false; hero.classList.remove('is-held'); last = performance.now(); };
     hero.addEventListener('pointerup', up);
     hero.addEventListener('pointercancel', up);
     hero.addEventListener('keydown', function (e) {     // setas também giram
       if (e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
-      frame = clampF(frame + (e.key === 'ArrowRight' ? 1 : -1)); last = performance.now() + 1500; drawHero();
+      frame = wrapF(Math.round(frame) + (e.key === 'ArrowRight' ? 2 : -2)); drawHero();
       e.preventDefault();
     });
   }
