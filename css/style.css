@@ -739,9 +739,6 @@ html.is-lb{ overflow:hidden }
   display:block; width:100%; height:auto; background:#000; filter:grayscale(1) contrast(1.15);
   border:1px solid color-mix(in srgb, var(--fg) 22%, transparent); box-shadow:0 1.2rem 2.6rem rgba(0,0,0,.45);
 }
-/* o desenho tem fundo branco: no tema escuro ele entra invertido (traço claro no preto) */
-.m3d__vid--tall video{ filter:grayscale(1) invert(1) contrast(1.1) }
-body.is-invert .m3d__vid--tall video{ filter:grayscale(1) contrast(1.1) }
 @keyframes m3dFloat{ 50%{ translate:0 -12px } }
 @media (prefers-reduced-motion:reduce){ .m3d__vid{ animation:none; transition:none } }
 .m3d__vid figcaption{
