@@ -205,7 +205,7 @@
   }
 
   /* ---- ciclo: um item em destaque, os outros dois menores à direita; troca sozinho ---- */
-  var cyc = [].slice.call(sec.querySelectorAll('.m3d__vid')), feat = 0, cycOn = false, cycHover = false, cycT = 0;
+  var cyc = [].slice.call(sec.querySelectorAll('.m3d__vid')), feat = 0, cycOn = false, cycT = 0;
   function cycPlace() {
     cyc.forEach(function (el, i) { el.setAttribute('data-slot', (i - feat + cyc.length) % cyc.length); });
   }
@@ -213,14 +213,12 @@
     clearInterval(cycT);
     if (reduce) return;
     cycT = setInterval(function () {
-      if (!cycOn || cycHover || document.hidden) return;
+      if (!cycOn || document.hidden) return;
       feat = (feat + 1) % cyc.length; cycPlace();
-    }, 6000);
+    }, 5000);
   }
   if (cyc.length > 1) {
     var box = cyc[0].parentNode;
-    box.addEventListener('pointerenter', function () { cycHover = true; });
-    box.addEventListener('pointerleave', function () { cycHover = false; });
     cyc.forEach(function (el, i) {
       el.addEventListener('click', function () { if (i !== feat) { feat = i; cycPlace(); cycArm(); } });
     });

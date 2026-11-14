@@ -744,20 +744,6 @@ html.is-lb{ overflow:hidden }
 body.is-invert .m3d__vid--tall video{ filter:grayscale(1) contrast(1.1) }
 @keyframes m3dFloat{ 50%{ translate:0 -12px } }
 @media (prefers-reduced-motion:reduce){ .m3d__vid{ animation:none; transition:none } }
-
-/* marca d'água: discreta, num canto de cada mídia */
-.wm{ position:relative }
-.wm::after, .lb__wm{
-  font-family:var(--mono); font-size:clamp(.5rem,.75vw,.8rem); font-weight:600; letter-spacing:.2em; line-height:1;
-  color:#fff; mix-blend-mode:difference; opacity:.38; pointer-events:none; -webkit-user-select:none; user-select:none;
-}
-.wm::after{ content:'JOAOBYSS'; position:absolute; z-index:1 }
-.wm[data-wm="br"]::after{ right:.9em; bottom:.8em }
-.wm[data-wm="bl"]::after{ left:.9em; bottom:.8em }
-.wm[data-wm="tr"]::after{ right:.9em; top:.8em }
-.wm[data-wm="tl"]::after{ left:.9em; top:.8em }
-.lb__stage{ position:relative }
-.lb__wm{ position:absolute; transform:translate(-100%,-100%); padding:1em 1.1em }
 .m3d__vid figcaption{
   padding-top:.5rem; font-family:var(--mono); font-size:.92rem; letter-spacing:.1em; text-transform:uppercase; color:var(--mute);
 }

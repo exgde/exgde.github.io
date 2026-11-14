@@ -55,8 +55,7 @@
       // o botão é só a área de hover/clique e nunca se mexe; quem "salta" no destaque é a
       // camada de dentro (sem pointer-events). Assim o salto não tira o quadro de baixo do cursor.
       var art = document.createElement('span');
-      art.className = 'gallery__art wm';
-      art.setAttribute('data-wm', ['br', 'tl', 'bl', 'tr'][idx % 4]);
+      art.className = 'gallery__art';
       art.appendChild(img);
       b.appendChild(art);
       frag.appendChild(b);
@@ -305,15 +304,6 @@
      ============================================================ */
   var lb = document.getElementById('lb') || { open: false };
   var lbImg = document.getElementById('lbImg'), lbCap = document.getElementById('lbCap'), lbN = document.getElementById('lbN');
-  var lbWm = document.querySelector('.lb__wm');          // marca d'água no canto de baixo do desenho aberto
-  function wmPlace() {
-    if (!lbWm) return;
-    lbWm.style.left = (lbImg.offsetLeft + lbImg.offsetWidth) + 'px';
-    lbWm.style.top = (lbImg.offsetTop + lbImg.offsetHeight) + 'px';
-  }
-  lbImg.addEventListener('load', wmPlace);
-  window.addEventListener('resize', wmPlace);
-  if (lbImg && 'ResizeObserver' in window) new ResizeObserver(wmPlace).observe(lbImg);
   var lbLink = document.getElementById('lbLink');
   var cur = 0, from = null;
   var pad = function (n) { return (n < 10 ? '0' : '') + n; };
