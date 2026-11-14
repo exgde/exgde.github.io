@@ -123,6 +123,11 @@ function mediaFor(i) {
 function cover(src, w, h) {       // preenche a tela inteira, cortando o excesso
   const k = Math.max(SW / w, SH / h), dw = w * k, dh = h * k;
   g.drawImage(src, (SW - dw) / 2, (SH - dh) / 2, dw, dh);
+  g.save();                              // marca d'água discreta no canto
+  g.globalAlpha = .38; g.fillStyle = '#fff'; g.textAlign = 'right'; g.textBaseline = 'bottom';
+  g.font = '600 ' + Math.round(SH * .042) + 'px ui-monospace, Consolas, monospace';
+  g.fillText('JOAOBYSS', SW - SH * .05, SH - SH * .045);
+  g.restore();
 }
 
 function placeholder(p, i, now) {

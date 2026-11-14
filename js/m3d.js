@@ -204,6 +204,32 @@
     vids.forEach(function (v) { vo.observe(v); });
   }
 
+  /* ---- ciclo: um item em destaque, os outros dois menores à direita; troca sozinho ---- */
+  var cyc = [].slice.call(sec.querySelectorAll('.m3d__vid')), feat = 0, cycOn = false, cycHover = false, cycT = 0;
+  function cycPlace() {
+    cyc.forEach(function (el, i) { el.setAttribute('data-slot', (i - feat + cyc.length) % cyc.length); });
+  }
+  function cycArm() {
+    clearInterval(cycT);
+    if (reduce) return;
+    cycT = setInterval(function () {
+      if (!cycOn || cycHover || document.hidden) return;
+      feat = (feat + 1) % cyc.length; cycPlace();
+    }, 6000);
+  }
+  if (cyc.length > 1) {
+    var box = cyc[0].parentNode;
+    box.addEventListener('pointerenter', function () { cycHover = true; });
+    box.addEventListener('pointerleave', function () { cycHover = false; });
+    cyc.forEach(function (el, i) {
+      el.addEventListener('click', function () { if (i !== feat) { feat = i; cycPlace(); cycArm(); } });
+    });
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { cycOn = es[0].isIntersecting; }, { threshold: .3 }).observe(box);
+    } else cycOn = true;
+    cycArm();
+  }
+
   /* ---- carregar só quando a seção estiver chegando ---- */
   function redrawAll() { pieces.forEach(drawPiece); drawHero(); }
   var loaded = false;
