@@ -739,6 +739,16 @@ html.is-lb{ overflow:hidden }
   display:block; width:100%; height:auto; background:#000; filter:grayscale(1) contrast(1.15);
   border:1px solid color-mix(in srgb, var(--fg) 22%, transparent); box-shadow:0 1.2rem 2.6rem rgba(0,0,0,.45);
 }
+/* quanto falta para o próximo quadro ganhar o destaque */
+.m3d__prog{
+  position:absolute; left:2%; bottom:-1.8rem; width:min(44cqw,17rem); z-index:3; display:flex; align-items:center; gap:.8em;
+  font-family:var(--mono); font-size:.8rem; letter-spacing:.12em; color:var(--mute);
+}
+.m3d__prog i{ flex:1; height:2px; overflow:hidden; background:color-mix(in srgb, var(--fg) 22%, transparent) }
+.m3d__prog b{ display:block; height:100%; background:var(--fg); transform-origin:left; animation:m3dProg 5s linear infinite paused }
+.m3d__prog.is-on b{ animation-play-state:running }
+@keyframes m3dProg{ from{ transform:scaleX(0) } to{ transform:scaleX(1) } }
+@media (prefers-reduced-motion:reduce){ .m3d__prog{ display:none } }
 @keyframes m3dFloat{ 50%{ translate:0 -12px } }
 @media (prefers-reduced-motion:reduce){ .m3d__vid{ animation:none; transition:none } }
 .m3d__vid figcaption{

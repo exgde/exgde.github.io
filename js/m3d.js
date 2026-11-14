@@ -204,28 +204,26 @@
     vids.forEach(function (v) { vo.observe(v); });
   }
 
-  /* ---- ciclo: um item em destaque, os outros dois menores à direita; troca sozinho ---- */
-  var cyc = [].slice.call(sec.querySelectorAll('.m3d__vid')), feat = 0, cycOn = false, cycT = 0;
+  /* ---- ciclo: um item em destaque, os outros dois menores à direita. A barra de progresso
+     (.m3d__prog) enche em 5 s e, a cada volta dela, o destaque passa para o próximo ---- */
+  var cyc = [].slice.call(sec.querySelectorAll('.m3d__vid')), feat = 0;
+  var prog = sec.querySelector('.m3d__prog'), bar = prog && prog.querySelector('b'), pn = $('m3dPN');
   function cycPlace() {
     cyc.forEach(function (el, i) { el.setAttribute('data-slot', (i - feat + cyc.length) % cyc.length); });
+    if (pn) pn.textContent = '0' + (feat + 1);
   }
-  function cycArm() {
-    clearInterval(cycT);
-    if (reduce) return;
-    cycT = setInterval(function () {
-      if (!cycOn || document.hidden) return;
-      feat = (feat + 1) % cyc.length; cycPlace();
-    }, 5000);
-  }
-  if (cyc.length > 1) {
-    var box = cyc[0].parentNode;
+  if (cyc.length > 1 && bar) {
     cyc.forEach(function (el, i) {
-      el.addEventListener('click', function () { if (i !== feat) { feat = i; cycPlace(); cycArm(); } });
+      el.addEventListener('click', function () {
+        if (i === feat) return;
+        feat = i; cycPlace();
+        bar.style.animation = 'none'; void bar.offsetWidth; bar.style.animation = '';   // recomeça a contagem
+      });
     });
+    bar.addEventListener('animationiteration', function () { feat = (feat + 1) % cyc.length; cycPlace(); });
     if ('IntersectionObserver' in window) {
-      new IntersectionObserver(function (es) { cycOn = es[0].isIntersecting; }, { threshold: .3 }).observe(box);
-    } else cycOn = true;
-    cycArm();
+      new IntersectionObserver(function (es) { prog.classList.toggle('is-on', es[0].isIntersecting); }, { threshold: .3 }).observe(cyc[0].parentNode);
+    } else prog.classList.add('is-on');
   }
 
   /* ---- carregar só quando a seção estiver chegando ---- */
