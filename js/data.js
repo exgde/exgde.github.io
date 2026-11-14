@@ -92,13 +92,13 @@ window.PF = {
 
   /* 03 · modelagem 3D (js/m3d.js). As imagens saem do Blender; ver tools/m3d/. */
   m3d: {
-    kicker: '3D · personagens e armas',
-    title: ['modelos', 'para jogos'],
-    lead: 'Personagens e armas dos meus jogos, preparados para rodar no motor.',
+    kicker: '3D · meu processo',
+    title: ['da ideia', 'ao modelo'],
+    lead: 'Sempre gostei de desenhar, e é daí que vem o meu 3D. Antes de colocar qualquer coisa em prática, já planejei o que quero ver pronto.',
     list: [
-      'Soldado do WW1-Thriller: 15,6 mil triângulos, rig no esqueleto da Unreal e shape keys de respiração',
-      'Armas com ossos para ferrolho, gatilho e carregador',
-      'Pose feita à mão no Blender, osso por osso'
+      'A visão criativa é minha e vem antes de qualquer ferramenta',
+      'Uso IA só para agilizar a parte técnica da modelagem',
+      'Ela não faz parte do processo criativo'
     ],
     meta: 'Blender · Unreal Engine 5',
     hint: 'arraste para girar',
@@ -264,13 +264,13 @@ window.PF_EN = {
   },
 
   m3d: {
-    kicker: '3D · characters and weapons',
-    title: ['models', 'for games'],
-    lead: 'Characters and weapons from my games, set up to run in the engine.',
+    kicker: '3D · my process',
+    title: ['from idea', 'to model'],
+    lead: "I've always liked to draw, and that is where my 3D comes from. Before I put anything into practice, I have already planned what I want to see finished.",
     list: [
-      'WW1-Thriller soldier: 15.6k triangles, rigged to the Unreal skeleton, with breathing shape keys',
-      'Weapons with bones for the slide, trigger and magazine',
-      'Pose made by hand in Blender, bone by bone'
+      'The creative vision is mine and comes before any tool',
+      'I use AI only to speed up the technical side of modeling',
+      'It is not part of the creative process'
     ],
     meta: 'Blender · Unreal Engine 5',
     hint: 'drag to rotate',
