@@ -4,7 +4,7 @@
    · À direita, o soldado do WW1-Thriller com a escopeta: 36 quadros renderizados
      no Blender... agora 72, numa folha só (assets/m3d/soldier-turn.webp, 12 x 6).
      Gira sozinho, devagar; arrastar gira na mão.
-   · À esquerda, o busto do soldado tático balançando de leve (assets/m3d/bust-sway.webp).
+   · À esquerda, o busto do soldado tático, parado (assets/m3d/bust.webp).
    · Nada aqui é imagem pronta de pontilhado: cada peça é um render em tons
      de cinza e os pontos são desenhados na hora, na cor do texto. Por isso
      o "inverter" funciona sem precisar de uma segunda versão das imagens.
@@ -125,21 +125,13 @@
     var f = ((Math.round(frame) % N) + N) % N;
     draw(hero, sheet, (f % COLS) * FW, Math.floor(f / COLS) * FH, FW, FH, 1, CELL);
   }
-  /* ---- o busto do soldado tático: 13 quadros (24° ao todo), indo e voltando bem devagar ---- */
-  var bust = $('m3dBust'), bsheet = null, BW = 480, BCOLS = 7, BN = 13, BSTEP = 280, bi = 6, bdir = 1, blast = 0;
-  function drawBust() {
-    if (bsheet && bust) draw(bust, bsheet, (bi % BCOLS) * BW, Math.floor(bi / BCOLS) * BW, BW, BW, 0, CELL);
-  }
   function tick(now) {
     if (!visible || document.hidden) { running = false; return; }
     if (!held && !reduce && now - last >= STEP) { last = now; frame = (frame + 1) % N; drawHero(); }
-    if (!reduce && bsheet && now - blast >= BSTEP) {            // o busto só balança: vai e volta
-      blast = now; if (bi + bdir < 0 || bi + bdir >= BN) bdir = -bdir; bi += bdir; drawBust();
-    }
     requestAnimationFrame(tick);
   }
   var running = false;
-  function start() { if (!running && visible && !document.hidden && (sheet || bsheet)) { running = true; last = performance.now(); requestAnimationFrame(tick); } }
+  function start() { if (!running && visible && !document.hidden && sheet) { running = true; last = performance.now(); requestAnimationFrame(tick); } }
 
   if (hero) {
     var x0 = 0, f0 = 0;
@@ -164,7 +156,7 @@
   }
 
   /* ---- carregar só quando a seção estiver chegando ---- */
-  function redrawAll() { pieces.forEach(drawPiece); drawHero(); drawBust(); }
+  function redrawAll() { pieces.forEach(drawPiece); drawHero(); }
   var loaded = false;
   function load() {
     if (loaded) return; loaded = true;
@@ -173,11 +165,6 @@
       im.onload = function () { p.img = im; drawPiece(p); p.cv.classList.add('is-on'); };
       im.src = p.src;
     });
-    if (bust) {
-      var b = new Image();
-      b.onload = function () { bsheet = b; drawBust(); bust.classList.add('is-on'); start(); };
-      b.src = bust.getAttribute('data-sheet');
-    }
     if (hero) {
       var s = new Image();
       s.onload = function () { sheet = s; drawHero(); hero.classList.add('is-on'); start(); };
